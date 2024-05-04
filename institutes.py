@@ -15,6 +15,10 @@ class InstituteData:
         return self._name
 
     @property
+    def id(self):
+        return self._id
+
+    @property
     def location(self):
         return self._location
 
@@ -51,9 +55,11 @@ class Institutes:
     def institute(self):
         return self._institute
 
-    def get_institute(self, institute_name):
+    def get_institute(self, institute_id):
+        if isinstance(institute_id, str):
+            institute_id = int(institute_id)
         for institute in self.institute:
-            if institute.name == institute_name:
+            if institute.id == institute_id:
                 return institute
         return None
 

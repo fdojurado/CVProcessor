@@ -16,10 +16,10 @@ class CV:
         self._filename = filename
         self._education = Education(self.filename)
         self._institutes = Institutes(self.filename)
-        self._authors = Authors(self.filename)
         self._software = Software(self.filename)
         self._intro = Intro(self.filename)
-        self._publications = Publications(self.filename)
+        self._authors = Authors(self.filename, self)
+        self._publications = Publications(self.filename, self)
 
     @property
     def filename(self):

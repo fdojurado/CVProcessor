@@ -2,11 +2,13 @@ import pandas as pd
 
 from authors import Authors
 from software import Software
+import common
 
 
 class PublicationsData:
-    def __init__(self, filename):
+    def __init__(self, filename, cv):
         self._filename = filename
+        self._cv = cv
         self._authors = None
         self._title = None
         self._year = None
@@ -31,6 +33,10 @@ class PublicationsData:
     @property
     def filename(self):
         return self._filename
+
+    @property
+    def cv(self):
+        return self._cv
 
     @property
     def authors(self):
@@ -108,11 +114,48 @@ class PublicationsData:
     def copyright(self):
         return self._copyright
 
-    def _load_publications(self):
+    def load_authors(self):
         authors_list = self.filename["Authors"].split(",")
-        self._authors = authors_list
+        authors = []
+        for author in authors_list:
+            if "(" in author:
+                # Author with specific affiliation
+                author_tuple = author.split("(")[1].split(")")[0]
+                author_tuple_list = author_tuple.split(";")
+                author_id = author_tuple_list[0]
+                author_affiliation = author_tuple_list[1:]
+            else:
+                author_id = author
+                author_affiliation = None
+
+            if isinstance(author_affiliation, list):
+                for affiliation in author_affiliation:
+                    author = self.cv.authors.get_author(
+                        int(author_id), int(affiliation))
+                    if author is None:
+                        raise ValueError(
+                            f"Author with ID {author_id} and affiliation {affiliation} not found")
+                    authors.append(author)
+            else:
+                author = self.cv.authors.get_author(int(author_id))
+                if author is None:
+                    raise ValueError(
+                        f"Author with ID {author_id} not found")
+                authors.append(author)
+        return authors
+
+    def process_year_data(self):
+        if len(self.year.split()) == 1:
+            self._year = 'Jan ' + self.year
+        else:
+            self._year = self.year
+        self._year = pd.to_datetime(self.year, format="%b %Y")
+
+    def _load_publications(self):
+        self._authors = self.load_authors()
         self._title = self.filename["Title"]
         self._year = self.filename["Year"]
+        self.process_year_data()
         self._source = self.filename["Source"]
         self._volume = self.filename["Volume"]
         self._issue = self.filename["Issue"]
@@ -130,8 +173,35 @@ class PublicationsData:
         self._license = self.filename["License"]
         self._copyright = self.filename["Copyright"]
 
+    def build_apa_citation(self):
+        citation = ""
+        authors = [author.alias_short for author in self.authors]
+        unique_authors = [authors[i] for i in range(
+            len(authors)) if authors[i] not in authors[:i]]
+        citation += ', '.join(unique_authors)
+        if not common.check_nan(self.year):
+            citation += f" ({self.year.year}). "
+        if not common.check_nan(self.title):
+            citation += f"{self.title}. "
+        if not common.check_nan(self.source):
+            citation += f"{self.source}"
+        if not common.check_nan(self.volume):
+            citation += f", {int(self.volume)}"
+        if not common.check_nan(self.issue):
+            citation += f"({int(self.issue)})"
+        if not common.check_nan(self.artno):
+            citation += f"{self.artno}"
+        if not common.check_nan(self.page_start):
+            citation += f", pp. {int(self.page_start)}"
+        if not common.check_nan(self.page_end):
+            citation += f"-{int(self.page_end)}"
+        if not common.check_nan(self.doi):
+            citation += f", doi: {self.doi}"
+        citation += "."
+        return citation
+
     def print(self):
-        # self.authors.print()
+        print(f"Authors: {self.authors}")
         print(f"Title: {self.title}")
         print(f"Year: {self.year}")
         print(f"Source: {self.source}")
@@ -150,11 +220,14 @@ class PublicationsData:
         print(f"JCR: {self.jcr}")
         print(f"License: {self.license}")
         print(f"Copyright: {self.copyright}")
+        citation = self.build_apa_citation()
+        print(f"Citation: {citation}")
 
 
 class Publications():
-    def __init__(self, filename):
+    def __init__(self, filename, cv):
         self._filename = filename
+        self._cv = cv
         self._publications = self._load_publications()
         # Sort publications by type then year
         self._publications.sort(key=lambda x: (
@@ -165,14 +238,19 @@ class Publications():
         return self._filename
 
     @property
+    def cv(self):
+        return self._cv
+
+    @property
     def publications(self):
         return self._publications
 
     def _load_publications(self):
         publications_df = pd.read_excel(
             self.filename, sheet_name="Publications")
-        return [PublicationsData(row) for index, row in publications_df.iterrows()]
+        return [PublicationsData(row, self.cv) for index, row in publications_df.iterrows()]
 
     def print(self):
+        print(f"Publications in {self.filename}")
         for publication in self.publications:
             publication.print()

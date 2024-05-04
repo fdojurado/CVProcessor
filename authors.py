@@ -2,7 +2,7 @@ import pandas as pd
 
 
 class AuthorsData:
-    def __init__(self, filename):
+    def __init__(self, filename, affiliation):
         self._filename = filename
         self._id = None
         self._name = None
@@ -11,7 +11,7 @@ class AuthorsData:
         self._alias_short = None
         self._job_title = None
         self._website = None
-        self._affiliations_ids = None
+        self._affiliation = affiliation
         self._fingerprint = None
         self._public_key = None
         self._email = None
@@ -58,8 +58,8 @@ class AuthorsData:
         return self._website
 
     @property
-    def affiliation_ids(self):
-        return self._affiliations_ids
+    def affiliation(self):
+        return self._affiliation
 
     @property
     def fingerprint(self):
@@ -106,18 +106,13 @@ class AuthorsData:
         return self._telephone
 
     def _load_authors(self):
-        self._id = self.filename["ID"]
+        self._id = int(self.filename["id"])
         self._name = self.filename["Name"]
         self._lastname = self.filename["Lastname"]
         self._alias_long = self.filename["Alias Long"]
         self._alias_short = self.filename["Alias Short"]
         self._job_title = self.filename["Job Title"]
         self._website = self.filename["Website"]
-        # if self.filename["Affiliations"] is a list of ids, then split it
-        if isinstance(self.filename["Affiliations"], list):
-            self._affiliations_ids = self.filename["Affiliations"].split(",")
-        else:
-            self._affiliations_ids = self.filename["Affiliations"]
         self._fingerprint = self.filename["Fingerprint"]
         self._public_key = self.filename["Public Key"]
         self._email = self.filename["Email"]
@@ -131,7 +126,7 @@ class AuthorsData:
         self._telephone = self.filename["Telephone"]
 
     def print(self):
-        print(f"ID: {self.id}")
+        print(f"id: {self.id}")
         print(f"Name: {self.name}")
         print(f"Lastname: {self.lastname}")
         print(f"Alias Long: {self.alias_long}")
@@ -149,12 +144,14 @@ class AuthorsData:
         print(f"Address: {self.address}")
         print(f"Location: {self.location}")
         print(f"Telephone: {self.telephone}")
+        print(f"Affiliation: {self.affiliation.name}")
         print("\n")
 
 
 class Authors:
-    def __init__(self, filename,):
+    def __init__(self, filename, cv):
         self._filename = filename
+        self._cv = cv
         self._authors = self._load_authors()
 
     @property
@@ -162,19 +159,45 @@ class Authors:
         return self._filename
 
     @property
+    def cv(self):
+        return self._cv
+
+    @property
     def authors(self):
         return self._authors
 
-    def get_author(self, author_id):
+    def get_author(self, author_id, affiliation_id=None):
+        if isinstance(author_id, str):
+            author_id = int(author_id)
+        if affiliation_id is None:
+            for author in self.authors:
+                if author.id == author_id:
+                    return author
+            return None
         for author in self.authors:
-            if author.id == author_id:
+            if author.id == author_id and self.cv.institutes.get_institute(int(affiliation_id)).id == author.affiliation.id:
                 return author
         return None
 
     def _load_authors(self):
         authors_df = pd.read_excel(self.filename, sheet_name="Authors")
-        return [AuthorsData(row) for _, row in authors_df.iterrows()]
+        authors = []
+        for index, row in authors_df.iterrows():
+            if isinstance(row["Affiliations"], str) and ("," in row["Affiliations"] or ";" in row["Affiliations"]):
+                affiliations = row["Affiliations"].split(",")
+                for affiliation in affiliations:
+                    affiliation = self.cv.institutes.get_institute(
+                        int(affiliation))
+                    author = AuthorsData(row, affiliation)
+                    authors.append(author)
+            else:
+                affiliation = self.cv.institutes.get_institute(
+                    int(row["Affiliations"]))
+                author = AuthorsData(row, affiliation)
+                authors.append(author)
+        return authors
 
     def print(self):
+        print(f"Printing authors from {self.filename}...")
         for author in self.authors:
             author.print()
