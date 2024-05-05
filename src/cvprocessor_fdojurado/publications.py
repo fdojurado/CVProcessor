@@ -164,7 +164,8 @@ class PublicationsData:
         self._doi = self.filename["DOI"]
         self._preprint_doi = self.filename["Preprint DOI"]
         self._document_type = self.filename["Document Type"]
-        self._code = self.filename["Code"]
+        self._code = self.cv.software.get_software(
+            int(self.filename["Code"])) if not common.check_nan(self.filename["Code"]) else None
         self._slides = self.filename["Slides"]
         self._abstract = self.filename["Abstract"]
         self._keywords = self.filename["Keywords"]
@@ -212,7 +213,7 @@ class PublicationsData:
         print(f"DOI: {self.doi}")
         print(f"Preprint DOI: {self.preprint_doi}")
         print(f"Document Type: {self.document_type}")
-        print(f"Code: {self.code}")
+        print(f"Code: {self.code.name if self.code else None}")
         print(f"Slides: {self.slides}")
         print(f"Abstract: {self.abstract}")
         print(f"Keywords: {self.keywords}")

@@ -8,10 +8,11 @@ class SofwareData:
         self._name = None
         self._version = None
         self._description = None
-        self._license = None
-        self._website = None
-        # self._doi = None
         self._repository = None
+        self._demo = None
+        self._website = None
+        self._summary = None
+        self._license = None
         self._load_software()
 
     @property
@@ -35,40 +36,50 @@ class SofwareData:
         return self._description
 
     @property
-    def license(self):
-        return self._license
+    def repository(self):
+        return self._repository
+
+    @property
+    def demo(self):
+        return self._demo
 
     @property
     def website(self):
         return self._website
 
+    @property
+    def summary(self):
+        return self._summary
+
+    @property
+    def license(self):
+        return self._license
+
     # @property
     # def doi(self):
     #     return self._doi
-
-    @property
-    def repository(self):
-        return self._repository
 
     def _load_software(self):
         self._id = self.filename["id"]
         self._name = self.filename["Name"]
         self._version = self.filename["Version"]
         self._description = self.filename["Description"]
-        self._license = self.filename["License"]
-        self._website = self.filename["Website"]
-        # self._doi = self.filename["doi"]
         self._repository = self.filename["Repository"]
+        self._demo = self.filename["Demo"]
+        self._website = self.filename["Website"]
+        self._summary = self.filename["Summary"]
+        self._license = self.filename["License"]
 
     def print(self):
         print(f"ID: {self.id}")
         print(f"Name: {self.name}")
         print(f"Version: {self.version}")
         print(f"Description: {self.description}")
-        print(f"License: {self.license}")
-        print(f"Website: {self.website}")
-        # print(f"DOI: {self.doi}")
         print(f"repository: {self.repository}")
+        print(f"Demo: {self.demo}")
+        print(f"Website: {self.website}")
+        print(f"Summary: {self.summary}")
+        print(f"License: {self.license}")
         print("\n")
 
 
@@ -86,6 +97,10 @@ class Software:
         return self._software
 
     def get_software(self, software_id):
+        if not software_id:
+            return None
+        if isinstance(software_id, str):
+            software_id = int(software_id)
         for software in self.software:
             if software.id == software_id:
                 return software
