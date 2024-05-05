@@ -1,8 +1,7 @@
 import pandas as pd
 
-from authors import Authors
-from software import Software
-import common
+
+from cvprocessor_fdojurado import common
 
 
 class PublicationsData:
