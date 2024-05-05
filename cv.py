@@ -9,6 +9,7 @@ from publications import Publications
 from authors import Authors
 from software import Software
 from institutes import Institutes
+from news import News
 
 
 class CV:
@@ -19,6 +20,7 @@ class CV:
         self._software = Software(self.filename)
         self._intro = Intro(self.filename)
         self._authors = Authors(self.filename, self)
+        self._news = News(self.filename)
         self._publications = Publications(self.filename, self)
 
     @property
@@ -50,6 +52,10 @@ class CV:
         return self._intro
 
     @property
+    def news(self):
+        return self._news
+
+    @property
     def publications(self):
         return self._publications
 
@@ -62,4 +68,5 @@ if __name__ == "__main__":
     cv.authors.print()
     cv.software.print()
     cv.publications.print()
+    cv.news.print()
     sys.exit(0)
