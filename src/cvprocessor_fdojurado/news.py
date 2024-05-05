@@ -24,6 +24,7 @@ class NewsData:
     def _load_news(self):
         self._title = self._pd_dataframe["Title"]
         self._date = self._pd_dataframe["Date"]
+        self._date = self._date.strftime("%b %d, %Y")
         self._description = self._pd_dataframe["Description"]
 
     def print(self):
