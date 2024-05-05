@@ -7,6 +7,10 @@ class NewsData:
         self._title = None
         self._date = None
         self._description = None
+        self._pdf = None
+        self._preprint = None
+        self._code = None
+        self._doi = None
         self._load_news()
 
     @property
@@ -21,16 +25,40 @@ class NewsData:
     def description(self):
         return self._description
 
+    @property
+    def pdf(self):
+        return self._pdf
+
+    @property
+    def preprint(self):
+        return self._preprint
+
+    @property
+    def code(self):
+        return self._code
+
+    @property
+    def doi(self):
+        return self._doi
+
     def _load_news(self):
         self._title = self._pd_dataframe["Title"]
         self._date = self._pd_dataframe["Date"]
         self._date = self._date.strftime("%b %d, %Y")
         self._description = self._pd_dataframe["Description"]
+        self._pdf = self._pd_dataframe["PDF"]
+        self._preprint = self._pd_dataframe["Preprint"]
+        self._code = self._pd_dataframe["Code"]
+        self._doi = self._pd_dataframe["DOI"]
 
     def print(self):
         print(f"Title: {self._title}")
         print(f"Date: {self._date}")
         print(f"Description: {self._description}")
+        print(f"PDF: {self._pdf}")
+        print(f"Preprint: {self._preprint}")
+        print(f"Code: {self._code}")
+        print(f"DOI: {self._doi}")
         print("\n")
 
 
