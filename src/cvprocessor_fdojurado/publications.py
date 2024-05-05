@@ -245,6 +245,36 @@ class Publications():
     def publications(self):
         return self._publications
 
+    def get_publications_count(self):
+        return len(self.publications)
+
+    def get_unique_sources(self):
+        sources = set()
+        for publication in self.publications:
+            sources.add(publication.source)
+        return len(sources)
+
+    def get_document_types(self):
+        document_types = set()
+        for publication in self.publications:
+            document_types.add(publication.document_type)
+        return document_types
+
+    def get_num_publications_by_document_type(self, document_type):
+        count = 0
+        for publication in self.publications:
+            if publication.document_type == document_type:
+                count += 1
+        return count
+
+    def get_num_publications_by_author(self, author_id):
+        count = 0
+        for publication in self.publications:
+            for author in publication.authors:
+                if author.id == author_id:
+                    count += 1
+        return count
+
     def _load_publications(self):
         publications_df = pd.read_excel(
             self.filename, sheet_name="Publications")
@@ -254,3 +284,7 @@ class Publications():
         print(f"Publications in {self.filename}")
         for publication in self.publications:
             publication.print()
+        # print the number of publications and unique sources
+        print(f"Total publications: {self.get_publications_count()}")
+        print(f"Unique sources: {self.get_unique_sources()}")
+        print(f"Document types: {self.get_document_types()}")
