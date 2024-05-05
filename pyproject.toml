@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cvprocessor_fdojurado"
+version = "0.0.1"
+authors = [
+    { name = "F. Fernando Jurado-Lasso", email = "fdo.jurado@gmail.com" },
+]
+description = "CVProcessor is a Python library for processing CV (Curriculum Vitae) or resume documents."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/fdojurado/CVProcessor"
+Issues = "https://github.com/fdojurado/CVProcessor/issues"
