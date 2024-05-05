@@ -260,6 +260,13 @@ class Publications():
             document_types.add(publication.document_type)
         return document_types
 
+    def get_document_types_ordered(self):
+        document_types = []
+        for publication in self.publications:
+            if publication.document_type not in document_types:
+                document_types.append(publication.document_type)
+        return document_types
+
     def get_num_publications_by_document_type(self, document_type):
         count = 0
         for publication in self.publications:
