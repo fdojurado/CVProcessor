@@ -10,6 +10,7 @@ from cvprocessor_fdojurado.authors import Authors
 from cvprocessor_fdojurado.software import Software
 from cvprocessor_fdojurado.institutes import Institutes
 from cvprocessor_fdojurado.news import News
+from cvprocessor_fdojurado.research_interests import ResearchInterests
 
 
 class CV:
@@ -22,6 +23,7 @@ class CV:
         self._authors = Authors(self.filename, self)
         self._news = News(self.filename)
         self._publications = Publications(self.filename, self)
+        self._research_interests = ResearchInterests(self.filename)
 
     @property
     def filename(self):
@@ -59,6 +61,10 @@ class CV:
     def publications(self):
         return self._publications
 
+    @property
+    def research_interests(self):
+        return self._research_interests
+
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
@@ -69,4 +75,5 @@ if __name__ == "__main__":
     cv.software.print()
     cv.publications.print()
     cv.news.print()
+    cv.research_interests.print()
     sys.exit(0)
