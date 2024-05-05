@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cvprocessor_fdojurado"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
     { name = "F. Fernando Jurado-Lasso", email = "fdo.jurado@gmail.com" },
 ]
@@ -16,6 +16,17 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+keywords = [
+    "CV",
+    "Curriculum Vitae",
+    "Resume",
+    "xslx",
+]
+dependencies = [
+    "pandas",
+    "sys",
+]
+
 
 [project.urls]
 Homepage = "https://github.com/fdojurado/CVProcessor"
