@@ -3,14 +3,14 @@ import pandas as pd
 import sys
 
 # Import classes from other modules such as news, publications, research, quarto_variables, and public_key
-from cvprocessor_fdojurado.intro import Intro
-from cvprocessor_fdojurado.education import Education
-from cvprocessor_fdojurado.publications import Publications
-from cvprocessor_fdojurado.authors import Authors
-from cvprocessor_fdojurado.software import Software
-from cvprocessor_fdojurado.institutes import Institutes
-from cvprocessor_fdojurado.news import News
-from cvprocessor_fdojurado.research_interests import ResearchInterests
+from cvprocessor.intro import Intro
+from cvprocessor.education import Education
+from cvprocessor.publications import Publications
+from cvprocessor.authors import Authors
+from cvprocessor.software import Software
+from cvprocessor.institutes import Institutes
+from cvprocessor.news import News
+from cvprocessor.research_interests import ResearchInterests
 
 
 class CV:

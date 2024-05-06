@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-from cvprocessor_fdojurado import common
+from cvprocessor import common
 
 
 class PublicationsData:
