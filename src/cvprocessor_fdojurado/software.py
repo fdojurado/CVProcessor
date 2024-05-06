@@ -106,6 +106,9 @@ class Software:
                 return software
         return None
 
+    def get_software_alphabetically(self):
+        return sorted(self.software, key=lambda x: x.name)
+
     def _load_software(self):
         software_df = pd.read_excel(self.filename, sheet_name="Software")
         return [SofwareData(software) for index, software in software_df.iterrows()]
