@@ -6,8 +6,10 @@ class InstituteData:
         self._pd_dataframe = pd_dataframe
         self._id = None
         self._name = None
-        self._location = None
-        self._website = None
+        self._address = None
+        self._city = None
+        self._country = None
+        self._url = None
         self._load_institute()
 
     @property
@@ -19,26 +21,40 @@ class InstituteData:
         return self._id
 
     @property
-    def location(self):
-        return self._location
+    def name(self):
+        return self._name
 
     @property
-    def website(self):
-        return self._website
+    def address(self):
+        return self._address
+
+    @property
+    def city(self):
+        return self._city
+
+    @property
+    def country(self):
+        return self._country
+
+    @property
+    def url(self):
+        return self._url
 
     def _load_institute(self):
         self._id = self._pd_dataframe["id"]
         self._name = self._pd_dataframe["Name"]
-        self._location = self._pd_dataframe["Location"]
-        self._website = self._pd_dataframe["Website"]
-        # self._doi = self.filename["doi"]
+        self._address = self._pd_dataframe["Address"]
+        self._city = self._pd_dataframe["City"]
+        self._country = self._pd_dataframe["Country"]
+        self._url = self._pd_dataframe["URL"]
 
     def print(self):
         print(f"Institute ID: {self._id}")
-        print(f"Institute name: {self._name}")
-        print(f"Location: {self._location}")
-        print(f"Website: {self._website}")
-        # print(f"DOI: {self._doi}")
+        print(f"Institute Name: {self._name}")
+        print(f"Institute Address: {self._address}")
+        print(f"Institute City: {self._city}")
+        print(f"Institute Country: {self._country}")
+        print(f"Institute URL: {self._url}")
         print("\n")
 
 
