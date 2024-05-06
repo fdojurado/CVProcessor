@@ -282,6 +282,12 @@ class Publications():
                     count += 1
         return count
 
+    def get_publications_year_range(self):
+        years = []
+        for publication in self.publications:
+            years.append(publication.year.year)
+        return min(years), max(years)
+
     def _load_publications(self):
         publications_df = pd.read_excel(
             self.filename, sheet_name="Publications")
