@@ -9,6 +9,7 @@ class InstituteData:
         self._address = None
         self._city = None
         self._country = None
+        self._coordinates = None
         self._url = None
         self._load_institute()
 
@@ -37,8 +38,31 @@ class InstituteData:
         return self._country
 
     @property
+    def coordinates(self):
+        return self._coordinates
+
+    @property
     def url(self):
         return self._url
+
+    def convert_coordinates(self, lalng):
+        lalng = lalng.replace("°", "").strip()
+        if "S" in lalng or "W" in lalng:
+            lalng = lalng.replace("S", "").replace("W", "")
+            lalng = "-" + lalng
+        else:
+            lalng = lalng.replace("N", "").replace("E", "")
+        return float(lalng)
+
+    def process_coordinates(self):
+        # Coordinates can be of the form 37.7983° S, 144.9610° E or 3.342119819025848, -76.5306449189542
+        # We will convert them to the form 37.7983, 144.9610
+        if self._coordinates is not None:
+            # split into latitude and longitude
+            coordinates = self._coordinates.split(", ")
+            coordinates = [self.convert_coordinates(
+                coord) for coord in coordinates]
+            self._coordinates = tuple(coordinates)
 
     def _load_institute(self):
         self._id = self._pd_dataframe["id"]
@@ -47,6 +71,8 @@ class InstituteData:
         self._city = self._pd_dataframe["City"]
         self._country = self._pd_dataframe["Country"]
         self._url = self._pd_dataframe["URL"]
+        self._coordinates = self._pd_dataframe["Coordinates"]
+        self.process_coordinates()
 
     def print(self):
         print(f"Institute ID: {self._id}")
@@ -55,6 +81,7 @@ class InstituteData:
         print(f"Institute City: {self._city}")
         print(f"Institute Country: {self._country}")
         print(f"Institute URL: {self._url}")
+        print(f"Institute Coordinates: {self._coordinates}")
         print("\n")
 
 
