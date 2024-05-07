@@ -280,6 +280,7 @@ class Publications():
             for author in publication.authors:
                 if author.id == author_id:
                     count += 1
+                    break
         return count
 
     def get_publications_year_range(self):
