@@ -19,7 +19,7 @@ class AuthorsData:
         self._github = None
         self._google_scholar = None
         self._orcid = None
-        self._research_gate = None
+        self._researchgate = None
         self._address = None
         self._location = None
         self._telephone = None
@@ -90,8 +90,8 @@ class AuthorsData:
         return self._orcid
 
     @property
-    def research_gate(self):
-        return self._research_gate
+    def researchgate(self):
+        return self._researchgate
 
     @property
     def address(self):
@@ -120,7 +120,7 @@ class AuthorsData:
         self._github = self.filename["GitHub"]
         self._google_scholar = self.filename["Google Scholar"]
         self._orcid = self.filename["ORCID"]
-        self._research_gate = self.filename["ResearchGate"]
+        self._researchgate = self.filename["ResearchGate"]
         self._address = self.filename["Address"]
         self._location = self.filename["Location"]
         self._telephone = self.filename["Telephone"]
@@ -140,7 +140,7 @@ class AuthorsData:
         print(f"GitHub: {self.github}")
         print(f"Google Scholar: {self.google_scholar}")
         print(f"ORCID: {self.orcid}")
-        print(f"ResearchGate: {self.research_gate}")
+        print(f"ResearchGate: {self.researchgate}")
         print(f"Address: {self.address}")
         print(f"Location: {self.location}")
         print(f"Telephone: {self.telephone}")
