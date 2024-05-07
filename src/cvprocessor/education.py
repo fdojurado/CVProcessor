@@ -115,6 +115,10 @@ class Education:
     def educations(self):
         return self._educations
 
+    # Get the oldest end year
+    def get_oldest_end_year(self):
+        return self.educations[-1].end_year.year
+
     def _load_educations(self):
         education_df = pd.read_excel(self.filename, sheet_name="Education")
         return [EducationData(row) for _, row in education_df.iterrows()]
