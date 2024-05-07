@@ -11,6 +11,7 @@ from cvprocessor.software import Software
 from cvprocessor.institutes import Institutes
 from cvprocessor.news import News
 from cvprocessor.research_interests import ResearchInterests
+from cvprocessor.grants_awards import GrantsAwards
 
 
 class CV:
@@ -24,6 +25,7 @@ class CV:
         self._news = News(self.filename)
         self._publications = Publications(self.filename, self)
         self._research_interests = ResearchInterests(self.filename)
+        self._grants_awards = GrantsAwards(self.filename)
 
     @property
     def filename(self):
@@ -65,6 +67,10 @@ class CV:
     def research_interests(self):
         return self._research_interests
 
+    @property
+    def grants_awards(self):
+        return self._grants_awards
+
     def print(self):
         print("CV")
         print("Filename:", self.filename)
@@ -76,16 +82,10 @@ class CV:
         self.publications.print()
         self.news.print()
         self.research_interests.print()
+        self.grants_awards.print()
 
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    cv.intro.print()
-    cv.education.print()
-    cv.institutes.print()
-    cv.authors.print()
-    cv.software.print()
-    cv.publications.print()
-    cv.news.print()
-    cv.research_interests.print()
+    cv.print()
     sys.exit(0)
