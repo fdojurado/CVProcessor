@@ -25,7 +25,7 @@ pip install cvprocessor
 Here's a simple example of how to use CVProcessor to extract personal details from a CV:
 
 ```python
-from cvprocessor import CV
+from cvprocessor.cv import CV
 
 # Load a CV file
 cv_file = "cv.xlsx"
