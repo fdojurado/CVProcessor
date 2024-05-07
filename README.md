@@ -1,3 +1,5 @@
+**Warning**: This is under development, some features may not work as expected.
+
 # CVProcessor
 
 CVProcessor is a Python library for processing CV (Curriculum Vitae) or resume documents. It provides a set of functions and utilities to extract information from CVs, such as personal details, education, work experience, skills, and more.
@@ -8,7 +10,7 @@ CVProcessor is a Python library for processing CV (Curriculum Vitae) or resume d
 - Parse education details, including degrees, institutions, and dates.
 - Extract work experience information, including job titles, companies, and dates.
 - Identify and extract skills mentioned in CVs.
-- Support for various CV formats, including PDF, Word, and plain text.
+- Support for xlsx files.
 
 ## Installation
 
@@ -23,13 +25,12 @@ pip install cvprocessor
 Here's a simple example of how to use CVProcessor to extract personal details from a CV:
 
 ```python
-from cvprocessor import CVProcessor
+from cvprocessor import CV
 
 # Load a CV file
-cv_file = "resume.pdf"
-cv = CVProcessor(cv_file)
+cv_file = "cv.xlsx"
+cv = CV(cv_file)
 
-# Extract personal details
-personal_details = cv.extract_personal_details()
-print(personal_details)
+# print CV details
+cv.print()
 ```

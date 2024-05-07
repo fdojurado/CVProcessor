@@ -65,6 +65,18 @@ class CV:
     def research_interests(self):
         return self._research_interests
 
+    def print(self):
+        print("CV")
+        print("Filename:", self.filename)
+        self.intro.print()
+        self.education.print()
+        self.institutes.print()
+        self.authors.print()
+        self.software.print()
+        self.publications.print()
+        self.news.print()
+        self.research_interests.print()
+
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
