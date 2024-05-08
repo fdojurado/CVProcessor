@@ -98,7 +98,6 @@ class TeachingData:
         return year
 
     def process_year_data(self):
-        self.print()
         self._year = self.filename["Year"]
         self._year = self._year.split(";")
         self._year = list(filter(None, self._year))
