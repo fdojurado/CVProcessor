@@ -13,6 +13,7 @@ from cvprocessor.news import News
 from cvprocessor.research_interests import ResearchInterests
 from cvprocessor.grants_awards import GrantsAwards
 from cvprocessor.teaching import Teaching
+from cvprocessor.supervision import Supervision
 
 
 class CV:
@@ -28,6 +29,7 @@ class CV:
         self._research_interests = ResearchInterests(self.filename)
         self._grants_awards = GrantsAwards(self.filename)
         self._teaching = Teaching(self.filename)
+        self._supervision = Supervision(self.filename, self)
 
     @property
     def filename(self):
@@ -77,6 +79,10 @@ class CV:
     def teaching(self):
         return self._teaching
 
+    @property
+    def supervision(self):
+        return self._supervision
+
     def __str__(self):
         string = f"Education: {self.education}\n"
         string += f"Institutes: {self.institutes}\n"
@@ -88,14 +94,15 @@ class CV:
         string += f"Research Interests: {self.research_interests}\n"
         string += f"Grants and Awards: {self.grants_awards}\n"
         string += f"Teaching: {self.teaching}\n"
+        string += f"Supervision: {self.supervision}\n"
         return string
 
     def __repr__(self):
-        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching})"
+        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching}, supervision={self.supervision})"
         return repr
 
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(repr(cv))
+    print(repr(cv.supervision))
     sys.exit(0)
