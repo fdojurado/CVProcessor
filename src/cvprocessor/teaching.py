@@ -154,6 +154,20 @@ class Teaching:
     def teaching(self):
         return self._teaching
 
+    def get_teaching_type_ordered(self):
+        teaching_type = []
+        for teaching in self.teaching:
+            if teaching.type not in teaching_type:
+                teaching_type.append(teaching.type)
+        return teaching_type
+
+    def get_num_teaching_by_document_type(self, teaching_type):
+        count = 0
+        for teaching in self.teaching:
+            if teaching.type == teaching_type:
+                count += 1
+        return count
+
     def _load_teaching(self):
         teaching_df = pd.read_excel(self.filename, sheet_name="Teaching")
         return [TeachingData(teaching) for _, teaching in teaching_df.iterrows()]
