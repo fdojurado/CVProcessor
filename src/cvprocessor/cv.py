@@ -14,6 +14,7 @@ from cvprocessor.research_interests import ResearchInterests
 from cvprocessor.grants_awards import GrantsAwards
 from cvprocessor.teaching import Teaching
 from cvprocessor.supervision import Supervision
+from cvprocessor.experience import Experience
 
 
 class CV:
@@ -30,6 +31,7 @@ class CV:
         self._grants_awards = GrantsAwards(self.filename)
         self._teaching = Teaching(self.filename)
         self._supervision = Supervision(self.filename, self)
+        self._experience = Experience(self.filename, self)
 
     @property
     def filename(self):
@@ -82,6 +84,10 @@ class CV:
     @property
     def supervision(self):
         return self._supervision
+    
+    @property
+    def experience(self):
+        return self._experience
 
     def __str__(self):
         string = f"Education: {self.education}\n"
@@ -95,14 +101,15 @@ class CV:
         string += f"Grants and Awards: {self.grants_awards}\n"
         string += f"Teaching: {self.teaching}\n"
         string += f"Supervision: {self.supervision}\n"
+        string += f"Experience: {self.experience}\n"
         return string
 
     def __repr__(self):
-        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching}, supervision={self.supervision})"
+        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching}, supervision={self.supervision}, experience={self.experience})"
         return repr
 
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(repr(cv.supervision))
+    print(cv.experience)
     sys.exit(0)
