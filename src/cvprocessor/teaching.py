@@ -71,18 +71,26 @@ class TeachingData:
         return self._responsibilities
 
     def get_start_year(self):
-        year = 0
+        year = 1e6
+        date = None
         for start, _ in self.year:
+            if not start:
+                continue
             if int(start.year) < year:
                 year = int(start.year)
-        return year
+                date = start
+        return date
 
     def get_end_year(self):
         year = 0
+        date = None
         for _, end in self.year:
+            if not end:
+                continue
             if int(end.year) > year:
                 year = int(end.year)
-        return year
+                date = end
+        return date
 
     def format_year(self, year):
         year = year.strip()
@@ -90,21 +98,22 @@ class TeachingData:
         return year
 
     def process_year_data(self):
+        self.print()
         self._year = self.filename["Year"]
         self._year = self._year.split(";")
         self._year = list(filter(None, self._year))
         year_list = []
         for year in self._year:
             year_split = year.split("-")
-            if len(year_split) > 2:
+            if len(year_split) > 1:
                 start_year = year_split[0]
                 end_year = year_split[1]
             else:
                 start_year = year_split[0]
-                end_year = year_split[-1]
-            start_year = "Jul 2020"
+                end_year = None
             start_year = self.format_year(start_year)
-            end_year = self.format_year(end_year)
+            if end_year:
+                end_year = self.format_year(end_year)
             year_list.append((start_year, end_year))
         self._year = year_list
 
@@ -144,7 +153,7 @@ class Teaching:
         self._teaching = self._load_teaching()
         # Sort the teaching data by type then by year
         self._teaching = sorted(
-            self.teaching, key=lambda x: (x.type, x.end_year), reverse=True)
+            self.teaching, key=lambda x: (x.type, x.start_year), reverse=True)
 
     @property
     def filename(self):
