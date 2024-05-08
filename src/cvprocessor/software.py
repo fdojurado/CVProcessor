@@ -70,17 +70,21 @@ class SofwareData:
         self._summary = self.filename["Summary"]
         self._license = self.filename["License"]
 
-    def print(self):
-        print(f"ID: {self.id}")
-        print(f"Name: {self.name}")
-        print(f"Version: {self.version}")
-        print(f"Description: {self.description}")
-        print(f"repository: {self.repository}")
-        print(f"Demo: {self.demo}")
-        print(f"Website: {self.website}")
-        print(f"Summary: {self.summary}")
-        print(f"License: {self.license}")
-        print("\n")
+    def __str__(self) -> str:
+        string = f"ID: {self.id}\n"
+        string += f"Name: {self.name}\n"
+        string += f"Version: {self.version}\n"
+        string += f"Description: {self.description}\n"
+        string += f"Repository: {self.repository}\n"
+        string += f"Demo: {self.demo}\n"
+        string += f"Website: {self.website}\n"
+        string += f"Summary: {self.summary}\n"
+        string += f"License: {self.license}\n\n"
+        return string
+
+    def __repr__(self) -> str:
+        string = f"SofwareData(id={self.id}, name={self.name}, version={self.version}, description={self.description}, repository={self.repository}, demo={self.demo}, website={self.website}, summary={self.summary}, license={self.license})"
+        return string
 
 
 class Software:
@@ -113,6 +117,12 @@ class Software:
         software_df = pd.read_excel(self.filename, sheet_name="Software")
         return [SofwareData(software) for index, software in software_df.iterrows()]
 
-    def print(self):
+    def __str__(self) -> str:
+        string = ""
         for software in self.software:
-            software.print()
+            string += str(software)
+        return string
+
+    def __repr__(self) -> str:
+        repr = f"Software(filename={self.filename}, software={self.software})\n"
+        return repr

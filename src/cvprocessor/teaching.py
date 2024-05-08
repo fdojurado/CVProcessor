@@ -130,20 +130,24 @@ class TeachingData:
         self._supervisor = self.filename["Supervisor"]
         self._responsibilities = self.filename["Responsibilities"]
 
-    def print(self):
-        print(f"Year: {self.year}")
-        print(f"Start year: {self.start_year}")
-        print(f"End year: {self.end_year}")
-        print(f"Position: {self.position}")
-        print(f"Course: {self.course}")
-        print(f"Link: {self.link}")
-        print(f"Type: {self.type}")
-        print(f"Institution: {self.institution}")
-        print(f"Department: {self.department}")
-        print(f"Country: {self.country}")
-        print(f"Supervisor: {self.supervisor}")
-        print(f"Responsibilities: {self.responsibilities}")
-        print("\n")
+    def __str__(self):
+        string = f"Year: {self.year}\n"
+        string += f"Start year: {self.start_year}\n"
+        string += f"End year: {self.end_year}\n"
+        string += f"Position: {self.position}\n"
+        string += f"Course: {self.course}\n"
+        string += f"Link: {self.link}\n"
+        string += f"Type: {self.type}\n"
+        string += f"Institution: {self.institution}\n"
+        string += f"Department: {self.department}\n"
+        string += f"Country: {self.country}\n"
+        string += f"Supervisor: {self.supervisor}\n"
+        string += f"Responsibilities: {self.responsibilities}\n\n"
+        return string
+
+    def __repr__(self):
+        string = f"TeachingData(year={self.year}, start_year={self.start_year}, end_year={self.end_year}, position={self.position}, course={self.course}, link={self.link}, type={self.type}, institution={self.institution}, department={self.department}, country={self.country}, supervisor={self.supervisor}, responsibilities={self.responsibilities})"
+        return string
 
 
 class Teaching:
@@ -180,6 +184,12 @@ class Teaching:
         teaching_df = pd.read_excel(self.filename, sheet_name="Teaching")
         return [TeachingData(teaching) for _, teaching in teaching_df.iterrows()]
 
-    def print(self):
+    def __str__(self):
+        string = ""
         for teaching in self.teaching:
-            teaching.print()
+            string += str(teaching)
+        return string
+
+    def __repr__(self):
+        string = f"Teaching(filename={self.filename}, teaching={self.teaching})\n"
+        return string

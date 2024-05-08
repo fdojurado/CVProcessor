@@ -74,15 +74,19 @@ class InstituteData:
         self._coordinates = self._pd_dataframe["Coordinates"]
         self.process_coordinates()
 
-    def print(self):
-        print(f"Institute ID: {self._id}")
-        print(f"Institute Name: {self._name}")
-        print(f"Institute Address: {self._address}")
-        print(f"Institute City: {self._city}")
-        print(f"Institute Country: {self._country}")
-        print(f"Institute URL: {self._url}")
-        print(f"Institute Coordinates: {self._coordinates}")
-        print("\n")
+    def __str__(self):
+        string = f"Institute ID: {self._id}\n"
+        string += f"Institute Name: {self._name}\n"
+        string += f"Institute Address: {self._address}\n"
+        string += f"Institute City: {self._city}\n"
+        string += f"Institute Country: {self._country}\n"
+        string += f"Institute URL: {self._url}\n"
+        string += f"Institute Coordinates: {self._coordinates}\n\n"
+        return string
+
+    def __repr__(self):
+        string = f"InstituteData(id={self._id}, name={self._name}, address={self._address}, city={self._city}, country={self._country}, coordinates={self._coordinates}, url={self._url})"
+        return string
 
 
 class Institutes:
@@ -110,6 +114,12 @@ class Institutes:
         institutes_df = pd.read_excel(self.filename, sheet_name="Institutes")
         return [InstituteData(institute) for index, institute in institutes_df.iterrows()]
 
-    def print(self):
+    def __str__(self):
+        string = ""
         for institute in self.institute:
-            institute.print()
+            string += str(institute)
+        return string
+
+    def __repr__(self):
+        repr = f"Institutes(filename={self.filename}, institute={self.institute})\n"
+        return repr

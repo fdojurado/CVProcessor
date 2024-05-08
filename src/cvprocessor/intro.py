@@ -45,9 +45,13 @@ class Intro:
         # self._job_title = self.intro["Jobtitle"].values[0]
         self._tagline = self.intro["Tagline"].values[0]
 
-    def print(self):
-        print(f"Short summary: {self.short_summary}")
-        print(f"Long summary: {self.long_summary}")
-        print(f"Job title: {self.job_title}")
-        print(f"Tagline: {self.tagline}")
-        print("\n")
+    def __str__(self) -> str:
+        string = f"Short summary: {self.short_summary}\n"
+        string += f"Long summary: {self.long_summary}\n"
+        string += f"Job title: {self.job_title}\n"
+        string += f"Tagline: {self.tagline}\n\n"
+        return string
+
+    def __repr__(self) -> str:
+        repr = f"Intro(filename={self.filename}, short_summary={self.short_summary}, long_summary={self.long_summary}, job_title={self.job_title}, tagline={self.tagline})"
+        return repr

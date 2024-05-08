@@ -85,18 +85,22 @@ class EducationData:
         self._institution = self.filename["Institution"]
         self._country = self.filename["Country"]
 
-    def print(self):
-        print(f"Year: {self.year}")
-        print(f"Start year: {self.start_year}")
-        print(f"End year: {self.end_year}")
-        print(f"Degree: {self.degree}")
-        print(f"Advisor: {self.advisor}")
-        print(f"Thesis: {self.thesis}")
-        print(f"Thesis link: {self.thesis_link}")
-        print(f"Award: {self.award}")
-        print(f"Institution: {self.institution}")
-        print(f"Country: {self.country}")
-        print("\n")
+    def __str__(self):
+        string = f"Year: {self.year}\n"
+        string += f"Start year: {self.start_year}\n"
+        string += f"End year: {self.end_year}\n"
+        string += f"Degree: {self.degree}\n"
+        string += f"Advisor: {self.advisor}\n"
+        string += f"Thesis: {self.thesis}\n"
+        string += f"Thesis link: {self.thesis_link}\n"
+        string += f"Award: {self.award}\n"
+        string += f"Institution: {self.institution}\n"
+        string += f"Country: {self.country}\n\n"
+        return string
+
+    def __repr__(self) -> str:
+        string = f"EducationData(year={self.year}, start_year={self.start_year}, end_year={self.end_year}, degree={self.degree}, advisor={self.advisor}, thesis={self.thesis}, thesis_link={self.thesis_link}, award={self.award}, institution={self.institution}, country={self.country})"
+        return string
 
 
 class Education:
@@ -123,6 +127,12 @@ class Education:
         education_df = pd.read_excel(self.filename, sheet_name="Education")
         return [EducationData(row) for _, row in education_df.iterrows()]
 
-    def print(self):
+    def __str__(self) -> str:
+        string = ""
         for education in self.educations:
-            education.print()
+            string += str(education)
+        return string
+
+    def __repr__(self) -> str:
+        repr = f"Education(filename={self.filename}, educations={self.educations})\n"
+        return repr

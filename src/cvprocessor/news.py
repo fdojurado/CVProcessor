@@ -51,15 +51,19 @@ class NewsData:
         self._code = self._pd_dataframe["Code"]
         self._doi = self._pd_dataframe["DOI"]
 
-    def print(self):
-        print(f"Title: {self._title}")
-        print(f"Date: {self._date}")
-        print(f"Description: {self._description}")
-        print(f"PDF: {self._pdf}")
-        print(f"Preprint: {self._preprint}")
-        print(f"Code: {self._code}")
-        print(f"DOI: {self._doi}")
-        print("\n")
+    def __str__(self) -> str:
+        string = f"Title: {self.title}\n"
+        string += f"Date: {self.date}\n"
+        string += f"Description: {self.description}\n"
+        string += f"PDF: {self.pdf}\n"
+        string += f"Preprint: {self.preprint}\n"
+        string += f"Code: {self.code}\n"
+        string += f"DOI: {self.doi}\n\n"
+        return string
+
+    def __repr__(self) -> str:
+        string = f"NewsData(title={self.title}, date={self.date}, description={self.description}, pdf={self.pdf}, preprint={self.preprint}, code={self.code}, doi={self.doi})"
+        return string
 
 
 class News:
@@ -79,7 +83,12 @@ class News:
         news_df = pd.read_excel(self._filename, sheet_name="News")
         return [NewsData(row) for index, row in news_df.iterrows()]
 
-    def print(self):
-        print(f"Printing news from {self.filename}...")
+    def __str__(self):
+        string = ""
         for news in self.news:
-            news.print()
+            string += str(news)
+        return string
+
+    def __repr__(self):
+        repr = f"News(filename={self.filename}, news={self.news})\n"
+        return repr

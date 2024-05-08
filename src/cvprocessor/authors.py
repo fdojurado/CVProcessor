@@ -125,27 +125,31 @@ class AuthorsData:
         self._location = self.filename["Location"]
         self._telephone = self.filename["Telephone"]
 
-    def print(self):
-        print(f"id: {self.id}")
-        print(f"Name: {self.name}")
-        print(f"Lastname: {self.lastname}")
-        print(f"Alias Long: {self.alias_long}")
-        print(f"Alias Short: {self.alias_short}")
-        print(f"Job Title: {self.job_title}")
-        print(f"Website: {self.website}")
-        print(f"Fingerprint: {self.fingerprint}")
-        print(f"Public Key: {self.public_key}")
-        print(f"Email: {self.email}")
-        print(f"LinkedIn: {self.linkedin}")
-        print(f"GitHub: {self.github}")
-        print(f"Google Scholar: {self.google_scholar}")
-        print(f"ORCID: {self.orcid}")
-        print(f"ResearchGate: {self.researchgate}")
-        print(f"Address: {self.address}")
-        print(f"Location: {self.location}")
-        print(f"Telephone: {self.telephone}")
-        print(f"Affiliation: {self.affiliation.name}")
-        print("\n")
+    def __str__(self):
+        string = f"id: {self.id}\n"
+        string += f"Name: {self.name}\n"
+        string += f"Lastname: {self.lastname}\n"
+        string += f"Alias Long: {self.alias_long}\n"
+        string += f"Alias Short: {self.alias_short}\n"
+        string += f"Job Title: {self.job_title}\n"
+        string += f"Website: {self.website}\n"
+        string += f"Fingerprint: {self.fingerprint}\n"
+        string += f"Public Key: {self.public_key}\n"
+        string += f"Email: {self.email}\n"
+        string += f"LinkedIn: {self.linkedin}\n"
+        string += f"GitHub: {self.github}\n"
+        string += f"Google Scholar: {self.google_scholar}\n"
+        string += f"ORCID: {self.orcid}\n"
+        string += f"ResearchGate: {self.researchgate}\n"
+        string += f"Address: {self.address}\n"
+        string += f"Location: {self.location}\n"
+        string += f"Telephone: {self.telephone}\n"
+        string += f"Affiliation: {self.affiliation.name}\n\n"
+        return string
+
+    def __repr__(self):
+        repr = f"Author(id={self.id}, name={self.name}, lastname={self.lastname}, alias_long={self.alias_long}, alias_short={self.alias_short}, job_title={self.job_title}, website={self.website}, fingerprint={self.fingerprint}, public_key={self.public_key}, email={self.email}, linkedin={self.linkedin}, github={self.github}, google_scholar={self.google_scholar}, orcid={self.orcid}, researchgate={self.researchgate}, address={self.address}, location={self.location}, telephone={self.telephone}, affiliation={self.affiliation})\n"
+        return repr
 
 
 class Authors:
@@ -197,7 +201,12 @@ class Authors:
                 authors.append(author)
         return authors
 
-    def print(self):
-        print(f"Printing authors from {self.filename}...")
+    def __str__(self):
+        string = ""
         for author in self.authors:
-            author.print()
+            string += str(author)
+        return string
+
+    def __repr__(self):
+        repr = f"Authors(filename={self.filename}, cv={self.cv}, authors={self.authors})\n"
+        return repr

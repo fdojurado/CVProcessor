@@ -43,13 +43,17 @@ class GrantsAwardsData:
         self._country = self.filename["Country"]
         self._value = self.filename["Value"]
 
-    def print(self):
-        print(f"Year: {self.year}")
-        print(f"Description: {self.description}")
-        print(f"Institution: {self.institution}")
-        print(f"Country: {self.country}")
-        print(f"Value: {self.value}")
-        print("\n")
+    def __str__(self) -> str:
+        string = f"Year: {self.year}\n"
+        string += f"Description: {self.description}\n"
+        string += f"Institution: {self.institution}\n"
+        string += f"Country: {self.country}\n"
+        string += f"Value: {self.value}\n\n"
+        return string
+
+    def __repr__(self) -> str:
+        string = f"GrantsAwardsData(year={self.year}, description={self.description}, institution={self.institution}, country={self.country}, value={self.value})"
+        return string
 
 
 class GrantsAwards:
@@ -72,10 +76,16 @@ class GrantsAwards:
         return self.grants_awards[-1].year
 
     def _load_grants_awards(self):
-        self._filename = pd.read_excel(
+        grants_rewards_df = pd.read_excel(
             self.filename, sheet_name="Grants_awards")
-        return [GrantsAwardsData(row) for index, row in self.filename.iterrows()]
+        return [GrantsAwardsData(row) for _, row in grants_rewards_df.iterrows()]
 
-    def print(self):
-        for grant_award in self.grants_awards:
-            grant_award.print()
+    def __str__(self) -> str:
+        string = ""
+        for grants_award in self.grants_awards:
+            string += str(grants_award)
+        return string
+
+    def __repr__(self) -> str:
+        string = f"GrantsAwards(filename={self.filename}, grants_awards={self.grants_awards})"
+        return string

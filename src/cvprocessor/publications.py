@@ -200,28 +200,31 @@ class PublicationsData:
         citation += "."
         return citation
 
-    def print(self):
-        print(f"Authors: {self.authors}")
-        print(f"Title: {self.title}")
-        print(f"Year: {self.year}")
-        print(f"Source: {self.source}")
-        print(f"Volume: {self.volume}")
-        print(f"Issue: {self.issue}")
-        print(f"Art. No.: {self.artno}")
-        print(f"Page start: {self.page_start}")
-        print(f"Page end: {self.page_end}")
-        print(f"DOI: {self.doi}")
-        print(f"Preprint DOI: {self.preprint_doi}")
-        print(f"Document Type: {self.document_type}")
-        print(f"Code: {self.code.name if self.code else None}")
-        print(f"Slides: {self.slides}")
-        print(f"Abstract: {self.abstract}")
-        print(f"Keywords: {self.keywords}")
-        print(f"JCR: {self.jcr}")
-        print(f"License: {self.license}")
-        print(f"Copyright: {self.copyright}")
-        citation = self.build_apa_citation()
-        print(f"Citation: {citation}")
+    def __str__(self) -> str:
+        string = f"Title: {self.title}\n"
+        string += f"Authors: {self.authors}\n"
+        string += f"Year: {self.year}\n"
+        string += f"Source: {self.source}\n"
+        string += f"Volume: {self.volume}\n"
+        string += f"Issue: {self.issue}\n"
+        string += f"Art. No.: {self.artno}\n"
+        string += f"Page start: {self.page_start}\n"
+        string += f"Page end: {self.page_end}\n"
+        string += f"DOI: {self.doi}\n"
+        string += f"Preprint DOI: {self.preprint_doi}\n"
+        string += f"Document Type: {self.document_type}\n"
+        string += f"Code: {self.code.name if self.code else None}\n"
+        string += f"Slides: {self.slides}\n"
+        string += f"Abstract: {self.abstract}\n"
+        string += f"Keywords: {self.keywords}\n"
+        string += f"JCR: {self.jcr}\n"
+        string += f"License: {self.license}\n"
+        string += f"Copyright: {self.copyright}\n\n"
+        return string
+
+    def __repr__(self) -> str:
+        repr = f"PublicationsData(authors={self.authors}, title={self.title}, year={self.year}, source={self.source}, volume={self.volume}, issue={self.issue}, artno={self.artno}, page_start={self.page_start}, page_end={self.page_end}, doi={self.doi}, preprint_doi={self.preprint_doi}, document_type={self.document_type}, code={self.code}, slides={self.slides}, abstract={self.abstract}, keywords={self.keywords}, jcr={self.jcr}, license={self.license}, copyright={self.copyright})"
+        return repr
 
 
 class Publications():
@@ -294,11 +297,12 @@ class Publications():
             self.filename, sheet_name="Publications")
         return [PublicationsData(row, self.cv) for index, row in publications_df.iterrows()]
 
-    def print(self):
-        print(f"Publications in {self.filename}")
+    def __str__(self):
+        string = ""
         for publication in self.publications:
-            publication.print()
-        # print the number of publications and unique sources
-        print(f"Total publications: {self.get_publications_count()}")
-        print(f"Unique sources: {self.get_unique_sources()}")
-        print(f"Document types: {self.get_document_types()}")
+            string += str(publication)
+        return string
+
+    def __repr__(self):
+        repr = f"Publications(filename={self.filename}, cv={self.cv}, publications={self.publications})\n"
+        return repr

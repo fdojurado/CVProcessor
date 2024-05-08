@@ -77,22 +77,25 @@ class CV:
     def teaching(self):
         return self._teaching
 
-    def print(self):
-        print("CV")
-        print("Filename:", self.filename)
-        self.intro.print()
-        self.education.print()
-        self.institutes.print()
-        self.authors.print()
-        self.software.print()
-        self.publications.print()
-        self.news.print()
-        self.research_interests.print()
-        self.grants_awards.print()
-        self.teaching.print()
+    def __str__(self):
+        string = f"Education: {self.education}\n"
+        string += f"Institutes: {self.institutes}\n"
+        string += f"Software: {self.software}\n"
+        string += f"Intro: {self.intro}\n"
+        string += f"Authors: {self.authors}\n"
+        string += f"News: {self.news}\n"
+        string += f"Publications: {self.publications}\n"
+        string += f"Research Interests: {self.research_interests}\n"
+        string += f"Grants and Awards: {self.grants_awards}\n"
+        string += f"Teaching: {self.teaching}\n"
+        return string
+
+    def __repr__(self):
+        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching})"
+        return repr
 
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    cv.print()
+    print(repr(cv))
     sys.exit(0)

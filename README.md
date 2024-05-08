@@ -31,6 +31,8 @@ from cvprocessor.cv import CV
 cv_file = "cv.xlsx"
 cv = CV(cv_file)
 
-# print CV details
-cv.print()
+# print education details
+print(cv.education)
+# Print teaching experience
+print(cv.teaching)
 ```
