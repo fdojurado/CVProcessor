@@ -1,0 +1,163 @@
+import pandas as pd
+
+
+class TeachingData:
+    def __init__(self, filename):
+        self._filename = filename
+        self._year = None
+        self._start_year = None
+        self._end_year = None
+        self._position = None
+        self._course = None
+        self._link = None
+        self._type = None
+        self._institution = None
+        self._department = None
+        self._country = None
+        self._supervisor = None
+        self._responsibilities = None
+        self._load_teaching()
+
+    @property
+    def filename(self):
+        return self._filename
+
+    @property
+    def year(self):
+        return self._year
+
+    @property
+    def start_year(self):
+        return self._start_year
+
+    @property
+    def end_year(self):
+        return self._end_year
+
+    @property
+    def position(self):
+        return self._position
+
+    @property
+    def course(self):
+        return self._course
+
+    @property
+    def link(self):
+        return self._link
+
+    @property
+    def type(self):
+        return self._type
+
+    @property
+    def institution(self):
+        return self._institution
+
+    @property
+    def department(self):
+        return self._department
+
+    @property
+    def country(self):
+        return self._country
+
+    @property
+    def supervisor(self):
+        return self._supervisor
+
+    @property
+    def responsibilities(self):
+        return self._responsibilities
+
+    def get_start_year(self):
+        year = 0
+        for start, _ in self.year:
+            if int(start.year) < year:
+                year = int(start.year)
+        return year
+
+    def get_end_year(self):
+        year = 0
+        for _, end in self.year:
+            if int(end.year) > year:
+                year = int(end.year)
+        return year
+
+    def format_year(self, year):
+        year = year.strip()
+        year = pd.to_datetime(year, format="%b %Y")
+        return year
+
+    def process_year_data(self):
+        self._year = self.filename["Year"]
+        self._year = self._year.split(";")
+        self._year = list(filter(None, self._year))
+        year_list = []
+        for year in self._year:
+            year_split = year.split("-")
+            if len(year_split) > 2:
+                start_year = year_split[0]
+                end_year = year_split[1]
+            else:
+                start_year = year_split[0]
+                end_year = year_split[-1]
+            start_year = "Jul 2020"
+            start_year = self.format_year(start_year)
+            end_year = self.format_year(end_year)
+            year_list.append((start_year, end_year))
+        self._year = year_list
+
+    def _load_teaching(self):
+        self.process_year_data()
+        self._start_year = self.get_start_year()
+        self._end_year = self.get_end_year()
+        self._position = self.filename["Position"]
+        self._course = self.filename["Course"]
+        self._link = self.filename["Link"]
+        self._type = self.filename["Type"]
+        self._institution = self.filename["Institution"]
+        self._department = self.filename["Department"]
+        self._country = self.filename["Country"]
+        self._supervisor = self.filename["Supervisor"]
+        self._responsibilities = self.filename["Responsibilities"]
+
+    def print(self):
+        print(f"Year: {self.year}")
+        print(f"Start year: {self.start_year}")
+        print(f"End year: {self.end_year}")
+        print(f"Position: {self.position}")
+        print(f"Course: {self.course}")
+        print(f"Link: {self.link}")
+        print(f"Type: {self.type}")
+        print(f"Institution: {self.institution}")
+        print(f"Department: {self.department}")
+        print(f"Country: {self.country}")
+        print(f"Supervisor: {self.supervisor}")
+        print(f"Responsibilities: {self.responsibilities}")
+        print("\n")
+
+
+class Teaching:
+    def __init__(self, filename):
+        self._filename = filename
+        self._teaching = self._load_teaching()
+        # Sort the teaching data by type then by year
+        self._teaching = sorted(
+            self.teaching, key=lambda x: (x.type, x.end_year), reverse=True)
+
+    @property
+    def filename(self):
+        return self._filename
+
+    @property
+    def teaching(self):
+        return self._teaching
+
+    def _load_teaching(self):
+        teaching_df = pd.read_excel(self.filename, sheet_name="Teaching")
+        return [TeachingData(teaching) for _, teaching in teaching_df.iterrows()]
+
+    def print(self):
+        for teaching in self.teaching:
+            teaching.print()

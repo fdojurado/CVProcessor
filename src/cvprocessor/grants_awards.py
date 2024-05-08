@@ -68,6 +68,9 @@ class GrantsAwards:
     def grants_awards(self):
         return self._grants_awards
 
+    def get_oldest_year(self):
+        return self.grants_awards[-1].year
+
     def _load_grants_awards(self):
         self._filename = pd.read_excel(
             self.filename, sheet_name="Grants_awards")
