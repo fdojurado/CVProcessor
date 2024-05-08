@@ -112,7 +112,7 @@ class ExperienceData:
         string = f"Year: {self.year}\n"
         string += f"Position: {self.position}\n"
         institution = self.cv.institutes.get_institute(self.institution)
-        string += f"Institution: {institution}\n"
+        string += f"Institution: {institution.name}\n"
         string += f"Description: {self.description}\n"
         string += f"Responsibilities: {self.responsibilities}\n\n"
         return string
