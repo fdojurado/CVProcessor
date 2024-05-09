@@ -6,6 +6,7 @@ class InstituteData:
         self._pd_dataframe = pd_dataframe
         self._id = None
         self._name = None
+        self._name_abbr = None
         self._address = None
         self._city = None
         self._country = None
@@ -24,6 +25,10 @@ class InstituteData:
     @property
     def name(self):
         return self._name
+
+    @property
+    def name_abbr(self):
+        return self._name_abbr
 
     @property
     def address(self):
@@ -67,6 +72,7 @@ class InstituteData:
     def _load_institute(self):
         self._id = self._pd_dataframe["id"]
         self._name = self._pd_dataframe["Name"]
+        self._name_abbr = self._pd_dataframe["Name Abbreviation"]
         self._address = self._pd_dataframe["Address"]
         self._city = self._pd_dataframe["City"]
         self._country = self._pd_dataframe["Country"]
@@ -77,6 +83,7 @@ class InstituteData:
     def __str__(self):
         string = f"Institute ID: {self._id}\n"
         string += f"Institute Name: {self._name}\n"
+        string += f"Institute Name Abbreviation: {self._name_abbr}\n"
         string += f"Institute Address: {self._address}\n"
         string += f"Institute City: {self._city}\n"
         string += f"Institute Country: {self._country}\n"
@@ -85,7 +92,7 @@ class InstituteData:
         return string
 
     def __repr__(self):
-        string = f"InstituteData(id={self._id}, name={self._name}, address={self._address}, city={self._city}, country={self._country}, coordinates={self._coordinates}, url={self._url})"
+        string = f"InstituteData(id={self._id}, name={self._name}, name_abbr={self._name_abbr}, address={self._address}, city={self._city}, country={self._country}, url={self._url}, coordinates={self._coordinates})\n"
         return string
 
 
