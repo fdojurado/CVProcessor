@@ -17,6 +17,7 @@ from cvprocessor.supervision import Supervision
 from cvprocessor.experience import Experience
 from cvprocessor.skills import Skills
 from cvprocessor.service import Services
+from cvprocessor.memberships import Memberships
 
 
 class CV:
@@ -36,6 +37,7 @@ class CV:
         self._experience = Experience(self.filename, self)
         self._skills = Skills(self.filename)
         self._service = Services(self.filename)
+        self._memberships = Memberships(self.filename)
 
     @property
     def filename(self):
@@ -96,10 +98,14 @@ class CV:
     @property
     def skills(self):
         return self._skills
-    
+
     @property
     def service(self):
         return self._service
+
+    @property
+    def memberships(self):
+        return self._memberships
 
     def __str__(self):
         string = f"Education: {self.education}\n"
@@ -116,14 +122,15 @@ class CV:
         string += f"Experience: {self.experience}\n"
         string += f"Skills: {self.skills}\n"
         string += f"Service: {self.service}\n"
+        string += f"Memberships: {self.memberships}\n"
         return string
 
     def __repr__(self):
-        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching}, supervision={self.supervision}, experience={self.experience}, skills={self.skills}, service={self.service})"
+        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching}, supervision={self.supervision}, experience={self.experience}, skills={self.skills}, service={self.service}, memberships={self.memberships})"
         return repr
 
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(str(cv.service))
+    print(repr(cv.memberships))
     sys.exit(0)
