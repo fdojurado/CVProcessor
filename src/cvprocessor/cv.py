@@ -16,6 +16,7 @@ from cvprocessor.teaching import Teaching
 from cvprocessor.supervision import Supervision
 from cvprocessor.experience import Experience
 from cvprocessor.skills import Skills
+from cvprocessor.service import Services
 
 
 class CV:
@@ -34,6 +35,7 @@ class CV:
         self._supervision = Supervision(self.filename, self)
         self._experience = Experience(self.filename, self)
         self._skills = Skills(self.filename)
+        self._service = Services(self.filename)
 
     @property
     def filename(self):
@@ -94,6 +96,10 @@ class CV:
     @property
     def skills(self):
         return self._skills
+    
+    @property
+    def service(self):
+        return self._service
 
     def __str__(self):
         string = f"Education: {self.education}\n"
@@ -109,14 +115,15 @@ class CV:
         string += f"Supervision: {self.supervision}\n"
         string += f"Experience: {self.experience}\n"
         string += f"Skills: {self.skills}\n"
+        string += f"Service: {self.service}\n"
         return string
 
     def __repr__(self):
-        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching}, supervision={self.supervision}, experience={self.experience}, skills={self.skills})"
+        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching}, supervision={self.supervision}, experience={self.experience}, skills={self.skills}, service={self.service})"
         return repr
 
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(repr(cv.skills))
+    print(str(cv.service))
     sys.exit(0)
