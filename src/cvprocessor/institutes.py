@@ -7,6 +7,8 @@ class InstituteData:
         self._id = None
         self._name = None
         self._name_abbr = None
+        self._department = None
+        self._department_abbr = None
         self._address = None
         self._city = None
         self._country = None
@@ -29,6 +31,14 @@ class InstituteData:
     @property
     def name_abbr(self):
         return self._name_abbr
+    
+    @property
+    def department(self):
+        return self._department
+    
+    @property
+    def department_abbr(self):
+        return self._department_abbr
 
     @property
     def address(self):
@@ -73,6 +83,8 @@ class InstituteData:
         self._id = self._pd_dataframe["id"]
         self._name = self._pd_dataframe["Name"]
         self._name_abbr = self._pd_dataframe["Name Abbreviation"]
+        self._department = self._pd_dataframe["Department"]
+        self._department_abbr = self._pd_dataframe["Department Abbreviation"]
         self._address = self._pd_dataframe["Address"]
         self._city = self._pd_dataframe["City"]
         self._country = self._pd_dataframe["Country"]
@@ -84,6 +96,8 @@ class InstituteData:
         string = f"Institute ID: {self._id}\n"
         string += f"Institute Name: {self._name}\n"
         string += f"Institute Name Abbreviation: {self._name_abbr}\n"
+        string += f"Institute Department: {self._department}\n"
+        string += f"Institute Department Abbreviation: {self._department_abbr}\n"
         string += f"Institute Address: {self._address}\n"
         string += f"Institute City: {self._city}\n"
         string += f"Institute Country: {self._country}\n"
