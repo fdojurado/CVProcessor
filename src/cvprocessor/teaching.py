@@ -12,8 +12,6 @@ class TeachingData:
         self._link = None
         self._type = None
         self._institution = None
-        self._department = None
-        self._country = None
         self._supervisor = None
         self._responsibilities = None
         self._load_teaching()
@@ -53,14 +51,6 @@ class TeachingData:
     @property
     def institution(self):
         return self._institution
-
-    @property
-    def department(self):
-        return self._department
-
-    @property
-    def country(self):
-        return self._country
 
     @property
     def supervisor(self):
@@ -125,8 +115,6 @@ class TeachingData:
         self._link = self.filename["Link"]
         self._type = self.filename["Type"]
         self._institution = self.filename["Institution"]
-        self._department = self.filename["Department"]
-        self._country = self.filename["Country"]
         self._supervisor = self.filename["Supervisor"]
         self._responsibilities = self.filename["Responsibilities"]
 
@@ -139,8 +127,6 @@ class TeachingData:
         string += f"Link: {self.link}\n"
         string += f"Type: {self.type}\n"
         string += f"Institution: {self.institution}\n"
-        string += f"Department: {self.department}\n"
-        string += f"Country: {self.country}\n"
         string += f"Supervisor: {self.supervisor}\n"
         string += f"Responsibilities: {self.responsibilities}\n\n"
         return string
