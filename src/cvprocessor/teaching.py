@@ -1,10 +1,55 @@
 import pandas as pd
 
 
+class YearData:
+    def __init__(self, year_range):
+        self._year_range = year_range
+        self._start_year = None
+        self._end_year = None
+        self._process_year_range()
+
+    @property
+    def year_range(self):
+        return self._year_range
+
+    @property
+    def start_year(self):
+        return self._start_year
+
+    @property
+    def end_year(self):
+        return self._end_year
+
+    def format_year(self, year):
+        year = year.strip()
+        year = pd.to_datetime(year, format="%b %Y")
+        return year
+
+    def _process_year_range(self):
+        year_range = self.year_range.split("-")
+        self._start_year = self.format_year(year_range[0])
+        self._start_year = pd.to_datetime(self.start_year, format="%b %Y")
+        if len(year_range) > 1:
+            self._end_year = self.format_year(year_range[1])
+            self._end_year = pd.to_datetime(self.end_year, format="%b %Y")
+        else:
+            self._end_year = None
+
+    def __str__(self):
+        string = f"Year range: {self.year_range}\n"
+        string += f"Start year: {self.start_year}\n"
+        string += f"End year: {self.end_year}\n"
+        return string
+
+    def __repr__(self):
+        string = f"YearData(year_range={self.year_range}, start_year={self.start_year}, end_year={self.end_year})"
+        return string
+
+
 class TeachingData:
     def __init__(self, filename):
         self._filename = filename
-        self._year = None
+        self._year_range = None
         self._start_year = None
         self._end_year = None
         self._position = None
@@ -22,7 +67,7 @@ class TeachingData:
 
     @property
     def year(self):
-        return self._year
+        return self._year_range
 
     @property
     def start_year(self):
@@ -61,50 +106,32 @@ class TeachingData:
         return self._responsibilities
 
     def get_start_year(self):
-        year = 1e6
+        min_year = 1e6
         date = None
-        for start, _ in self.year:
-            if not start:
-                continue
-            if int(start.year) < year:
-                year = int(start.year)
-                date = start
+        for year in self.year:
+            if int(year.start_year.year) < min_year:
+                min_year = int(year.start_year.year)
+                date = year.start_year
         return date
 
     def get_end_year(self):
-        year = 0
+        max_year = -1
         date = None
-        for _, end in self.year:
-            if not end:
-                continue
-            if int(end.year) > year:
-                year = int(end.year)
-                date = end
+        for year in self.year:
+            if year.end_year is not None:
+                if int(year.end_year.year) > max_year:
+                    max_year = int(year.end_year.year)
+                    date = year.end_year
         return date
 
-    def format_year(self, year):
-        year = year.strip()
-        year = pd.to_datetime(year, format="%b %Y")
-        return year
-
     def process_year_data(self):
-        self._year = self.filename["Year"]
-        self._year = self._year.split(";")
-        self._year = list(filter(None, self._year))
+        self._year_range = self.filename["Year"]
+        self._year_range = self._year_range.split(";")
+        self._year_range = list(filter(None, self._year_range))
         year_list = []
-        for year in self._year:
-            year_split = year.split("-")
-            if len(year_split) > 1:
-                start_year = year_split[0]
-                end_year = year_split[1]
-            else:
-                start_year = year_split[0]
-                end_year = None
-            start_year = self.format_year(start_year)
-            if end_year:
-                end_year = self.format_year(end_year)
-            year_list.append((start_year, end_year))
-        self._year = year_list
+        for year in self._year_range:
+            year_list.append(YearData(year))
+        self._year_range = year_list
 
     def _load_teaching(self):
         self.process_year_data()
@@ -119,7 +146,10 @@ class TeachingData:
         self._responsibilities = self.filename["Responsibilities"]
 
     def __str__(self):
-        string = f"Year: {self.year}\n"
+        year_data = ""
+        for year in self.year:
+            year_data += str(year)
+        string = f"Year range: {year_data}\n"
         string += f"Start year: {self.start_year}\n"
         string += f"End year: {self.end_year}\n"
         string += f"Position: {self.position}\n"
@@ -132,7 +162,7 @@ class TeachingData:
         return string
 
     def __repr__(self):
-        string = f"TeachingData(year={self.year}, start_year={self.start_year}, end_year={self.end_year}, position={self.position}, course={self.course}, link={self.link}, type={self.type}, institution={self.institution}, department={self.department}, country={self.country}, supervisor={self.supervisor}, responsibilities={self.responsibilities})"
+        string = f"TeachingData(year_range={self.year}, start_year={self.start_year}, end_year={self.end_year}, position={self.position}, course={self.course}, link={self.link}, type={self.type}, institution={self.institution}, department={self.department}, country={self.country}, supervisor={self.supervisor}, responsibilities={self.responsibilities})"
         return string
 
 
