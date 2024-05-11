@@ -132,6 +132,9 @@ class TeachingData:
         for year in self._year_range:
             year_list.append(YearData(year))
         self._year_range = year_list
+        # Sort the year data by start year
+        self._year_range = sorted(
+            self.year, key=lambda x: x.start_year, reverse=True)
 
     def _load_teaching(self):
         self.process_year_data()
