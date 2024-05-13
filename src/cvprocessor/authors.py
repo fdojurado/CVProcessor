@@ -236,12 +236,11 @@ class AuthorsData:
     def __repr__(self):
         string = (
             f"Author("
-            f"filename={self.filename}, "
             f"id={self.id}, "
-            f"affiliation={self.affiliation}, "
-            f"personal_info={self.personal_info}, "
-            f"contact_info={self.contact_info}, "
-            f"research_info={self.research_info})"
+            f"affiliation={repr(self.affiliation)}, "
+            f"personal_info={repr(self.personal_info)}, "
+            f"contact_info={repr(self.contact_info)}, "
+            f"research_info={repr(self.research_info)})"
         )
         return string
 
@@ -348,7 +347,6 @@ class Authors:
         string = (
             f"Authors("
             f"filename={self.filename}, "
-            f"cv={self.cv}, "
             f"authors={self.authors})\n"
         )
         return string
