@@ -173,6 +173,42 @@ class CV:
         """
         return self.software.get_software(software_id)
 
+    def get_publications_count(self):
+        """
+        The get_publications_count method is used to get the number of publications.
+        """
+        return self.academic_info.publications.get_publications_count()
+
+    def get_publications_unique_sources(self):
+        """
+        The get_publications_unique_sources method is used to get the unique sources of the publications.
+        """
+        return self.academic_info.publications.get_unique_sources()
+
+    def get_publications_document_types_ordered(self):
+        """
+        The get_publications_document_types_ordered method is used to get the document types of the publications in order.
+        """
+        return self.academic_info.publications.get_document_types_ordered()
+
+    def get_publications_num_publications_by_document_type(self, document_type):
+        """
+        The get_publications_num_publications_by_document_type method is used to get the number of publications by the given document type.
+
+        :param document_type: The document type.
+        :type document_type: str
+        """
+        return self.academic_info.publications.get_num_publications_by_document_type(document_type)
+
+    def get_publications_num_publications_by_author(self, author_id):
+        """
+        The get_publications_num_publications_by_author method is used to get the number of publications by the given author.
+
+        :param author_id: The author ID.
+        :type author_id: int
+        """
+        return self.academic_info.publications.get_num_publications_by_author(author_id)
+
     def _load_cv(self, filename):
         """
         The _load_cv method is used to load the CV file.
