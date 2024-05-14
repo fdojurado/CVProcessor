@@ -311,6 +311,114 @@ class PublicationsData:
         self.resources = PublicationResources()
         self.rights = PublicationRights()
 
+    def get_title(self):
+        """
+        Get the title of the publication.
+        """
+        return self.details.basic_info.title
+
+    def get_year(self):
+        """
+        Get the year of the publication.
+        """
+        return self.details.basic_info.year
+
+    def get_source(self):
+        """
+        Get the source of the publication.
+        """
+        return self.details.basic_info.source
+
+    def get_volume(self):
+        """
+        Get the volume of the publication.
+        """
+        return self.details.journal_info.volume
+
+    def get_issue(self):
+        """
+        Get the issue of the publication.
+        """
+        return self.details.journal_info.issue
+
+    def get_artno(self):
+        """
+        Get the article number of the publication.
+        """
+        return self.details.journal_info.artno
+
+    def get_page_start(self):
+        """
+        Get the starting page of the publication.
+        """
+        return self.details.page_info.page_start
+
+    def get_page_end(self):
+        """
+        Get the ending page of the publication.
+        """
+        return self.details.page_info.page_end
+
+    def get_document_type(self):
+        """
+        Get the document type of the publication.
+        """
+        return self.details.document_type
+
+    def get_code(self):
+        """
+        Get the code of the publication.
+        """
+        return self.resources.code
+
+    def get_slides(self):
+        """
+        Get the slides of the publication.
+        """
+        return self.resources.slides
+
+    def get_abstract(self):
+        """
+        Get the abstract of the publication.
+        """
+        return self.resources.abstract
+
+    def get_keywords(self):
+        """
+        Get the keywords of the publication.
+        """
+        return self.resources.keywords
+
+    def get_doi(self):
+        """
+        Get the DOI of the publication.
+        """
+        return self.resources.doi
+
+    def get_preprint_doi(self):
+        """
+        Get the preprint DOI of the publication.
+        """
+        return self.resources.preprint_doi
+
+    def get_jcr(self):
+        """
+        Get the JCR of the publication.
+        """
+        return self.rights.jcr
+
+    def get_license(self):
+        """
+        Get the license of the publication.
+        """
+        return self.rights.license
+
+    def get_copyright(self):
+        """
+        Get the copyright of the publication.
+        """
+        return self.rights.copyright
+
     def load(self, filename):
         """
         Load the publication data from the file.
