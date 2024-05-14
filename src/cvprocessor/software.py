@@ -104,6 +104,60 @@ class SoftwareData:
         self.summary = str()
         self.license = str()
 
+    def get_id(self):
+        """
+        Get the ID of the software.
+        """
+        return self.info.id
+
+    def get_name(self):
+        """
+        Get the name of the software.
+        """
+        return self.info.name
+
+    def get_version(self):
+        """
+        Get the version of the software.
+        """
+        return self.info.version
+
+    def get_description(self):
+        """
+        Get the description of the software.
+        """
+        return self.info.description
+
+    def get_repository(self):
+        """
+        Get the repository link of the software.
+        """
+        return self.resources.repository
+
+    def get_demo(self):
+        """
+        Get the demo link of the software.
+        """
+        return self.resources.demo
+
+    def get_website(self):
+        """
+        Get the website link of the software.
+        """
+        return self.resources.website
+
+    def get_summary(self):
+        """
+        Get the summary of the software.
+        """
+        return self.summary
+
+    def get_license(self):
+        """
+        Get the license of the software.
+        """
+        return self.license
+
     def load(self, filename) -> None:
         """
         Load the software data from a file.
@@ -151,7 +205,7 @@ class Software:
         if isinstance(software_id, str):
             software_id = int(software_id)
         for software in self.softwares:
-            if software.info.id == software_id:
+            if software.get_id() == software_id:
                 return software
         return None
 

@@ -164,6 +164,15 @@ class CV:
         """
         return self.academic_info.institutes.get_institute(institute_id)
 
+    def get_software(self, software_id):
+        """
+        The get_software method is used to get the software by the given software ID.
+
+        :param software_id: The software ID.
+        :type software_id: int
+        """
+        return self.software.get_software(software_id)
+
     def _load_cv(self, filename):
         """
         The _load_cv method is used to load the CV file.
