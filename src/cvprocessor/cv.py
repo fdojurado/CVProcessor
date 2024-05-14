@@ -209,6 +209,12 @@ class CV:
         """
         return self.academic_info.publications.get_num_publications_by_author(author_id)
 
+    def get_publications_year_range(self):
+        """
+        The get_publications_year_range method is used to get the year range of the publications.
+        """
+        return self.academic_info.publications.get_publications_year_range()
+
     def get_research_interests(self):
         """
         The get_reserach_interests method is used to get the research interests.
