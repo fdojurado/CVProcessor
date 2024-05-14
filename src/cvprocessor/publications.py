@@ -270,6 +270,18 @@ class AuthorIDAffiliationIDs:
         self.author_id = int()
         self.affiliation_ids = []
 
+    def get_author_id(self):
+        """
+        Get the author ID.
+        """
+        return self.author_id
+
+    def get_affiliation_ids(self):
+        """
+        Get the affiliation IDs.
+        """
+        return self.affiliation_ids
+
     def add_affiliation_id(self, affiliation_id):
         """
         Add an affiliation ID.
