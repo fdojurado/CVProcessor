@@ -579,9 +579,9 @@ class Publications():
         Gets the number of publications by author.
         """
         count = 0
-        for publication in self.publications:
-            for author in publication.authors:
-                if author.id == author_id:
+        for publication in self:
+            for author in publication.get_authors_ids():
+                if author.get_author_id() == author_id:
                     count += 1
                     break
         return count
