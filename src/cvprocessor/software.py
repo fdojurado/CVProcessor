@@ -233,3 +233,6 @@ class Software:
     def __repr__(self) -> str:
         string = f"Software(software={repr(self.softwares)})"
         return string
+
+    def __iter__(self):
+        return iter(self.softwares)
