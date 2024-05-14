@@ -173,7 +173,7 @@ class Software:
     def __str__(self) -> str:
         string = ""
         for software in self.softwares:
-            string += str(software)
+            string += str(software) + "\n"
         return string
 
     def __repr__(self) -> str:

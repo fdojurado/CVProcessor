@@ -26,7 +26,7 @@ class MembershipData:
 
     def __str__(self):
         string = f"Year: {self.year}\n"
-        string += f"Membership: {self.membership}\n\n"
+        string += f"Membership: {self.membership}\n"
         return string
 
     def __repr__(self):
@@ -55,7 +55,7 @@ class Memberships:
     def __str__(self):
         string = ""
         for membership in self.memberships:
-            string += str(membership)
+            string += str(membership) + "\n"
         return string
 
     def __repr__(self):

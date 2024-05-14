@@ -79,7 +79,7 @@ class SupervisionData:
         self.supervisors = filename["Supervisors"]
 
     def __str__(self) -> str:
-        string = f"info: {str(self.info)}\n"
+        string = str(self.info)
         string += f"Institution: {self.institution}\n"
         string += f"Supervisors: {self.supervisors}\n"
         string += f"Students: {self.students}\n"
@@ -137,7 +137,7 @@ class Supervision:
         Load the supervision data.
         """
         supervision_df = pd.read_excel(filename, sheet_name="Supervision")
-        for index, row in supervision_df.iterrows():
+        for _, row in supervision_df.iterrows():
             supervision_data = SupervisionData()
             supervision_data.load(row)
             self.supervisions.append(supervision_data)
@@ -148,7 +148,7 @@ class Supervision:
     def __str__(self) -> str:
         string = ""
         for supervision in self.supervisions:
-            string += str(supervision)
+            string += str(supervision) + "\n"
         return string
 
     def __repr__(self) -> str:

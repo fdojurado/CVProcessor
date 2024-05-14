@@ -186,10 +186,10 @@ class AuthorsData:
 
     def __str__(self):
         string = f"id: {self.id}\n"
-        string += f"Affiliation: \n{self.affiliations}\n"
-        string += f"Personal Info: \n{self.personal_info}\n"
-        string += f"Contact Info: \n{self.contact_info}\n"
-        string += f"Research Info: \n{self.research_info}\n"
+        string += f"Affiliation: {self.affiliations}\n"
+        string += str(self.personal_info)
+        string += str(self.contact_info)
+        string += str(self.research_info)
         return string
 
     def __repr__(self):
@@ -249,7 +249,7 @@ class Authors:
     def __str__(self):
         string = ""
         for author in self.authors:
-            string += str(author)
+            string += str(author) + "\n"
         return string
 
     def __repr__(self):

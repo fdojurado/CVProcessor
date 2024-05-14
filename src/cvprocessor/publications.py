@@ -158,9 +158,9 @@ class PublicationDetails:
         return string
 
     def __str__(self):
-        string = f"Basic Info: {self.basic_info}\n"
-        string += f"Journal Info: {self.journal_info}\n"
-        string += f"Page Info: {self.page_info}\n"
+        string = str(self.basic_info)
+        string += str(self.journal_info)
+        string += str(self.page_info)
         return string
 
 
@@ -268,7 +268,7 @@ class AuthorIDAffiliationIDs:
 
     def __init__(self):
         self.author_id = int()
-        self.affiliation_ids = [int()]
+        self.affiliation_ids = []
 
     def add_affiliation_id(self, affiliation_id):
         """
@@ -286,7 +286,7 @@ class AuthorIDAffiliationIDs:
 
     def __str__(self):
         string = f"Author ID: {self.author_id}\n"
-        string += f"Affiliation IDs: {repr(list(map(str, self.affiliation_ids)))}\n"
+        string += f"Affiliation IDs: {repr(list(map(repr, self.affiliation_ids)))}\n"
         return string
 
 
@@ -306,7 +306,7 @@ class PublicationsData:
     """
 
     def __init__(self):
-        self.authors_ids = [AuthorIDAffiliationIDs()]
+        self.authors_ids = []
         self.details = PublicationDetails()
         self.resources = PublicationResources()
         self.rights = PublicationRights()
@@ -368,9 +368,9 @@ class PublicationsData:
 
     def __str__(self) -> str:
         string = f"Authors' IDs and Affiliation IDs: {list(map(str, self.authors_ids))}\n"
-        string += f"Details: {self.details}\n"
-        string += f"Resources: {self.resources}\n"
-        string += f"Rights: {self.rights}\n"
+        string += str(self.details)
+        string += str(self.resources)
+        string += str(self.rights)
         return string
 
     def __repr__(self) -> str:
@@ -486,12 +486,12 @@ class Publications():
     def __str__(self):
         string = ""
         for publication in self.publications:
-            string += str(publication)
+            string += str(publication) + "\n\n"
         return string
 
     def __repr__(self):
         string = (
             f"Publications("
-            f"publications={repr(list(map(str, self.publications)))}"
+            f"publications={list(map(repr, self.publications))}"
         )
         return string

@@ -30,7 +30,7 @@ class ServiceData:
     def __str__(self) -> str:
         string = f"Type: {self.type}\n"
         string += f"Venue: {self.venue}\n"
-        string += f"Link: {self.link}\n\n"
+        string += f"Link: {self.link}\n"
         return string
 
     def __repr__(self) -> str:
@@ -78,7 +78,7 @@ class Services:
     def __str__(self):
         string = ""
         for service in self.services:
-            string += str(service)
+            string += str(service) + "\n"
         return string
 
     def __repr__(self):

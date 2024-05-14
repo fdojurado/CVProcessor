@@ -30,7 +30,7 @@ class SkillData:
     def __str__(self) -> str:
         string = f"Type: {self.type}\n"
         string += f"Skill: {self.skill}\n"
-        string += f"Level: {self.level}\n\n"
+        string += f"Level: {self.level}\n"
         return string
 
     def __repr__(self) -> str:
@@ -102,7 +102,7 @@ class Skills:
     def __str__(self):
         string = ""
         for skill in self.skills:
-            string += str(skill)
+            string += str(skill) + "\n"
         return string
 
     def __repr__(self):

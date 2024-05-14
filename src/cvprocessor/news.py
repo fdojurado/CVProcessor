@@ -79,7 +79,7 @@ class NewsData:
         string = f"Title: {self.title}\n"
         string += f"Date: {self.date}\n"
         string += f"Description: {self.description}\n"
-        string += f"Resources:\n{self.resources}\n"
+        string += str(self.resources)
         return string
 
     def __repr__(self) -> str:
@@ -118,7 +118,7 @@ class News:
     def __str__(self):
         string = ""
         for news in self.news:
-            string += str(news)
+            string += str(news) + "\n"
         return string
 
     def __repr__(self):

@@ -191,5 +191,5 @@ class CV:
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(repr(cv.academic_info.publications))
+    print(str(cv.personal_info.references))
     sys.exit(0)

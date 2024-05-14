@@ -190,8 +190,7 @@ class TeachingData:
         self.responsibilities = filename["Responsibilities"]
 
     def __str__(self):
-        string = "Teaching data:\n"
-        string += f"{self.info}\n"
+        string = str(self.info)
         string += f"Institution: {self.institution}\n"
         string += f"Supervisor: {self.supervisor}\n"
         string += f"Responsibilities: {self.responsibilities}\n"
@@ -251,7 +250,7 @@ class Teaching:
     def __str__(self):
         string = ""
         for teaching in self.teaching:
-            string += str(teaching)
+            string += str(teaching) + "\n"
         return string
 
     def __repr__(self):

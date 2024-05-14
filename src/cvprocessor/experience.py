@@ -182,7 +182,7 @@ class Experience:
     def __str__(self) -> str:
         string = ""
         for experience in self.experiences:
-            string += str(experience)
+            string += str(experience) + "\n"
         return string
 
     def __repr__(self) -> str:

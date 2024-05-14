@@ -127,9 +127,9 @@ class InstituteData:
         self.url = pd_dataframe["URL"]
 
     def __str__(self):
-        string = f"info: {self.info}\n"
-        string += f"location: {self.location}\n"
-        string += f"url: {self.url}\n"
+        string = str(self.info)
+        string += str(self.location)
+        string += f"url: \n{self.url}\n"
         return string
 
     def __repr__(self):
@@ -181,7 +181,7 @@ class Institutes:
     def __str__(self):
         string = ""
         for institute in self.institutes:
-            string += str(institute)
+            string += str(institute) + "\n"
         return string
 
     def __repr__(self):

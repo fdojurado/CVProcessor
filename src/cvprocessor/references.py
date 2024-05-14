@@ -34,7 +34,7 @@ class ReferenceData:
         string = f"Name: {self.name}\n"
         string += f"Email: {self.email}\n"
         string += f"Position: {self.position}\n"
-        string += f"Institution: {self.institution}\n\n"
+        string += f"Institution: {self.institution}\n"
         return string
 
     def __repr__(self):
@@ -75,7 +75,7 @@ class References:
     def __str__(self):
         string = ""
         for reference in self.references:
-            string += str(reference)
+            string += str(reference) + "\n"
         return string
 
     def __repr__(self):

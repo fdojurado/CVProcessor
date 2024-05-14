@@ -176,7 +176,7 @@ class Education:
     def __str__(self) -> str:
         string = ""
         for education in self.educations:
-            string += str(education)
+            string += str(education) + "\n"
         return string
 
     def __repr__(self) -> str:

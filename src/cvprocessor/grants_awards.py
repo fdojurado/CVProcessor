@@ -43,7 +43,7 @@ class GrantsAwardsData:
         string += f"Description: {self.description}\n"
         string += f"Institution: {self.institution}\n"
         string += f"Country: {self.country}\n"
-        string += f"Value: {self.value}\n\n"
+        string += f"Value: {self.value}\n"
         return string
 
     def __repr__(self) -> str:
@@ -96,7 +96,7 @@ class GrantsAwards:
     def __str__(self) -> str:
         string = ""
         for grants_award in self.grants_awards:
-            string += str(grants_award)
+            string += str(grants_award) + "\n"
         return string
 
     def __repr__(self) -> str:
