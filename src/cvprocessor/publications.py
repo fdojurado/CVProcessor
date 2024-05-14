@@ -472,7 +472,7 @@ class PublicationsData:
         if not common.check_nan(self.details.basic_info.title):
             citation += f"{self.details.basic_info.title}. "
         if not common.check_nan(self.details.basic_info.source):
-            citation += f"{self.details.basic_info.source}, "
+            citation += f"{self.details.basic_info.source}"
         if not common.check_nan(self.details.journal_info.volume):
             citation += f", {int(self.details.journal_info.volume)}"
         if not common.check_nan(self.details.journal_info.issue):

@@ -163,7 +163,7 @@ class AuthorsData:
 
     def __init__(self):
         self.id = int()
-        self.affiliations = []
+        self.affiliation_ids = []
         self.personal_info = PersonalInfo()
         self.contact_info = ContactInfo()
         self.research_info = ResearchInfo()
@@ -174,11 +174,11 @@ class AuthorsData:
         """
         return self.id
 
-    def get_affiliations(self):
+    def get_affiliation_ids(self):
         """
         Returns the affiliations of the author.
         """
-        return self.affiliations
+        return self.affiliation_ids
 
     def get_name(self):
         """
@@ -291,16 +291,16 @@ class AuthorsData:
                 ("," in filename["Affiliations"] or ";" in filename["Affiliations"]):
             affiliations = filename["Affiliations"].split(",")
             for affiliation in affiliations:
-                self.affiliations.append(int(affiliation))
+                self.affiliation_ids.append(int(affiliation))
         else:
-            self.affiliations.append(int(filename["Affiliations"]))
+            self.affiliation_ids.append(int(filename["Affiliations"]))
         self.personal_info.load(filename)
         self.contact_info.load(filename)
         self.research_info.load(filename)
 
     def __str__(self):
         string = f"id: {self.id}\n"
-        string += f"Affiliation: {self.affiliations}\n"
+        string += f"Affiliation: {self.affiliation_ids}\n"
         string += str(self.personal_info)
         string += str(self.contact_info)
         string += str(self.research_info)
@@ -310,7 +310,7 @@ class AuthorsData:
         string = (
             f"Author("
             f"id={self.id}, "
-            f"affiliation={repr(self.affiliations)}, "
+            f"affiliation={repr(self.affiliation_ids)}, "
             f"personal_info={repr(self.personal_info)}, "
             f"contact_info={repr(self.contact_info)}, "
             f"research_info={repr(self.research_info)})"
@@ -347,8 +347,9 @@ class Authors:
                     return author
             return None
         for author in self.authors:
-            if author.get_id() == author_id and affiliation_id in author.get_affiliations():
+            if author.get_id() == author_id and affiliation_id in author.get_affiliation_ids():
                 return author
+        return None
 
     def load(self, filename):
         """
