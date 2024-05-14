@@ -495,3 +495,6 @@ class Publications():
             f"publications={list(map(repr, self.publications))}"
         )
         return string
+
+    def __iter__(self):
+        return iter(self.publications)
