@@ -1,66 +1,66 @@
+"""
+This module contains the classes to handle the data of the institutes.
+"""
 import pandas as pd
 
 
-class InstituteData:
-    def __init__(self, pd_dataframe):
-        self._pd_dataframe = pd_dataframe
-        self._id = None
-        self._name = None
-        self._name_abbr = None
-        self._department = None
-        self._department_abbr = None
-        self._address = None
-        self._city = None
-        self._country = None
-        self._coordinates = None
-        self._url = None
-        self._load_institute()
+class InstituteInfo:
+    """
+    A class to represent the information of an institute.
+    """
 
-    @property
-    def name(self):
-        return self._name
+    def __init__(self):
+        self.id = None
+        self.name = None
+        self.name_abbr = None
+        self.department = None
+        self.department_abbr = None
 
-    @property
-    def id(self):
-        return self._id
+    def load(self, filename):
+        """
+        Load the institute information.
+        """
+        self.id = filename["id"]
+        self.name = filename["Name"]
+        self.name_abbr = filename["Name Abbreviation"]
+        self.department = filename["Department"]
+        self.department_abbr = filename["Department Abbreviation"]
 
-    @property
-    def name(self):
-        return self._name
+    def __str__(self):
+        string = f"Institute ID: {self.id}\n"
+        string += f"Institute Name: {self.name}\n"
+        string += f"Institute Name Abbreviation: {self.name_abbr}\n"
+        string += f"Institute Department: {self.department}\n"
+        string += f"Institute Department Abbreviation: {self.department_abbr}\n"
+        return string
 
-    @property
-    def name_abbr(self):
-        return self._name_abbr
-    
-    @property
-    def department(self):
-        return self._department
-    
-    @property
-    def department_abbr(self):
-        return self._department_abbr
+    def __repr__(self):
+        string = (
+            f"InstituteInfo("
+            f"id={self.id}, "
+            f"name={self.name}, "
+            f"name_abbr={self.name_abbr}, "
+            f"department={self.department}, "
+            f"department_abbr={self.department_abbr})"
+        )
+        return string
 
-    @property
-    def address(self):
-        return self._address
 
-    @property
-    def city(self):
-        return self._city
+class InstituteLocation:
+    """
+    A class to represent the location of an institute.
+    """
 
-    @property
-    def country(self):
-        return self._country
-
-    @property
-    def coordinates(self):
-        return self._coordinates
-
-    @property
-    def url(self):
-        return self._url
+    def __init__(self):
+        self.address = str()
+        self.city = str()
+        self.country = str()
+        self.coordinates = tuple()
 
     def convert_coordinates(self, lalng):
+        """
+        Convert the latitude and longitude coordinates to a float value.
+        """
         lalng = lalng.replace("°", "").strip()
         if "S" in lalng or "W" in lalng:
             lalng = lalng.replace("S", "").replace("W", "")
@@ -69,78 +69,121 @@ class InstituteData:
             lalng = lalng.replace("N", "").replace("E", "")
         return float(lalng)
 
-    def process_coordinates(self):
-        # Coordinates can be of the form 37.7983° S, 144.9610° E or 3.342119819025848, -76.5306449189542
-        # We will convert them to the form 37.7983, 144.9610
-        if self._coordinates is not None:
+    def process_coordinates(self, coordinates):
+        """
+        Process the coordinates to convert them to a tuple of floats.
+        """
+        if coordinates is not None:
             # split into latitude and longitude
-            coordinates = self._coordinates.split(", ")
+            coordinates = coordinates.split(", ")
             coordinates = [self.convert_coordinates(
                 coord) for coord in coordinates]
-            self._coordinates = tuple(coordinates)
+            self.coordinates = tuple(coordinates)
 
-    def _load_institute(self):
-        self._id = self._pd_dataframe["id"]
-        self._name = self._pd_dataframe["Name"]
-        self._name_abbr = self._pd_dataframe["Name Abbreviation"]
-        self._department = self._pd_dataframe["Department"]
-        self._department_abbr = self._pd_dataframe["Department Abbreviation"]
-        self._address = self._pd_dataframe["Address"]
-        self._city = self._pd_dataframe["City"]
-        self._country = self._pd_dataframe["Country"]
-        self._url = self._pd_dataframe["URL"]
-        self._coordinates = self._pd_dataframe["Coordinates"]
-        self.process_coordinates()
+    def load(self, filename):
+        """
+        Load the location data.
+        """
+        self.address = filename["Address"]
+        self.city = filename["City"]
+        self.country = filename["Country"]
+        coordinates = filename["Coordinates"]
+        self.process_coordinates(coordinates)
 
     def __str__(self):
-        string = f"Institute ID: {self._id}\n"
-        string += f"Institute Name: {self._name}\n"
-        string += f"Institute Name Abbreviation: {self._name_abbr}\n"
-        string += f"Institute Department: {self._department}\n"
-        string += f"Institute Department Abbreviation: {self._department_abbr}\n"
-        string += f"Institute Address: {self._address}\n"
-        string += f"Institute City: {self._city}\n"
-        string += f"Institute Country: {self._country}\n"
-        string += f"Institute URL: {self._url}\n"
-        string += f"Institute Coordinates: {self._coordinates}\n\n"
+        string = f"Institute Address: {self.address}\n"
+        string += f"Institute City: {self.city}\n"
+        string += f"Institute Country: {self.country}\n"
+        string += f"Institute Coordinates: {self.coordinates}\n"
         return string
 
     def __repr__(self):
-        string = f"InstituteData(id={self._id}, name={self._name}, name_abbr={self._name_abbr}, address={self._address}, city={self._city}, country={self._country}, url={self._url}, coordinates={self._coordinates})\n"
+        string = (
+            f"InstituteLocation("
+            f"address={self.address}, "
+            f"city={self.city}, "
+            f"country={self.country}, "
+            f"coordinates={self.coordinates})"
+        )
+        return string
+
+
+class InstituteData:
+    """
+    A class to represent the data of an institute.
+    """
+
+    def __init__(self):
+        self.info = InstituteInfo()
+        self.location = InstituteLocation()
+        self.url = None
+
+    def load(self, pd_dataframe):
+        """
+        Load the data from a pandas dataframe.
+        """
+        self.info.load(pd_dataframe)
+        self.location.load(pd_dataframe)
+        self.url = pd_dataframe["URL"]
+
+    def __str__(self):
+        string = f"info: {self.info}\n"
+        string += f"location: {self.location}\n"
+        string += f"url: {self.url}\n"
+        return string
+
+    def __repr__(self):
+        string = (
+            f"InstituteData("
+            f"info={repr(self.info)}, "
+            f"location={repr(self.location)}, "
+            f"url={self.url})"
+        )
         return string
 
 
 class Institutes:
-    def __init__(self, filename):
-        self._filename = filename
-        self._institute = self._load_institutes()
+    """
+    A class to represent the institutes.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    institutes (list): A list of InstituteData objects.
 
-    @property
-    def institute(self):
-        return self._institute
+    Methods:
+    get_institute(): Get the institute by its ID.
+    load(): Load the institutes from the filename.
+    """
+
+    def __init__(self):
+        self.institutes = []
 
     def get_institute(self, institute_id):
+        """
+        Get the institute by its ID.
+        """
         if isinstance(institute_id, str):
             institute_id = int(institute_id)
-        for institute in self.institute:
-            if institute.id == institute_id:
+        for institute in self.institutes:
+            if institute.info.id == institute_id:
                 return institute
         return None
 
-    def _load_institutes(self):
-        institutes_df = pd.read_excel(self.filename, sheet_name="Institutes")
-        return [InstituteData(institute) for index, institute in institutes_df.iterrows()]
+    def load(self, filename):
+        """
+        Load the institutes from the filename.
+        """
+        institutes_df = pd.read_excel(filename, sheet_name="Institutes")
+        for _, institute in institutes_df.iterrows():
+            institute_data = InstituteData()
+            institute_data.load(institute)
+            self.institutes.append(institute_data)
 
     def __str__(self):
         string = ""
-        for institute in self.institute:
+        for institute in self.institutes:
             string += str(institute)
         return string
 
     def __repr__(self):
-        repr = f"Institutes(filename={self.filename}, institute={self.institute})\n"
-        return repr
+        string = f"Institutes(Institute={repr(self.institutes)})"
+        return string

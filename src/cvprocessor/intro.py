@@ -1,57 +1,49 @@
-# Introduction class that receives information given a pandas dataframe
+"""
+This module contains the class Intro, which is used to store the introduction
+"""
 import pandas as pd
 
 
 class Intro:
-    def __init__(self, filename):
-        self._filename = filename
-        self._short_summary = None
-        self._long_summary = None
-        self._job_title = None
-        self._tagline = None
-        self._intro = self._get_intro()
-        self.load_intro()
+    """
+    The Intro class is used to store the introduction of the CV file.
 
-    @property
-    def intro(self):
-        return self._intro
+    Attributes:
+    short_summary (str): A short summary of the CV file.
+    long_summary (str): A long summary of the CV file.
+    tagline (str): A tagline of the CV file.
 
-    @property
-    def filename(self):
-        return self._filename
+    Methods:
+    __init__(filename): Initializes the Intro class by loading the introduction from the given file.
+    __str__(): Returns a string representation of the Intro class.
+    __repr__(): Returns a string representation of the Intro class.
+    """
 
-    @property
-    def short_summary(self):
-        return self._short_summary
+    def __init__(self):
+        self.short_summary = None
+        self.long_summary = None
+        self.tagline = None
 
-    @property
-    def long_summary(self):
-        return self._long_summary
-
-    @property
-    def job_title(self):
-        return self._job_title
-
-    @property
-    def tagline(self):
-        return self._tagline
-
-    def _get_intro(self):
-        return pd.read_excel(self.filename, sheet_name="Intro")
-
-    def load_intro(self):
-        self._short_summary = self.intro["Short summary"].values[0]
-        self._long_summary = self.intro["Welcome"].values[0]
-        # self._job_title = self.intro["Jobtitle"].values[0]
-        self._tagline = self.intro["Tagline"].values[0]
+    def load(self, filename):
+        """
+        Load the introduction from the given file.
+        """
+        intro = pd.read_excel(filename, sheet_name="Intro")
+        self.short_summary = intro["Short summary"].values[0]
+        self.long_summary = intro["Welcome"].values[0]
+        self.tagline = intro["Tagline"].values[0]
 
     def __str__(self) -> str:
         string = f"Short summary: {self.short_summary}\n"
         string += f"Long summary: {self.long_summary}\n"
-        string += f"Job title: {self.job_title}\n"
         string += f"Tagline: {self.tagline}\n\n"
         return string
 
     def __repr__(self) -> str:
-        repr = f"Intro(filename={self.filename}, short_summary={self.short_summary}, long_summary={self.long_summary}, job_title={self.job_title}, tagline={self.tagline})"
-        return repr
+        string = (
+            f"Intro("
+            f"short_summary={self.short_summary}, "
+            f"long_summary={self.long_summary}, "
+            f"tagline={self.tagline})"
+        )
+        return string

@@ -1,8 +1,9 @@
-# This is the main entry point of the program. It imports the necessary modules and calls the functions to create the content of the website.
-import pandas as pd
+"""
+This module contains the CV class that is used to create a CV object.
+The CV object is used to store all the information
+"""
 import sys
 
-# Import classes from other modules such as news, publications, research, quarto_variables, and public_key
 from cvprocessor.intro import Intro
 from cvprocessor.education import Education
 from cvprocessor.publications import Publications
@@ -21,123 +22,174 @@ from cvprocessor.memberships import Memberships
 from cvprocessor.references import References
 
 
-class CV:
-    def __init__(self, filename):
-        self._filename = filename
-        self._education = Education(self.filename)
-        self._institutes = Institutes(self.filename)
-        self._software = Software(self.filename)
-        self._intro = Intro(self.filename)
-        self._authors = Authors(self.filename, self)
-        self._news = News(self.filename)
-        self._publications = Publications(self.filename, self)
-        self._research_interests = ResearchInterests(self.filename)
-        self._grants_awards = GrantsAwards(self.filename)
-        self._teaching = Teaching(self.filename)
-        self._supervision = Supervision(self.filename, self)
-        self._experience = Experience(self.filename, self)
-        self._skills = Skills(self.filename)
-        self._service = Services(self.filename)
-        self._memberships = Memberships(self.filename)
-        self._references = References(self.filename)
+class AcademicInfo:
+    """
+    The AcademicInfo class is used to store all the academic information from the CV file.
 
-    @property
-    def filename(self):
-        return self._filename
+    :param filename: The filename of the CV file.
+    :type filename: str
 
-    @property
-    def intro(self):
-        return self._intro
+    :param cv_class: The CV class object.
+    :type cv_class: CV
+    """
 
-    @property
-    def education(self):
-        return self._education
-
-    @property
-    def institutes(self):
-        return self._institutes
-
-    @property
-    def authors(self):
-        return self._authors
-
-    @property
-    def software(self):
-        return self._software
-
-    @property
-    def intro(self):
-        return self._intro
-
-    @property
-    def news(self):
-        return self._news
-
-    @property
-    def publications(self):
-        return self._publications
-
-    @property
-    def research_interests(self):
-        return self._research_interests
-
-    @property
-    def grants_awards(self):
-        return self._grants_awards
-
-    @property
-    def teaching(self):
-        return self._teaching
-
-    @property
-    def supervision(self):
-        return self._supervision
-
-    @property
-    def experience(self):
-        return self._experience
-
-    @property
-    def skills(self):
-        return self._skills
-
-    @property
-    def service(self):
-        return self._service
-
-    @property
-    def memberships(self):
-        return self._memberships
-
-    @property
-    def references(self):
-        return self._references
+    def __init__(self):
+        self.education = Education()
+        self.institutes = Institutes()
+        self.research_interests = ResearchInterests()
+        self.grants_awards = GrantsAwards()
+        self.teaching = Teaching()
+        self.supervision = Supervision()
+        self.publications = Publications()
 
     def __str__(self):
         string = f"Education: {self.education}\n"
         string += f"Institutes: {self.institutes}\n"
-        string += f"Software: {self.software}\n"
-        string += f"Intro: {self.intro}\n"
-        string += f"Authors: {self.authors}\n"
-        string += f"News: {self.news}\n"
-        string += f"Publications: {self.publications}\n"
         string += f"Research Interests: {self.research_interests}\n"
         string += f"Grants and Awards: {self.grants_awards}\n"
         string += f"Teaching: {self.teaching}\n"
         string += f"Supervision: {self.supervision}\n"
-        string += f"Experience: {self.experience}\n"
-        string += f"Skills: {self.skills}\n"
-        string += f"Service: {self.service}\n"
-        string += f"Memberships: {self.memberships}\n"
+        string += f"Publications: {self.publications}\n"
+        return string
+
+    def __repr__(self):
+        string = (
+            f"AcademicInfo("
+            f"education={repr(self.education)}, "
+            f"institutes={repr(self.institutes)}, "
+            f"research_interests={repr(self.research_interests)}, "
+            f"grants_awards={repr(self.grants_awards)}, "
+            f"teaching={repr(self.teaching)}, "
+            f"supervision={repr(self.supervision)}, "
+            f"publications={repr(self.publications)})\n")
+        return string
+
+
+class PersonalInfo:
+    """
+    The PersonalInfo class is used to store all the personal information from the CV file.
+
+    :param filename: The filename of the CV file.
+    :type filename: str
+
+    :param cv_class: The CV class object.
+    :type cv_class: CV
+    """
+
+    def __init__(self):
+        self.intro = Intro()
+        self.authors = Authors()
+        self.references = References()
+
+    def __str__(self):
+        string = f"Intro: {self.intro}\n"
+        string += f"Authors: {self.authors}\n"
         string += f"References: {self.references}\n"
         return string
 
     def __repr__(self):
-        repr = f"CV(filename={self.filename}, education={self.education}, institutes={self.institutes}, software={self.software}, intro={self.intro}, authors={self.authors}, news={self.news}, publications={self.publications}, research_interests={self.research_interests}, grants_awards={self.grants_awards}, teaching={self.teaching}, supervision={self.supervision}, experience={self.experience}, skills={self.skills}, service={self.service}, memberships={self.memberships}, references={self.references})"
-        return repr
+        string = (
+            f"PersonalInfo("
+            f"intro={repr(self.intro)}, "
+            f"authors={repr(self.authors)}, "
+            f"references={repr(self.references)})\n")
+        return string
+
+
+class ProfessionalInfo:
+    """
+    The ProfessionalInfo class is used to store all the professional information from the CV file.
+
+    :param filename: The filename of the CV file.
+    :type filename: str
+
+    :param cv_class: The CV class object.
+    :type cv_class: CV
+    """
+
+    def __init__(self):
+        self.experience = Experience()
+        self.skills = Skills()
+        self.service = Services()
+        self.memberships = Memberships()
+
+    def __str__(self):
+        string = f"Experience: {self.experience}\n"
+        string += f"Skills: {self.skills}\n"
+        string += f"Service: {self.service}\n"
+        string += f"Memberships: {self.memberships}\n"
+        return string
+
+    def __repr__(self):
+        string = (
+            f"ProfessionalInfo("
+            f"experience={repr(self.experience)}, "
+            f"skills={repr(self.skills)}, "
+            f"service={repr(self.service)}, "
+            f"memberships={repr(self.memberships)})\n")
+        return string
+
+
+class CV:
+    """
+    The CV class is used to create a CV object that stores all the information from the CV file.
+
+    :param filename: The filename of the CV file.
+    :type filename: str
+    """
+
+    def __init__(self, filename):
+        self.professional_info = ProfessionalInfo()
+        self.personal_info = PersonalInfo()
+        self.academic_info = AcademicInfo()
+        self.software = Software()
+        self.news = News()
+        self._load_cv(filename)
+
+    def _load_cv(self, filename):
+        """
+        The _load_cv method is used to load the CV file.
+
+        :param filename: The filename of the CV file.
+        :type filename: str
+        """
+        self.academic_info.education.load(filename)
+        self.academic_info.institutes.load(filename)
+        self.software.load(filename)
+        self.personal_info.intro.load(filename)
+        self.personal_info.authors.load(filename)
+        self.news.load(filename)
+        self.academic_info.publications.load(filename)
+        self.academic_info.research_interests.load(filename)
+        self.academic_info.grants_awards.load(filename)
+        self.academic_info.teaching.load(filename)
+        self.academic_info.supervision.load(filename)
+        self.professional_info.experience.load(filename)
+        self.professional_info.skills.load(filename)
+        self.professional_info.service.load(filename)
+        self.professional_info.memberships.load(filename)
+        self.personal_info.references.load(filename)
+
+    def __str__(self):
+        string = f"Academic Info: {self.academic_info}\n"
+        string += f"Personal Info: {self.personal_info}\n"
+        string += f"Professional Info: {self.professional_info}\n"
+        string += f"Software: {self.software}\n"
+        string += f"News: {self.news}\n"
+        return string
+
+    def __repr__(self):
+        string = (
+            f"CV("
+            f"academic_info={repr(self.academic_info)}, "
+            f"personal_info={repr(self.personal_info)}, "
+            f"professional_info={repr(self.professional_info)}, "
+            f"software={repr(self.software)}, "
+            f"news={repr(self.news)})\n")
+        return string
 
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(repr(cv.authors))
+    print(repr(cv.academic_info.publications))
     sys.exit(0)

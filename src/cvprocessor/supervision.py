@@ -1,67 +1,37 @@
+"""
+This module contains the classes and methods to process the supervision data from the CV.
+"""
 import pandas as pd
 
 
-class SupervisionData:
-    def __init__(self, filename, cv):
-        self._filename = filename
-        self._cv = cv
-        self._students = None
-        self._year = None
-        self._title = None
-        self._program = None
-        self._type = None
-        self._institution = None
-        self._supervisors = None
-        self._load_supervision()
+class SupervisionInfo:
+    """
+    A class to represent the information of a supervision.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    students (list): The students of the supervision.
+    year (int): The year of the supervision.
+    title (str): The title of the supervision.
+    program (str): The program of the supervision.
+    type (str): The type of the supervision.
+    """
 
-    @property
-    def cv(self):
-        return self._cv
+    def __init__(self):
+        self.students = str()
+        self.year = str()
+        self.title = str()
+        self.program = str()
+        self.type = str()
 
-    @property
-    def students(self):
-        return self._students
-
-    @property
-    def year(self):
-        return self._year
-
-    @property
-    def title(self):
-        return self._title
-
-    @property
-    def program(self):
-        return self._program
-
-    @property
-    def type(self):
-        return self._type
-
-    @property
-    def institution(self):
-        return self._institution
-
-    @property
-    def supervisors(self):
-        return self._supervisors
-
-    def process_students(self):
-        self._students = self.filename['Students'].split(",")
-
-    def _load_supervision(self):
-        self.process_students()
-        self._year = self.filename["Year"]
-        self._year = pd.to_datetime(self.year, format="%Y").year
-        self._title = self.filename["Title"]
-        self._program = self.filename["Program"]
-        self._type = self.filename["Type"]
-        self._institution = self.filename["Institution"]
-        self._supervisors = self.filename["Supervisors"]
+    def load(self, filename):
+        """
+        Load the supervision information.
+        """
+        self.students = filename["Students"]
+        self.year = filename["Year"]
+        self.title = filename["Title"]
+        self.program = filename["Program"]
+        self.type = filename["Type"]
 
     def __str__(self) -> str:
         string = f"Students: {self.students}\n"
@@ -69,61 +39,118 @@ class SupervisionData:
         string += f"Title: {self.title}\n"
         string += f"Program: {self.program}\n"
         string += f"Type: {self.type}\n"
-        institution = self.cv.institutes.get_institute(self.institution)
-        string += f"Institution: {institution.name}\n"
-        string += f"Supervisors: {self.supervisors}\n\n"
         return string
 
     def __repr__(self) -> str:
-        string = f"SupervisionData(students={self.students}, year={self.year}, title={self.title}, program={self.program}, type={self.type}, institution={self.institution}, supervisors={self.supervisors})"
+        string = (
+            f"SupervisionInfo("
+            f"students={self.students}, "
+            f"year={self.year}, "
+            f"title={self.title}, "
+            f"program={self.program}, "
+            f"type={self.type})"
+        )
+        return string
+
+
+class SupervisionData:
+    """
+    A class to represent the data of a supervision.
+
+    Attributes:
+    info (SupervisionInfo): The information of the supervision.
+    institution (str): The institution of the supervision.
+    supervisors (list): The supervisors of the supervision.
+    students (list): The students of the supervision.
+    """
+
+    def __init__(self):
+        self.info = SupervisionInfo()
+        self.institution = str()
+        self.supervisors = str()
+        self.students = str()
+
+    def load(self, filename):
+        """
+        Load the supervision data.
+        """
+        self.info.load(filename)
+        self.institution = filename["Institution"]
+        self.supervisors = filename["Supervisors"]
+
+    def __str__(self) -> str:
+        string = f"info: {str(self.info)}\n"
+        string += f"Institution: {self.institution}\n"
+        string += f"Supervisors: {self.supervisors}\n"
+        string += f"Students: {self.students}\n"
+        return string
+
+    def __repr__(self) -> str:
+        string = (
+            f"SupervisionData("
+            f"info={repr(self.info)}, "
+            f"institution={self.institution}, "
+            f"supervisors={self.supervisors}, "
+            f"students={self.students})"
+        )
         return string
 
 
 class Supervision:
-    def __init__(self, filename, cv):
-        self._filename = filename
-        self._cv = cv
-        self._supervision = self._load_supervision()
-        # Sort the supervision by type then by year
-        self._supervision = sorted(
-            self._supervision, key=lambda x: (x.type, x.year), reverse=True)
+    """
+    A class to represent the supervision data.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    supervision (list): The list of supervision data.
 
-    @property
-    def cv(self):
-        return self._cv
+    Methods:
+    get_supervision_types_ordered: Get the supervision types in order.
+    get_num_supervision_by_document_type: Get the number of supervision by document type.
+    load: Load the supervision data.
+    """
 
-    @property
-    def supervision(self):
-        return self._supervision
+    def __init__(self):
+        self.supervisions = []
 
     def get_supervision_types_ordered(self):
+        """
+        Get the supervision types in order.
+        """
         supervision_types = []
-        for supervision in self.supervision:
-            if supervision.type not in supervision_types:
-                supervision_types.append(supervision.type)
+        for supervision in self.supervisions:
+            if supervision.info.type not in supervision_types:
+                supervision_types.append(supervision.info.type)
         return supervision_types
 
     def get_num_supervision_by_document_type(self, supervision_type):
+        """
+        Get the number of supervision by document type.
+        """
         count = 0
-        for supervision in self.supervision:
-            if supervision.type == supervision_type:
+        for supervision in self.supervisions:
+            if supervision.info.type == supervision_type:
                 count += 1
         return count
 
-    def _load_supervision(self):
-        supervision_df = pd.read_excel(self.filename, sheet_name="Supervision")
-        return [SupervisionData(row, self.cv) for _, row in supervision_df.iterrows()]
+    def load(self, filename):
+        """
+        Load the supervision data.
+        """
+        supervision_df = pd.read_excel(filename, sheet_name="Supervision")
+        for index, row in supervision_df.iterrows():
+            supervision_data = SupervisionData()
+            supervision_data.load(row)
+            self.supervisions.append(supervision_data)
+        # sort the supervision data by type and year
+        self.supervisions = sorted(
+            self.supervisions, key=lambda x: (x.info.type, x.info.year), reverse=True)
 
     def __str__(self) -> str:
         string = ""
-        for supervision in self.supervision:
+        for supervision in self.supervisions:
             string += str(supervision)
         return string
 
     def __repr__(self) -> str:
-        string = f"Supervision(filename={self.filename}, supervision={self.supervision})"
+        string = f"Supervision(supervision={repr(list(self.supervisions))})"
         return string

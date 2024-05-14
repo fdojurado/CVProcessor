@@ -1,128 +1,181 @@
+"""
+This module contains the Software class and SofwareData class.
+"""
 import pandas as pd
 
 
-class SofwareData:
-    def __init__(self, filename):
-        self._filename = filename
-        self._id = None
-        self._name = None
-        self._version = None
-        self._description = None
-        self._repository = None
-        self._demo = None
-        self._website = None
-        self._summary = None
-        self._license = None
-        self._load_software()
+class SoftwareInfo:
+    """
+    A class to represent the information of a software.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    id (int): The ID of the software.
+    name (str): The name of the software.
+    version (str): The version of the software.
+    description (str): The description of the software.
+    """
 
-    @property
-    def id(self):
-        return self._id
+    def __init__(self):
+        self.id = str()
+        self.name = str()
+        self.version = str()
+        self.description = str()
 
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def version(self):
-        return self._version
-
-    @property
-    def description(self):
-        return self._description
-
-    @property
-    def repository(self):
-        return self._repository
-
-    @property
-    def demo(self):
-        return self._demo
-
-    @property
-    def website(self):
-        return self._website
-
-    @property
-    def summary(self):
-        return self._summary
-
-    @property
-    def license(self):
-        return self._license
-
-    # @property
-    # def doi(self):
-    #     return self._doi
-
-    def _load_software(self):
-        self._id = self.filename["id"]
-        self._name = self.filename["Name"]
-        self._version = self.filename["Version"]
-        self._description = self.filename["Description"]
-        self._repository = self.filename["Repository"]
-        self._demo = self.filename["Demo"]
-        self._website = self.filename["Website"]
-        self._summary = self.filename["Summary"]
-        self._license = self.filename["License"]
+    def load(self, filename):
+        """
+        Load the software information.
+        """
+        self.id = filename["id"]
+        self.name = filename["Name"]
+        self.version = filename["Version"]
+        self.description = filename["Description"]
 
     def __str__(self) -> str:
         string = f"ID: {self.id}\n"
         string += f"Name: {self.name}\n"
         string += f"Version: {self.version}\n"
         string += f"Description: {self.description}\n"
-        string += f"Repository: {self.repository}\n"
+        return string
+
+    def __repr__(self) -> str:
+        string = (
+            f"SoftwareInfo("
+            f"id={self.id}, "
+            f"name={self.name}, "
+            f"version={self.version}, "
+            f"description={self.description})"
+        )
+        return string
+
+
+class SoftwareResources:
+    """
+    A class to represent the resources of a software.
+
+    Attributes:
+    repository (str): The repository link of the software.
+    demo (str): The demo link of the software.
+    website (str): The website link of the software.
+    """
+
+    def __init__(self):
+        self.repository = str()
+        self.demo = str()
+        self.website = str()
+
+    def load(self, filename):
+        """
+        Load the software resources.
+        """
+        self.repository = filename["Repository"]
+        self.demo = filename["Demo"]
+        self.website = filename["Website"]
+
+    def __str__(self) -> str:
+        string = f"Repository: {self.repository}\n"
         string += f"Demo: {self.demo}\n"
         string += f"Website: {self.website}\n"
+        return string
+
+    def __repr__(self) -> str:
+        string = (
+            f"SoftwareResources("
+            f"repository={self.repository}, "
+            f"demo={self.demo}, "
+            f"website={self.website})"
+        )
+        return string
+
+
+class SoftwareData:
+    """
+    The SoftwareData class is used to store the software data.
+
+    Attributes:
+    info (SoftwareInfo): The information of the software.
+    resources (SoftwareResources): The resources of the software.
+    summary (str): The summary of the software.
+    license (str): The license of the software.
+    """
+
+    def __init__(self):
+        self.info = SoftwareInfo()
+        self.resources = SoftwareResources()
+        self.summary = str()
+        self.license = str()
+
+    def load(self, filename) -> None:
+        """
+        Load the software data from a file.
+        """
+        self.info.load(filename)
+        self.resources.load(filename)
+        self.summary = filename["Summary"]
+        self.license = filename["License"]
+
+    def __str__(self) -> str:
+        string = str(self.info)
+        string += str(self.resources)
         string += f"Summary: {self.summary}\n"
         string += f"License: {self.license}\n\n"
         return string
 
     def __repr__(self) -> str:
-        string = f"SofwareData(id={self.id}, name={self.name}, version={self.version}, description={self.description}, repository={self.repository}, demo={self.demo}, website={self.website}, summary={self.summary}, license={self.license})"
+        string = (
+            f"SoftwareData("
+            f"info={repr(self.info)}, "
+            f"resources={repr(self.resources)}, "
+            f"summary={self.summary}, "
+            f"license={self.license})"
+        )
         return string
 
 
 class Software:
-    def __init__(self, filename):
-        self._filename = filename
-        self._software = self._load_software()
+    """
+    The Software class is used to store the software data.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    filename (str): The filename of the software data.
+    """
 
-    @property
-    def software(self):
-        return self._software
+    def __init__(self):
+        self.softwares = []
 
     def get_software(self, software_id):
+        """
+        Get the software by ID.
+        """
         if not software_id:
             return None
         if isinstance(software_id, str):
             software_id = int(software_id)
-        for software in self.software:
-            if software.id == software_id:
+        for software in self.softwares:
+            if software.info.id == software_id:
                 return software
         return None
 
     def get_software_alphabetically(self):
-        return sorted(self.software, key=lambda x: x.name)
+        """
+        Get the software alphabetically.
+        """
+        return sorted(self.softwares, key=lambda x: x.info.name)
 
-    def _load_software(self):
-        software_df = pd.read_excel(self.filename, sheet_name="Software")
-        return [SofwareData(software) for index, software in software_df.iterrows()]
+    def load(self, filename):
+        """
+        Load the software data.
+        """
+        software_df = pd.read_excel(filename, sheet_name="Software")
+        for _, row in software_df.iterrows():
+            self.softwares.append(SoftwareData())
+            self.softwares[-1].load(row)
 
     def __str__(self) -> str:
         string = ""
-        for software in self.software:
+        for software in self.softwares:
             string += str(software)
         return string
 
     def __repr__(self) -> str:
-        repr = f"Software(filename={self.filename}, software={self.software})\n"
-        return repr
+        string = f"Software(software={repr(self.softwares)})"
+        return string

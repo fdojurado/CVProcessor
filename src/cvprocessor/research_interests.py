@@ -1,32 +1,33 @@
+"""
+This module contains the ResearchInterests class which is used to store
+the research interests and keywords of a person.
+"""
 import pandas as pd
 
 
 class ResearchInterests:
-    def __init__(self, filename):
-        self._filename = filename
-        self._research_interests = None
-        self._keywords = []
-        self._load_interests()
+    """
+    The ResearchInterests class is used to store the research interests and keywords of a person.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    research_interests (str): The research interests of the person.
+    keywords (list): The keywords related to the research interests.
+    """
 
-    @property
-    def keywords(self):
-        return self._keywords
+    def __init__(self):
+        self.research_interests = None
+        self.keywords = []
 
-    @property
-    def research_interests(self):
-        return self._research_interests
-
-    def _load_interests(self):
+    def load(self, filename) -> None:
+        """
+        Load the research interests and keywords from the given file.
+        """
         research_interests_pd = pd.read_excel(
-            self.filename, sheet_name="Research_Interests")
-        self._research_interests = research_interests_pd["Interests"].values[0]
+            filename, sheet_name="Research_Interests")
+        self.research_interests = research_interests_pd["Interests"].values[0]
         keywords = research_interests_pd["Keywords"]
         for keyword in keywords:
-            self._keywords.append(keyword)
+            self.keywords.append(keyword)
 
     def __str__(self):
         string = f"Research Interests: {self.research_interests}\n"
@@ -34,5 +35,9 @@ class ResearchInterests:
         return string
 
     def __repr__(self):
-        repr = f"ResearchInterests(filename={self.filename}, research_interests={self.research_interests}, keywords={self.keywords})"
-        return repr
+        string = (
+            f"ResearchInterests("
+            f"research_interests={self.research_interests}, "
+            f"keywords={self.keywords})"
+        )
+        return string

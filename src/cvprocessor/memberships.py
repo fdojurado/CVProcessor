@@ -1,28 +1,28 @@
+"""
+This module contains the Memberships class and the MembershipData class.
+"""
 import pandas as pd
 
 
 class MembershipData:
-    def __init__(self, filename):
-        self._filename = filename
-        self._year = None
-        self._membership = None
-        self._load_membership()
+    """
+    The MembershipData class is used to store the membership data.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    year (pd.Timestamp): The year of the membership.
+    membership (str): The membership.
+    """
 
-    @property
-    def year(self):
-        return self._year
+    def __init__(self):
+        self.year: pd.Timestamp = pd.Timestamp("NaT")
+        self.membership = str()
 
-    @property
-    def membership(self):
-        return self._membership
-
-    def _load_membership(self):
-        self._year = self.filename["Year"]
-        self._membership = self.filename["Membership"]
+    def load(self, filename):
+        """
+        Load the membership data.
+        """
+        self.year = filename["Year"]
+        self.membership = filename["Membership"]
 
     def __str__(self):
         string = f"Year: {self.year}\n"
@@ -30,26 +30,27 @@ class MembershipData:
         return string
 
     def __repr__(self):
-        return f"MembershipData({self.year}, {self.membership})\n"
+        return f"MembershipData({repr(self.year)}, {repr(self.membership)})\n"
 
 
 class Memberships:
-    def __init__(self, filename):
-        self._filename = filename
-        self._memberships = self._load_memberships()
+    """
+    The Memberships class is used to store the memberships data.
+    """
 
-    @property
-    def filename(self):
-        return self._filename
+    def __init__(self):
+        self.memberships = []
 
-    @property
-    def memberships(self):
-        return self._memberships
-
-    def _load_memberships(self):
+    def load(self, filename):
+        """
+        Load the memberships data.
+        """
         membership_df = pd.read_excel(
-            self.filename, sheet_name="Professional_memberships")
-        return [MembershipData(row) for _, row in membership_df.iterrows()]
+            filename, sheet_name="Professional_memberships")
+        for _, row in membership_df.iterrows():
+            membership = MembershipData()
+            membership.load(row)
+            self.memberships.append(membership)
 
     def __str__(self):
         string = ""
@@ -58,4 +59,4 @@ class Memberships:
         return string
 
     def __repr__(self):
-        return f"Memberships(filename={self.filename}, memberships={self.memberships})\n"
+        return f"Memberships(memberships={repr(list(map(repr, self.memberships)))})\n"

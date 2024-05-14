@@ -15,21 +15,22 @@ class ContactInfo:
     A class to represent the contact information of an author.
     """
 
-    def __init__(self, filename):
-        self.filename = filename
-        self.email = None
-        self.telephone = None
-        self.website = None
-        self.address = None
-        self.location = None
-        self._load_contact_info()
+    def __init__(self):
+        self.email = str()
+        self.telephone = str()
+        self.website = str()
+        self.address = str()
+        self.location = str()
 
-    def _load_contact_info(self):
-        self.email = self.filename["Email"]
-        self.telephone = self.filename["Telephone"]
-        self.website = self.filename["Website"]
-        self.address = self.filename["Address"]
-        self.location = self.filename["Location"]
+    def load(self, filename):
+        """
+        Loads the contact information of the author.
+        """
+        self.email = filename["Email"]
+        self.telephone = filename["Telephone"]
+        self.website = filename["Website"]
+        self.address = filename["Address"]
+        self.location = filename["Location"]
 
     def __repr__(self):
         string = (
@@ -56,21 +57,22 @@ class ResearchInfo:
     A class to represent the research information of an author.
     """
 
-    def __init__(self, filename):
-        self.filename = filename
-        self.linkedin = None
-        self.github = None
-        self.google_scholar = None
-        self.orcid = None
-        self.researchgate = None
-        self._load_research_info()
+    def __init__(self):
+        self.linkedin = str()
+        self.github = str()
+        self.google_scholar = str()
+        self.orcid = str()
+        self.researchgate = str()
 
-    def _load_research_info(self):
-        self.linkedin = self.filename["LinkedIn"]
-        self.github = self.filename["GitHub"]
-        self.google_scholar = self.filename["Google Scholar"]
-        self.orcid = self.filename["ORCID"]
-        self.researchgate = self.filename["ResearchGate"]
+    def load(self, filename):
+        """
+        Loads the research information of the author.
+        """
+        self.linkedin = filename["LinkedIn"]
+        self.github = filename["GitHub"]
+        self.google_scholar = filename["Google Scholar"]
+        self.orcid = filename["ORCID"]
+        self.researchgate = filename["ResearchGate"]
 
     def __repr__(self):
         string = (
@@ -97,17 +99,19 @@ class PersonalInfo:
     A class to represent the personal information of an author.
     """
 
-    def __init__(self, filename):
-        self.name = None
-        self.lastname = None
-        self.alias_long = None
-        self.alias_short = None
-        self.job_title = None
-        self.fingerprint = None
-        self.public_key = None
-        self._load_personal_info(filename)
+    def __init__(self):
+        self.name = str()
+        self.lastname = str()
+        self.alias_long = str()
+        self.alias_short = str()
+        self.job_title = str()
+        self.fingerprint = str()
+        self.public_key = str()
 
-    def _load_personal_info(self, filename):
+    def load(self, filename):
+        """
+        Loads the personal information of the author.
+        """
         self.name = filename["Name"]
         self.lastname = filename["Lastname"]
         self.alias_long = filename["Alias Long"]
@@ -143,91 +147,46 @@ class PersonalInfo:
 class AuthorsData:
     """
     A class to represent an author.
+
+    Attributes:
+    id (int): The ID of the author.
+    affiliations (list): The affiliations of the author.
+    personal_info (PersonalInfo): The personal information of the author.
+    contact_info (ContactInfo): The contact information of the author.
+    research_info (ResearchInfo): The research information of the author.
+
+    Methods:
+    load(filename): Loads the author data from the file.
+    __str__(): Returns a string representation of the author.
+    __repr__(): Returns a string representation of the author.
     """
 
-    def __init__(self, filename, affiliation):
-        """
-        Constructs all the necessary attributes for the author object.
+    def __init__(self):
+        self.id = int()
+        self.affiliations = []
+        self.personal_info = PersonalInfo()
+        self.contact_info = ContactInfo()
+        self.research_info = ResearchInfo()
 
-        :param filename: The name of the file
-        :type filename: str
-        :param affiliation: The affiliation of the author
-        :type affiliation: Affiliation
+    def load(self, filename):
         """
-        self._filename = filename
-        self._id = None
-        self._affiliation = affiliation
-        self._personal_info = PersonalInfo(filename)
-        self._contact_info = ContactInfo(filename)
-        self._research_info = ResearchInfo(filename)
-        self._load_authors()
-
-    @property
-    def filename(self):
+        Loads the author data from the file.
         """
-        Gets the filename of the author.
-
-        :return: The filename of the author
-        :rtype: str
-        """
-        return self._filename
-
-    @property
-    def id(self):
-        """
-        Gets the ID of the author.
-
-        :return: The ID of the author
-        :rtype: str
-        """
-        return self._id
-
-    @property
-    def affiliation(self):
-        """
-        Gets the affiliation of the author.
-
-        :return: The affiliation of the author
-        :rtype: Affiliation
-        """
-        return self._affiliation
-
-    @property
-    def personal_info(self):
-        """
-        Gets the personal information of the author.
-
-        :return: The personal information of the author
-        :rtype: PersonalInfo
-        """
-        return self._personal_info
-
-    @property
-    def contact_info(self):
-        """
-        Gets the contact information of the author.
-
-        :return: The contact information of the author
-        :rtype: ContactInfo
-        """
-        return self._contact_info
-
-    @property
-    def research_info(self):
-        """
-        Gets the research information of the author.
-
-        :return: The research information of the author
-        :rtype: ResearchInfo
-        """
-        return self._research_info
-
-    def _load_authors(self):
-        self._id = int(self.filename["id"])
+        self.id = filename["id"]
+        if isinstance(filename["Affiliations"], str) and\
+                ("," in filename["Affiliations"] or ";" in filename["Affiliations"]):
+            affiliations = filename["Affiliations"].split(",")
+            for affiliation in affiliations:
+                self.affiliations.append(int(affiliation))
+        else:
+            self.affiliations.append(int(filename["Affiliations"]))
+        self.personal_info.load(filename)
+        self.contact_info.load(filename)
+        self.research_info.load(filename)
 
     def __str__(self):
         string = f"id: {self.id}\n"
-        string += f"Affiliation: \n{self.affiliation}\n"
+        string += f"Affiliation: \n{self.affiliations}\n"
         string += f"Personal Info: \n{self.personal_info}\n"
         string += f"Contact Info: \n{self.contact_info}\n"
         string += f"Research Info: \n{self.research_info}\n"
@@ -237,7 +196,7 @@ class AuthorsData:
         string = (
             f"Author("
             f"id={self.id}, "
-            f"affiliation={repr(self.affiliation)}, "
+            f"affiliation={repr(self.affiliations)}, "
             f"personal_info={repr(self.personal_info)}, "
             f"contact_info={repr(self.contact_info)}, "
             f"research_info={repr(self.research_info)})"
@@ -248,61 +207,23 @@ class AuthorsData:
 class Authors:
     """
     A class to represent a list of authors.
+
+    Attributes:
+    authors (list): The list of authors.
+
+    Methods:
+    get_author(author_id, affiliation_id): Gets the author.
+    load(filename): Loads the authors from the file.
+    __str__(): Returns a string representation of the authors.
+    __repr__(): Returns a string representation of the authors.
     """
 
-    def __init__(self, filename, cv):
-        """
-        Constructs all the necessary attributes for the authors object.
-
-        :param filename: The name of the file
-        :type filename: str
-        :param cv: The CV object
-        :type cv: CV
-        """
-        self._filename = filename
-        self._cv = cv
-        self._authors = self._load_authors()
-
-    @property
-    def filename(self):
-        """
-        Gets the filename of the authors.
-
-        :return: The filename of the authors
-        :rtype: str
-        """
-        return self._filename
-
-    @property
-    def cv(self):
-        """
-        Gets the CV of the authors.
-
-        :return: The CV of the authors
-        :rtype: CV
-        """
-        return self._cv
-
-    @property
-    def authors(self):
-        """
-        Gets the authors.
-
-        :return: The authors
-        :rtype: list
-        """
-        return self._authors
+    def __init__(self):
+        self.authors = []
 
     def get_author(self, author_id, affiliation_id=None):
         """
-        Gets the author.
-
-        :param author_id: The ID of the author
-        :type author_id: int
-        :param affiliation_id: The ID of the affiliation
-        :type affiliation_id: int
-        :return: The author
-        :rtype: Author
+        Gets the author by ID and affiliation ID.
         """
         if isinstance(author_id, str):
             author_id = int(author_id)
@@ -312,30 +233,18 @@ class Authors:
                     return author
             return None
         for author in self.authors:
-            if author.id == author_id and \
-                self.cv.institutes.get_institute(int(affiliation_id)).id == \
-                    author.affiliation.id:
+            if author.id == author_id and affiliation_id in author.affiliations:
                 return author
         return None
 
-    def _load_authors(self):
-        authors_df = pd.read_excel(self.filename, sheet_name="Authors")
-        authors = []
+    def load(self, filename):
+        """
+        Loads the authors from the file.
+        """
+        authors_df = pd.read_excel(filename, sheet_name="Authors")
         for _, row in authors_df.iterrows():
-            if isinstance(row["Affiliations"], str) and\
-                    ("," in row["Affiliations"] or ";" in row["Affiliations"]):
-                affiliations = row["Affiliations"].split(",")
-                for affiliation in affiliations:
-                    affiliation = self.cv.institutes.get_institute(
-                        int(affiliation))
-                    author = AuthorsData(row, affiliation)
-                    authors.append(author)
-            else:
-                affiliation = self.cv.institutes.get_institute(
-                    int(row["Affiliations"]))
-                author = AuthorsData(row, affiliation)
-                authors.append(author)
-        return authors
+            self.authors.append(AuthorsData())
+            self.authors[-1].load(row)
 
     def __str__(self):
         string = ""
@@ -346,7 +255,6 @@ class Authors:
     def __repr__(self):
         string = (
             f"Authors("
-            f"filename={self.filename}, "
-            f"authors={self.authors})\n"
+            f"authors={repr(self.authors)})"
         )
         return string

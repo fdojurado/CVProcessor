@@ -1,47 +1,42 @@
+"""
+This module contains the GrantsAwards class and GrantsAwardsData class.
+"""
 import pandas as pd
 
 
 class GrantsAwardsData:
-    def __init__(self, filename):
-        self._filename = filename
-        self._year = None
-        self._description = None
-        self._institution = None
-        self._country = None
-        self._value = None
-        self._load_grants_awards()
+    """
+    A class to represent the grants and awards data.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    year: The year of the grant or award.
+    description: The description of the grant or award.
+    institution: The institution that awarded the grant or award.
+    country: The country where the grant or award was awarded.
+    value: The value of the grant or award.
 
-    @property
-    def year(self):
-        return self._year
+    Methods:
+    __str__: Returns the string representation of the grants and awards data.
+    __repr__: Returns the string representation of the grants and awards data.
+    """
 
-    @property
-    def description(self):
-        return self._description
+    def __init__(self):
+        self.year: pd.Timestamp = pd.Timestamp("NaT")
+        self.description = str()
+        self.institution = str()
+        self.country = str()
+        self.value = str()
 
-    @property
-    def institution(self):
-        return self._institution
-
-    @property
-    def country(self):
-        return self._country
-
-    @property
-    def value(self):
-        return self._value
-
-    def _load_grants_awards(self):
-        self._year = self.filename["Year"]
-        self._year = pd.to_datetime(self.year, format="%Y").year
-        self._description = self.filename["Description"]
-        self._institution = self.filename["Institution"]
-        self._country = self.filename["Country"]
-        self._value = self.filename["Value"]
+    def load(self, filename):
+        """
+        Load the grants and awards data from the given file.
+        """
+        year = filename["Year"]
+        self.year = pd.to_datetime(year, format="%Y").year
+        self.description = filename["Description"]
+        self.institution = filename["Institution"]
+        self.country = filename["Country"]
+        self.value = filename["Value"]
 
     def __str__(self) -> str:
         string = f"Year: {self.year}\n"
@@ -52,33 +47,51 @@ class GrantsAwardsData:
         return string
 
     def __repr__(self) -> str:
-        string = f"GrantsAwardsData(year={self.year}, description={self.description}, institution={self.institution}, country={self.country}, value={self.value})"
+        string = (
+            f"GrantsAwardsData("
+            f"year={self.year}, "
+            f"description={self.description}, "
+            f"institution={self.institution}, "
+            f"country={self.country}, "
+            f"value={self.value})"
+        )
         return string
 
 
 class GrantsAwards:
-    def __init__(self, filename):
-        self._filename = filename
-        self._grants_awards = self._load_grants_awards()
-        # sort the grants_awards data by year
-        self._grants_awards = sorted(
-            self.grants_awards, key=lambda x: x.year, reverse=True)
+    """
+    A class to represent the grants and awards data.
 
-    @property
-    def filename(self):
-        return self._filename
+    Attributes:
+    grants_awards: The grants and awards data.
 
-    @property
-    def grants_awards(self):
-        return self._grants_awards
+    Methods:
+    get_oldest_year: Returns the oldest year in the grants and awards data.
+    load: Loads the grants and awards data from the given file.
+    __str__: Returns the string representation of the grants and awards data.
+    __repr__: Returns the string representation of the grants and awards data.
+    """
+
+    def __init__(self):
+        self.grants_awards = []
 
     def get_oldest_year(self):
+        """
+        Returns the oldest year in the grants and awards data.
+        """
         return self.grants_awards[-1].year
 
-    def _load_grants_awards(self):
+    def load(self, filename):
+        """
+        Load the grants and awards data from the given file.
+        """
         grants_rewards_df = pd.read_excel(
-            self.filename, sheet_name="Grants_awards")
-        return [GrantsAwardsData(row) for _, row in grants_rewards_df.iterrows()]
+            filename, sheet_name="Grants_awards")
+        for _, row in grants_rewards_df.iterrows():
+            self.grants_awards.append(GrantsAwardsData())
+            self.grants_awards[-1].load(row)
+        self.grants_awards = sorted(
+            self.grants_awards, key=lambda x: x.year, reverse=True)
 
     def __str__(self) -> str:
         string = ""
@@ -87,5 +100,5 @@ class GrantsAwards:
         return string
 
     def __repr__(self) -> str:
-        string = f"GrantsAwards(filename={self.filename}, grants_awards={self.grants_awards})"
+        string = f"GrantsAwards(grants_awards={repr(list(self.grants_awards))})"
         return string
