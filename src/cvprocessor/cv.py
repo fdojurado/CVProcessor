@@ -181,19 +181,22 @@ class CV:
 
     def get_publications_unique_sources(self):
         """
-        The get_publications_unique_sources method is used to get the unique sources of the publications.
+        The get_publications_unique_sources method is used to get the unique sources
+        of the publications.
         """
         return self.academic_info.publications.get_unique_sources()
 
     def get_publications_document_types_ordered(self):
         """
-        The get_publications_document_types_ordered method is used to get the document types of the publications in order.
+        The get_publications_document_types_ordered method is used to get
+        the document types of the publications in order.
         """
         return self.academic_info.publications.get_document_types_ordered()
 
     def get_publications_num_publications_by_document_type(self, document_type):
         """
-        The get_publications_num_publications_by_document_type method is used to get the number of publications by the given document type.
+        The get_publications_num_publications_by_document_type method is used to get
+        the number of publications by the given document type.
 
         :param document_type: The document type.
         :type document_type: str
@@ -202,7 +205,8 @@ class CV:
 
     def get_publications_num_publications_by_author(self, author_id):
         """
-        The get_publications_num_publications_by_author method is used to get the number of publications by the given author.
+        The get_publications_num_publications_by_author method is used to get
+        the number of publications by the given author.
 
         :param author_id: The author ID.
         :type author_id: int
@@ -215,9 +219,36 @@ class CV:
         """
         return self.academic_info.publications.get_publications_year_range()
 
+    def get_publications_apa_citation(self, publication_title):
+        """
+        The get_publications_apa_citation method is used to get the APA citation of the publication.
+
+        :param publication_title: The title of the publication.
+        :type publication_title: str
+        """
+        pub = self.academic_info.publications.get_publication_by_title(
+            publication_title)
+        if pub is None:
+            return None
+        apa = pub.get_apa_citation()
+        authors_ids_affiliations_ids = pub.get_auth_id_aff_id()
+        authors_ids = []
+        for author_id in authors_ids_affiliations_ids:
+            authors_ids.append(author_id.get_author_id())
+        authors_alias_short = []
+        for author_id in authors_ids:
+            author = self.get_author(author_id)
+            if author is not None:
+                authors_alias_short.append(author.get_alias_short())
+        if len(authors_alias_short) > 1:
+            authors_alias_short[-1] = "& " + authors_alias_short[-1]
+        authors_alias_short = ", ".join(authors_alias_short)
+        apa = authors_alias_short + apa
+        return apa
+
     def get_research_interests(self):
         """
-        The get_reserach_interests method is used to get the research interests.
+        The get_research_interests method is used to get the research interests.
         """
         return self.academic_info.research_interests.get_interests()
 

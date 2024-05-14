@@ -318,7 +318,7 @@ class PublicationsData:
     """
 
     def __init__(self):
-        self.authors_ids = []
+        self.auth_id_aff_id = []
         self.details = PublicationDetails()
         self.resources = PublicationResources()
         self.rights = PublicationRights()
@@ -431,11 +431,11 @@ class PublicationsData:
         """
         return self.rights.copyright
 
-    def get_authors_ids(self):
+    def get_auth_id_aff_id(self):
         """
-        Get the authors' IDs and affiliation IDs.
+        Get the author IDs and affiliation IDs.
         """
-        return self.authors_ids
+        return self.auth_id_aff_id
 
     def load(self, filename):
         """
@@ -457,20 +457,16 @@ class PublicationsData:
             if author_affiliation is not None:
                 for affiliation in author_affiliation:
                     authors[-1].add_affiliation_id(int(affiliation))
-        self.authors_ids = authors
+        self.auth_id_aff_id = authors
         self.details.load(filename)
         self.resources.load(filename)
         self.rights.load(filename)
 
-    def build_apa_citation(self):
+    def get_apa_citation(self) -> str:
         """
         Build the APA citation.
         """
         citation = ""
-        authors = [f"{author.author_id}" for author in self.authors_ids]
-        unique_authors = [authors[i] for i in range(
-            len(authors)) if authors[i] not in authors[:i]]
-        citation += ', '.join(unique_authors)
         if not common.check_nan(self.details.basic_info.year):
             citation += f" ({self.details.basic_info.year.year}). "
         if not common.check_nan(self.details.basic_info.title):
@@ -493,7 +489,7 @@ class PublicationsData:
         return citation
 
     def __str__(self) -> str:
-        string = f"Authors' IDs and Affiliation IDs: {list(map(str, self.authors_ids))}\n"
+        string = f"Authors' IDs and Affiliation IDs: {list(map(str, self.auth_id_aff_id))}\n"
         string += str(self.details)
         string += str(self.resources)
         string += str(self.rights)
@@ -502,7 +498,7 @@ class PublicationsData:
     def __repr__(self) -> str:
         string = (
             f"PublicationsData("
-            f"authors={repr(self.authors_ids)}, "
+            f"authors={repr(self.auth_id_aff_id)}, "
             f"details={repr(self.details)}, "
             f"resources={repr(self.resources)}, "
             f"rights={repr(self.rights)})"
@@ -554,6 +550,15 @@ class Publications():
             document_types.add(publication.details.document_type)
         return document_types
 
+    def get_publication_by_title(self, title):
+        """
+        Get the publication by the title.
+        """
+        for publication in self.publications:
+            if publication.get_title() == title:
+                return publication
+        return None
+
     def get_document_types_ordered(self):
         """
         Gets the document types ordered.
@@ -580,10 +585,9 @@ class Publications():
         """
         count = 0
         for publication in self:
-            for author in publication.get_authors_ids():
-                if author.get_author_id() == author_id:
+            for auth_id_aff_id in publication.get_auth_id_aff_id():
+                if auth_id_aff_id.get_author_id() == author_id:
                     count += 1
-                    break
         return count
 
     def get_publications_year_range(self):
