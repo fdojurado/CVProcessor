@@ -15,8 +15,20 @@ class ResearchInterests:
     """
 
     def __init__(self):
-        self.research_interests = None
+        self.research_interests = str()
         self.keywords = []
+
+    def get_interests(self) -> str:
+        """
+        Get the research interests of the person.
+        """
+        return self.research_interests
+
+    def get_keywords(self) -> list:
+        """
+        Get the keywords related to the research interests.
+        """
+        return self.keywords
 
     def load(self, filename) -> None:
         """

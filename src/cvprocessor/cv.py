@@ -209,6 +209,18 @@ class CV:
         """
         return self.academic_info.publications.get_num_publications_by_author(author_id)
 
+    def get_research_interests(self):
+        """
+        The get_reserach_interests method is used to get the research interests.
+        """
+        return self.academic_info.research_interests.get_interests()
+
+    def get_research_keywords(self):
+        """
+        The get_research_keywords method is used to get the research keywords.
+        """
+        return self.academic_info.research_interests.get_keywords()
+
     def _load_cv(self, filename):
         """
         The _load_cv method is used to load the CV file.
