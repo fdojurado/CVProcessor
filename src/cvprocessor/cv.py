@@ -146,6 +146,24 @@ class CV:
         self.news = News()
         self._load_cv(filename)
 
+    def get_author(self, author_id):
+        """
+        The get_author method is used to get the author by the given author ID.
+
+        :param author_id: The author ID.
+        :type author_id: int
+        """
+        return self.personal_info.authors.get_author(author_id)
+
+    def get_institute(self, institute_id):
+        """
+        The get_institute method is used to get the institute by the given institute ID.
+
+        :param institute_id: The institute ID.
+        :type institute_id: int
+        """
+        return self.academic_info.institutes.get_institute(institute_id)
+
     def _load_cv(self, filename):
         """
         The _load_cv method is used to load the CV file.

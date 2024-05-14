@@ -419,6 +419,12 @@ class PublicationsData:
         """
         return self.rights.copyright
 
+    def get_authors_ids(self):
+        """
+        Get the authors' IDs and affiliation IDs.
+        """
+        return self.authors_ids
+
     def load(self, filename):
         """
         Load the publication data from the file.

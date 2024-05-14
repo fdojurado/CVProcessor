@@ -118,6 +118,66 @@ class InstituteData:
         self.location = InstituteLocation()
         self.url = None
 
+    def get_id(self):
+        """
+        Get the ID of the institute.
+        """
+        return self.info.id
+
+    def get_name(self):
+        """
+        Get the name of the institute.
+        """
+        return self.info.name
+
+    def get_name_abbr(self):
+        """
+        Get the name abbreviation of the institute.
+        """
+        return self.info.name_abbr
+
+    def get_department(self):
+        """
+        Get the department of the institute.
+        """
+        return self.info.department
+
+    def get_department_abbr(self):
+        """
+        Get the department abbreviation of the institute.
+        """
+        return self.info.department_abbr
+
+    def get_address(self):
+        """
+        Get the address of the institute.
+        """
+        return self.location.address
+
+    def get_city(self):
+        """
+        Get the city of the institute.
+        """
+        return self.location.city
+
+    def get_country(self):
+        """
+        Get the country of the institute.
+        """
+        return self.location.country
+
+    def get_coordinates(self):
+        """
+        Get the coordinates of the institute.
+        """
+        return self.location.coordinates
+
+    def get_url(self):
+        """
+        Get the URL of the institute.
+        """
+        return self.url
+
     def load(self, pd_dataframe):
         """
         Load the data from a pandas dataframe.
@@ -164,7 +224,7 @@ class Institutes:
         if isinstance(institute_id, str):
             institute_id = int(institute_id)
         for institute in self.institutes:
-            if institute.info.id == institute_id:
+            if institute.get_id() == institute_id:
                 return institute
         return None
 

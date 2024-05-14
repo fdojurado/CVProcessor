@@ -168,6 +168,120 @@ class AuthorsData:
         self.contact_info = ContactInfo()
         self.research_info = ResearchInfo()
 
+    def get_id(self):
+        """
+        Returns the ID of the author.
+        """
+        return self.id
+
+    def get_affiliations(self):
+        """
+        Returns the affiliations of the author.
+        """
+        return self.affiliations
+
+    def get_name(self):
+        """
+        Returns the name of the author.
+        """
+        return self.personal_info.name
+
+    def get_lastname(self):
+        """
+        Returns the lastname of the author.
+        """
+        return self.personal_info.lastname
+
+    def get_alias_long(self):
+        """
+        Returns the long alias of the author.
+        """
+        return self.personal_info.alias_long
+
+    def get_alias_short(self):
+        """
+        Returns the short alias of the author.
+        """
+        return self.personal_info.alias_short
+
+    def get_job_title(self):
+        """
+        Returns the job title of the author.
+        """
+        return self.personal_info.job_title
+
+    def get_fingerprint(self):
+        """
+        Returns the fingerprint of the author.
+        """
+        return self.personal_info.fingerprint
+
+    def get_public_key(self):
+        """
+        Returns the public key of the author.
+        """
+        return self.personal_info.public_key
+
+    def get_email(self):
+        """
+        Returns the email of the author.
+        """
+        return self.contact_info.email
+
+    def get_telephone(self):
+        """
+        Returns the telephone of the author.
+        """
+        return self.contact_info.telephone
+
+    def get_website(self):
+        """
+        Returns the website of the author.
+        """
+        return self.contact_info.website
+
+    def get_address(self):
+        """
+        Returns the address of the author.
+        """
+        return self.contact_info.address
+
+    def get_location(self):
+        """
+        Returns the location of the author.
+        """
+        return self.contact_info.location
+
+    def get_linkedin(self):
+        """
+        Returns the LinkedIn of the author.
+        """
+        return self.research_info.linkedin
+
+    def get_github(self):
+        """
+        Returns the GitHub of the author.
+        """
+        return self.research_info.github
+
+    def get_google_scholar(self):
+        """
+        Returns the Google Scholar of the author.
+        """
+        return self.research_info.google_scholar
+
+    def get_orcid(self):
+        """
+        Returns the ORCID of the author.
+        """
+        return self.research_info.orcid
+
+    def get_researchgate(self):
+        """
+        Returns the ResearchGate of the author.
+        """
+        return self.research_info.researchgate
+
     def load(self, filename):
         """
         Loads the author data from the file.
@@ -229,13 +343,12 @@ class Authors:
             author_id = int(author_id)
         if affiliation_id is None:
             for author in self.authors:
-                if author.id == author_id:
+                if author.get_id() == author_id:
                     return author
             return None
         for author in self.authors:
-            if author.id == author_id and affiliation_id in author.affiliations:
+            if author.get_id() == author_id and affiliation_id in author.get_affiliations():
                 return author
-        return None
 
     def load(self, filename):
         """
