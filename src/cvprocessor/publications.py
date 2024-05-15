@@ -307,7 +307,7 @@ class AuthorIDAffiliationIDs:
         string += f"Affiliation IDs: {repr(list(map(repr, self.affiliation_ids)))}\n"
         return string
 
-
+# pylint: disable=too-many-public-methods
 class PublicationsData:
     """
     A class to represent the data of a publication.
