@@ -65,6 +65,48 @@ class NewsData:
         self.description = str()
         self.resources = NewsResources()
 
+    def get_title(self):
+        """
+        Get the title of the news item.
+        """
+        return self.title
+
+    def get_date(self):
+        """
+        Get the date of the news item.
+        """
+        return self.date
+
+    def get_description(self):
+        """
+        Get the description of the news item.
+        """
+        return self.description
+
+    def get_pdf(self):
+        """
+        Get the PDF link for the news item.
+        """
+        return self.resources.pdf
+
+    def get_preprint(self):
+        """
+        Get the preprint link for the news item.
+        """
+        return self.resources.preprint
+
+    def get_code(self):
+        """
+        Get the code link for the news item.
+        """
+        return self.resources.code
+
+    def get_doi(self):
+        """
+        Get the DOI link for the news item.
+        """
+        return self.resources.doi
+
     def load(self, pd_dataframe):
         """
         Load the news data from a Pandas DataFrame.
@@ -110,6 +152,9 @@ class News:
         self.news = []
 
     def load(self, filename):
+        """
+        Load the news data from the given file.
+        """
         news_df = pd.read_excel(filename, sheet_name="News")
         for _, row in news_df.iterrows():
             self.news.append(NewsData())
@@ -124,3 +169,6 @@ class News:
     def __repr__(self):
         string = f"News(news={repr(self.news)})\n"
         return string
+
+    def __iter__(self):
+        return iter(self.news)

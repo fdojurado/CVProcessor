@@ -2,58 +2,7 @@
 This module contains the classes to process the teaching data from the CV.
 """
 import pandas as pd
-
-
-class YearData:
-    """
-    A class to represent the year data.
-
-    Attributes:
-    year_range (str): The year range.
-    start_year (datetime): The start year.
-    end_year (datetime): The end year.
-    """
-
-    def __init__(self):
-        self.year_range = None
-        self.start_year = None
-        self.end_year = None
-
-    def format_year(self, year):
-        """
-        Format the year to a datetime object.
-        """
-        year = year.strip()
-        year = pd.to_datetime(year, format="%b %Y")
-        return year
-
-    def process_year_range(self, year_range):
-        """
-        Process the year range.
-        """
-        year_range = year_range.split("-")
-        self.start_year = self.format_year(year_range[0])
-        self.start_year = pd.to_datetime(self.start_year, format="%b %Y")
-        if len(year_range) > 1:
-            self.end_year = self.format_year(year_range[1])
-            self.end_year = pd.to_datetime(self.end_year, format="%b %Y")
-        else:
-            self.end_year = None
-
-    def __str__(self):
-        string = f"Year range: {self.year_range}\n"
-        string += f"Start year: {self.start_year}\n"
-        string += f"End year: {self.end_year}\n"
-        return string
-
-    def __repr__(self):
-        string = (
-            f"YearData("
-            f"year_range={self.year_range}, "
-            f"start_year={self.start_year}, "
-            f"end_year={self.end_year})"
-        )
-        return string
+from cvprocessor import common
 
 
 class TeachingInfo:
@@ -77,34 +26,45 @@ class TeachingInfo:
 
     def get_start_year(self):
         """
-        Get the start year of this teaching activity.
+        Get the start year of the teaching.
         """
-        min_year = 1e6
-        date = None
-        for year in self.years:
-            if int(year.start_year.year) < min_year:
-                min_year = int(year.start_year.year)
-                date = year.start_year
-        return date
+        return common.get_start_year(self.years)
 
     def get_end_year(self):
         """
-        Get the end year of this teaching activity.
+        Get the end year of the teaching.
         """
-        max_year = -1
-        date = None
-        for year in self.years:
-            if year.end_year is not None:
-                if int(year.end_year.year) > max_year:
-                    max_year = int(year.end_year.year)
-                    date = year.end_year
-        return date
+        return common.get_end_year(self.years)
+
+    def get_position(self):
+        """
+        Get the position of the teaching.
+        """
+        return self.position
+
+    def get_course(self):
+        """
+        Get the course of the teaching.
+        """
+        return self.course
+
+    def get_link(self):
+        """
+        Get the link of the teaching.
+        """
+        return self.link
+
+    def get_type(self):
+        """
+        Get the type of the teaching.
+        """
+        return self.type
 
     def add_year(self, year):
         """
         Add a year to the year list.
         """
-        assert isinstance(year, YearData)
+        assert isinstance(year, common.YearData)
         self.years.append(year)
 
     def sort_years(self):
@@ -170,7 +130,7 @@ class TeachingData:
         year_range = filename["Year"].split(";")
         year_range = list(filter(None, year_range))
         for year in year_range:
-            year_data = YearData()
+            year_data = common.YearData()
             year_data.year_range = year
             year_data.process_year_range(year)
             self.info.add_year(year_data)
@@ -256,3 +216,6 @@ class Teaching:
     def __repr__(self):
         string = f"Teaching(teaching={repr(self.teaching)})"
         return string
+
+    def __iter__(self):
+        return iter(self.teaching)
