@@ -2,7 +2,7 @@
 This module contains the ExperienceData and Experience classes.
 """
 import pandas as pd
-from cvprocessor import common
+from cvprocessor import year_data as yd
 
 
 class ExperienceData:
@@ -28,13 +28,13 @@ class ExperienceData:
         """
         Get the start year of this experience.
         """
-        return common.get_start_year(self.years)
+        return yd.get_start_year(self.years)
 
     def get_end_year(self):
         """
         Get the end year of this experience.
         """
-        return common.get_end_year(self.years)
+        return yd.get_end_year(self.years)
 
     def get_position(self):
         """
@@ -60,32 +60,11 @@ class ExperienceData:
         """
         return self.responsibilities
 
-    def add_year(self, year):
-        """
-        Add a year to the experience.
-        """
-        assert isinstance(year, common.YearData)
-        self.years.append(year)
-
-    def sort_years(self):
-        """
-        Sort the years.
-        """
-        self.years = sorted(
-            self.years, key=lambda x: x.start_year, reverse=True)
-
     def process_year_data(self, filename):
         """
         Process the year data.
         """
-        year_range = filename["Year"].split(";")
-        year_range = list(filter(None, year_range))
-        for year in year_range:
-            year_data = common.YearData()
-            year_data.year_range = year
-            year_data.process_year_range(year)
-            self.add_year(year_data)
-        self.sort_years()
+        self.years = yd.process_year_data(filename, self.years)
 
     def load(self, filename):
         """

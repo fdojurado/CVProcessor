@@ -2,7 +2,7 @@
 This module contains the classes to process the teaching data from the CV.
 """
 import pandas as pd
-from cvprocessor import common
+from cvprocessor import year_data as yd
 
 
 class TeachingInfo:
@@ -28,13 +28,13 @@ class TeachingInfo:
         """
         Get the start year of the teaching.
         """
-        return common.get_start_year(self.years)
+        return yd.get_start_year(self.years)
 
     def get_end_year(self):
         """
         Get the end year of the teaching.
         """
-        return common.get_end_year(self.years)
+        return yd.get_end_year(self.years)
 
     def get_position(self):
         """
@@ -59,20 +59,6 @@ class TeachingInfo:
         Get the type of the teaching.
         """
         return self.type
-
-    def add_year(self, year):
-        """
-        Add a year to the year list.
-        """
-        assert isinstance(year, common.YearData)
-        self.years.append(year)
-
-    def sort_years(self):
-        """
-        Sort the years by start year.
-        """
-        self.years = sorted(
-            self.years, key=lambda x: x.start_year, reverse=True)
 
     def __str__(self):
         string = f"Year: {list(map(str, self.years))}\n"
@@ -127,14 +113,7 @@ class TeachingData:
         """
         Process the year data.
         """
-        year_range = filename["Year"].split(";")
-        year_range = list(filter(None, year_range))
-        for year in year_range:
-            year_data = common.YearData()
-            year_data.year_range = year
-            year_data.process_year_range(year)
-            self.info.add_year(year_data)
-        self.info.sort_years()
+        self.info.years = yd.process_year_data(filename, self.info.years)
 
     def load(self, filename):
         """
