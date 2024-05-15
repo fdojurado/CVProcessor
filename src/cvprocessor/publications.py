@@ -17,6 +17,12 @@ class PublicationBasicInfo:
         self.year: pd.Timestamp = pd.Timestamp("NaT")
         self.source = str()
 
+    def get_date(self):
+        """
+        Get the date of the publication.
+        """
+        return self.year.date()
+
     def process_year_data(self, year):
         """
         Process the year data.
@@ -329,11 +335,11 @@ class PublicationsData:
         """
         return self.details.basic_info.title
 
-    def get_year(self):
+    def get_date(self):
         """
-        Get the year of the publication.
+        Get the date of the publication.
         """
-        return self.details.basic_info.year
+        return self.details.basic_info.get_date()
 
     def get_source(self):
         """

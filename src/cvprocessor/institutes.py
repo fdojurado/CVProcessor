@@ -247,3 +247,6 @@ class Institutes:
     def __repr__(self):
         string = f"Institutes(Institute={repr(self.institutes)})"
         return string
+
+    def __iter__(self):
+        return iter(self.institutes)
