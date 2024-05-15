@@ -220,8 +220,8 @@ if __name__ == "__main__":
     cv = CV("cv.xlsx")
     print(str(cv.personal.references))
     # Get the first publication
-    pub = cv.academic.publications.get_publications_by_index(0)
-    print(f"Publication title: {pub.details.get_title()}")
-    apa = cv.get_publications_apa_citation(pub.details.get_title())
-    print(f"APA Citation: {apa}")
+    # pub = cv.academic.publications.get_publications_by_index(0)
+    # print(f"Publication title: {pub.details.get_title()}")
+    # apa = cv.get_publications_apa_citation(pub.details.get_title())
+    # print(f"APA Citation: {apa}")
     sys.exit(0)
