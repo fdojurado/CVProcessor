@@ -126,7 +126,7 @@ class Details:
 
     def __init__(self):
         self.title = str()
-        self.year = pd.Timestamp("NaT")
+        self.date = pd.Timestamp("NaT")
         self.source = Source()
         self.pages = Pages()
         self.document_type = str()
@@ -139,11 +139,11 @@ class Details:
         """
         return self.title
 
-    def get_year(self):
+    def get_date(self):
         """
-        Get the year of the publication.
+        Get the date of the publication.
         """
-        return self.year
+        return self.date
 
     def get_document_type(self):
         """
@@ -168,11 +168,11 @@ class Details:
         Load the publication details from the file.
         """
         self.title = filename["Title"]
-        self.year = filename["Year"]
-        if len(self.year.split()) == 1:
-            self.year = "Jan "+self.year
+        self.date = filename["Year"]
+        if len(self.date.split()) == 1:
+            self.date = "Jan "+self.date
         # To datetime month year format
-        self.year = pd.to_datetime(self.year, format="%b %Y").date()
+        self.date = pd.to_datetime(self.date, format="%b %Y").date()
         self.source.load(filename)
         self.pages.load(filename)
         self.document_type = filename["Document Type"]
@@ -183,7 +183,7 @@ class Details:
         string = (
             f"Details("
             f"title={self.title}, "
-            f"year={self.year}, "
+            f"date={self.date}, "
             f"source={repr(self.source)}, "
             f"pages={repr(self.pages)}, "
             f"document_type={self.document_type}, "
@@ -409,8 +409,8 @@ class PublicationsData:
         Build the APA citation.
         """
         citation = ""
-        if not common.check_nan(self.details.get_year()):
-            citation += f"({self.details.get_year().year}). "
+        if not common.check_nan(self.details.get_date()):
+            citation += f"({self.details.get_date().year}). "
         if not common.check_nan(self.details.get_title()):
             citation += f"{self.details.get_title()}. "
         if not common.check_nan(self.details.source.get_source()):
@@ -544,7 +544,7 @@ class Publications():
         """
         years = []
         for publication in self.publications:
-            years.append(publication.details.get_year().year)
+            years.append(publication.details.get_date().year)
         return min(years), max(years)
 
     def load(self, filename):
@@ -558,7 +558,7 @@ class Publications():
             self.publications[-1].load(row)
         self.publications = sorted(
             self.publications, key=lambda x: (
-                x.details.get_year(), x.details.get_title()), reverse=True
+                x.details.get_date(), x.details.get_title()), reverse=True
         )
 
     def __str__(self):
