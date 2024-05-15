@@ -1,3 +1,6 @@
+"""
+This module contains the YearData class and functions to process year data.
+"""
 import pandas as pd
 
 
