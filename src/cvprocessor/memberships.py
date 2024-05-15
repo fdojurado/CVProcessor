@@ -17,6 +17,18 @@ class MembershipData:
         self.year: pd.Timestamp = pd.Timestamp("NaT")
         self.membership = str()
 
+    def get_year(self):
+        """
+        Get the year of the membership.
+        """
+        return self.year
+
+    def get_membership(self):
+        """
+        Get the membership.
+        """
+        return self.membership
+
     def load(self, filename):
         """
         Load the membership data.
@@ -60,3 +72,6 @@ class Memberships:
 
     def __repr__(self):
         return f"Memberships(memberships={repr(list(map(repr, self.memberships)))})\n"
+
+    def __iter__(self):
+        return iter(self.memberships)

@@ -20,9 +20,27 @@ class Intro:
     """
 
     def __init__(self):
-        self.short_summary = None
-        self.long_summary = None
-        self.tagline = None
+        self.short_summary = str()
+        self.long_summary = str()
+        self.tagline = str()
+
+    def get_short_summary(self):
+        """
+        Get the short summary of the CV file.
+        """
+        return self.short_summary
+
+    def get_long_summary(self):
+        """
+        Get the long summary of the CV file.
+        """
+        return self.long_summary
+
+    def get_tagline(self):
+        """
+        Get the tagline of the CV file.
+        """
+        return self.tagline
 
     def load(self, filename):
         """

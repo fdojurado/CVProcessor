@@ -21,6 +21,30 @@ class ReferenceData:
         self.position = str()
         self.institution = str()
 
+    def get_name(self):
+        """
+        Get the name of the reference.
+        """
+        return self.name
+
+    def get_email(self):
+        """
+        Get the email of the reference.
+        """
+        return self.email
+
+    def get_position(self):
+        """
+        Get the position of the reference.
+        """
+        return self.position
+
+    def get_institution(self):
+        """
+        Get the institution of the reference.
+        """
+        return self.institution
+
     def load(self, filename):
         """
         Load the reference data.
@@ -80,3 +104,6 @@ class References:
 
     def __repr__(self):
         return f"References({repr(self.references)})"
+
+    def __iter__(self):
+        return iter(self.references)

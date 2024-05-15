@@ -2,6 +2,7 @@
 This module contains the classes to represent the education data of an author.
 """
 import pandas as pd
+from cvprocessor import year_data as yd
 
 
 class ThesisInfo:
@@ -22,6 +23,24 @@ class ThesisInfo:
         self.thesis = None
         self.thesis_link = None
         self.advisor = None
+
+    def get_thesis(self):
+        """
+        Get the thesis.
+        """
+        return self.thesis
+
+    def get_thesis_link(self):
+        """
+        Get the thesis link.
+        """
+        return self.thesis_link
+
+    def get_advisor(self):
+        """
+        Get the advisor.
+        """
+        return self.advisor
 
     def load(self, filename):
         """
@@ -47,60 +66,6 @@ class ThesisInfo:
         return string
 
 
-class EducationPeriod:
-    """
-    A class to represent the education period of an author.
-
-    Attributes:
-    year: The year.
-    start_year: The start year.
-    end_year: The end year.
-
-    Methods:
-    __str__: Returns the string representation of the education period.
-    __repr__: Returns the string representation of the education period.
-    """
-
-    def __init__(self):
-        self.start_year = None
-        self.end_year = None
-        self.year = None
-
-    def load(self, filename):
-        """
-        Load the education period.
-        """
-        years = filename["Year"]
-        years = years.split(";")
-        years = list(filter(None, years))
-        self.year = years[0]
-        start_year = years[0].split("-")[0].strip()
-        end_year = years[-1].split("-")[-1].strip()
-        if len(start_year.split()) == 2:
-            start_year = '1 '+start_year
-        if len(end_year.split()) == 2:
-            end_year = "1 "+end_year
-        self.start_year = pd.to_datetime(
-            start_year, format="%d %b %Y")
-        self.end_year = pd.to_datetime(
-            end_year, format="%d %b %Y")
-
-    def __str__(self):
-        string = f"Year: {self.year}\n"
-        string += f"Start year: {self.start_year}\n"
-        string += f"End year: {self.end_year}\n"
-        return string
-
-    def __repr__(self):
-        string = (
-            f"EducationPeriod("
-            f"year={self.year}, "
-            f"start_year={self.start_year}, "
-            f"end_year={self.end_year})"
-        )
-        return string
-
-
 class EducationData:
     """
     A class to represent the education data of an author.
@@ -110,8 +75,45 @@ class EducationData:
         self.degree = str()
         self.award = str()
         self.institution = str()
-        self.education_period = EducationPeriod()
+        self.education_period = []
         self.thesis_info = ThesisInfo()
+
+    def get_degree(self):
+        """
+        Get the degree.
+        """
+        return self.degree
+
+    def get_institution(self):
+        """
+        Get the institution.
+        """
+        return self.institution
+
+    def get_award(self):
+        """
+        Get the award.
+        """
+        return self.award
+
+    def get_start_year(self):
+        """
+        Get the start year of this experience.
+        """
+        return yd.get_start_year(self.education_period)
+
+    def get_end_year(self):
+        """
+        Get the end year of this experience.
+        """
+        return yd.get_end_year(self.education_period)
+
+    def process_year_data(self, filename):
+        """
+        Process the year data.
+        """
+        self.education_period = yd.process_year_data(
+            filename, self.education_period)
 
     def load(self, filename):
         """
@@ -120,7 +122,7 @@ class EducationData:
         self.degree = filename["Degree"]
         self.award = filename["Award"]
         self.institution = filename["Institution"]
-        self.education_period.load(filename)
+        self.process_year_data(filename)
         self.thesis_info.load(filename)
 
     def __str__(self):
@@ -171,7 +173,7 @@ class Education:
             self.educations[-1].load(row)
         # sort the education data by end year
         self.educations = sorted(
-            self.educations, key=lambda x: x.education_period.end_year, reverse=True)
+            self.educations, key=lambda x: x.get_end_year(), reverse=True)
 
     def __str__(self) -> str:
         string = ""
@@ -182,3 +184,6 @@ class Education:
     def __repr__(self) -> str:
         string = f"Education(educations={repr(self.educations)})"
         return string
+
+    def __iter__(self):
+        return iter(self.educations)

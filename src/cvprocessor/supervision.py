@@ -4,96 +4,142 @@ This module contains the classes and methods to process the supervision data fro
 import pandas as pd
 
 
-class SupervisionInfo:
+class AcademicDetails:
     """
-    A class to represent the information of a supervision.
+    The AcademicDetails class is used to store the academic details.
 
     Attributes:
-    students (list): The students of the supervision.
-    year (int): The year of the supervision.
-    title (str): The title of the supervision.
-    program (str): The program of the supervision.
-    type (str): The type of the supervision.
+    year (str): The year.
+    title (str): The title.
+    program (str): The program.
+    type (str): The type.
     """
 
     def __init__(self):
-        self.students = str()
         self.year = str()
         self.title = str()
         self.program = str()
         self.type = str()
 
+    def get_year(self):
+        """
+        Get the year.
+        """
+        return self.year
+
+    def get_title(self):
+        """
+        Get the title.
+        """
+        return self.title
+
+    def get_program(self):
+        """
+        Get the program.
+        """
+        return self.program
+
+    def get_type(self):
+        """
+        Get the type.
+        """
+        return self.type
+
     def load(self, filename):
         """
-        Load the supervision information.
+        Load the academic details.
         """
-        self.students = filename["Students"]
         self.year = filename["Year"]
         self.title = filename["Title"]
         self.program = filename["Program"]
         self.type = filename["Type"]
 
-    def __str__(self) -> str:
-        string = f"Students: {self.students}\n"
-        string += f"Year: {self.year}\n"
-        string += f"Title: {self.title}\n"
-        string += f"Program: {self.program}\n"
-        string += f"Type: {self.type}\n"
-        return string
-
     def __repr__(self) -> str:
-        string = (
-            f"SupervisionInfo("
-            f"students={self.students}, "
+        return (
+            f"AcademicDetails("
             f"year={self.year}, "
             f"title={self.title}, "
             f"program={self.program}, "
             f"type={self.type})"
         )
-        return string
+
+
+class SupervisionDetails:
+    """
+    The SupervisionDetails class is used to store the supervision details.
+
+    Attributes:
+    institution (str): The institution.
+    supervisors (str): The supervisors.
+    students (str): The students.
+    """
+
+    def __init__(self):
+        self.institution = str()
+        self.supervisors = str()
+        self.students = str()
+
+    def get_institution(self):
+        """
+        Get the institution.
+        """
+        return self.institution
+
+    def get_supervisors(self):
+        """
+        Get the supervisors.
+        """
+        return self.supervisors
+
+    def get_students(self):
+        """
+        Get the students.
+        """
+        return self.students
+
+    def load(self, filename):
+        """
+        Load the supervision details.
+        """
+        self.institution = filename["Institution"]
+        self.supervisors = filename["Supervisors"]
+        self.students = filename["Students"]
+
+    def __repr__(self) -> str:
+        return (
+            f"SupervisionDetails("
+            f"institution={self.institution}, "
+            f"supervisors={self.supervisors}, "
+            f"students={self.students})"
+        )
 
 
 class SupervisionData:
     """
-    A class to represent the data of a supervision.
+    The Supervision class is used to store the supervision data.
 
     Attributes:
-    info (SupervisionInfo): The information of the supervision.
-    institution (str): The institution of the supervision.
-    supervisors (list): The supervisors of the supervision.
-    students (list): The students of the supervision.
+    info (AcademicDetails): The academic details.
+    institution (str): The institution.
     """
 
     def __init__(self):
-        self.info = SupervisionInfo()
-        self.institution = str()
-        self.supervisors = str()
-        self.students = str()
+        self.academic = AcademicDetails()
+        self.supervision = SupervisionDetails()
 
     def load(self, filename):
         """
         Load the supervision data.
         """
-        self.info.load(filename)
-        self.institution = filename["Institution"]
-        self.supervisors = filename["Supervisors"]
-
-    def __str__(self) -> str:
-        string = str(self.info)
-        string += f"Institution: {self.institution}\n"
-        string += f"Supervisors: {self.supervisors}\n"
-        string += f"Students: {self.students}\n"
-        return string
+        self.academic.load(filename)
+        self.supervision.load(filename)
 
     def __repr__(self) -> str:
-        string = (
+        return (
             f"SupervisionData("
-            f"info={repr(self.info)}, "
-            f"institution={self.institution}, "
-            f"supervisors={self.supervisors}, "
-            f"students={self.students})"
+            f"info={repr(self.academic)}, "
+            f"institution={self.supervision.institution})"
         )
-        return string
 
 
 class Supervision:
@@ -118,8 +164,8 @@ class Supervision:
         """
         supervision_types = []
         for supervision in self.supervisions:
-            if supervision.info.type not in supervision_types:
-                supervision_types.append(supervision.info.type)
+            if supervision.academic.type not in supervision_types:
+                supervision_types.append(supervision.academic.type)
         return supervision_types
 
     def get_num_supervision_by_document_type(self, supervision_type):
@@ -128,7 +174,7 @@ class Supervision:
         """
         count = 0
         for supervision in self.supervisions:
-            if supervision.info.type == supervision_type:
+            if supervision.academic.type == supervision_type:
                 count += 1
         return count
 
@@ -143,7 +189,7 @@ class Supervision:
             self.supervisions.append(supervision_data)
         # sort the supervision data by type and year
         self.supervisions = sorted(
-            self.supervisions, key=lambda x: (x.info.type, x.info.year), reverse=True)
+            self.supervisions, key=lambda x: (x.academic.type, x.academic.year), reverse=True)
 
     def __str__(self) -> str:
         string = ""
@@ -154,3 +200,6 @@ class Supervision:
     def __repr__(self) -> str:
         string = f"Supervision(supervision={repr(list(self.supervisions))})"
         return string
+
+    def __iter__(self):
+        return iter(self.supervisions)

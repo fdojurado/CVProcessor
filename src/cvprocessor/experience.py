@@ -19,10 +19,10 @@ class ExperienceData:
 
     def __init__(self):
         self.years = []
-        self.position = None
-        self.institution = None
-        self.description = None
-        self.responsibilities = None
+        self.position = str()
+        self.institution = str()
+        self.description = str()
+        self.responsibilities = str()
 
     def get_start_year(self):
         """

@@ -7,57 +7,9 @@ import pandas as pd
 from cvprocessor import common
 
 
-class PublicationBasicInfo:
+class Source:
     """
-    A class to represent the basic information of a publication.
-    """
-
-    def __init__(self):
-        self.title = str()
-        self.year: pd.Timestamp = pd.Timestamp("NaT")
-        self.source = str()
-
-    def get_date(self):
-        """
-        Get the date of the publication.
-        """
-        return self.year.date()
-
-    def process_year_data(self, year):
-        """
-        Process the year data.
-        """
-        if len(year.split()) == 1:
-            year = 'Jan ' + year
-        self.year = pd.to_datetime(year, format="%b %Y")
-
-    def load(self, filename):
-        """
-        Load the publication basic information from the file.
-        """
-        self.title = filename["Title"]
-        self.process_year_data(filename["Year"])
-        self.source = filename["Source"]
-
-    def __repr__(self):
-        string = (
-            f"PublicationBasicInfo("
-            f"title={self.title}, "
-            f"year={self.year}, "
-            f"source={self.source})"
-        )
-        return string
-
-    def __str__(self):
-        string = f"Title: {self.title}\n"
-        string += f"Year: {self.year}\n"
-        string += f"Source: {self.source}\n"
-        return string
-
-
-class PublicationJournalInfo:
-    """
-    A class to represent the journal information of a publication.
+    A class to represent the source of a publication.
 
     Attributes:
     volume (str): The volume of the publication.
@@ -69,6 +21,31 @@ class PublicationJournalInfo:
         self.volume = str()
         self.issue = str()
         self.artno = str()
+        self.source = str()
+
+    def get_volume(self):
+        """
+        Get the volume of the publication.
+        """
+        return self.volume
+
+    def get_issue(self):
+        """
+        Get the issue of the publication.
+        """
+        return self.issue
+
+    def get_artno(self):
+        """
+        Get the article number of the publication.
+        """
+        return self.artno
+
+    def get_source(self):
+        """
+        Get the source of the publication.
+        """
+        return self.source
 
     def load(self, filename):
         """
@@ -77,24 +54,20 @@ class PublicationJournalInfo:
         self.volume = filename["Volume"]
         self.issue = filename["Issue"]
         self.artno = filename["Art. No."]
+        self.source = filename["Source"]
 
     def __repr__(self):
         string = (
-            f"PublicationJournalInfo("
+            f"Source("
             f"volume={self.volume}, "
             f"issue={self.issue}, "
-            f"artno={self.artno})"
+            f"artno={self.artno}, "
+            f"source={self.source})"
         )
         return string
 
-    def __str__(self):
-        string = f"Volume: {self.volume}\n"
-        string += f"Issue: {self.issue}\n"
-        string += f"Art. No.: {self.artno}\n"
-        return string
 
-
-class PublicationPageInfo:
+class Pages:
     """
     A class to represent the page information of a publication.
 
@@ -107,6 +80,18 @@ class PublicationPageInfo:
         self.page_start = str()
         self.page_end = str()
 
+    def get_page_start(self):
+        """
+        Get the starting page of the publication.
+        """
+        return self.page_start
+
+    def get_page_end(self):
+        """
+        Get the ending page of the publication.
+        """
+        return self.page_end
+
     def load(self, filename):
         """
         Load the publication page information from the file.
@@ -116,7 +101,7 @@ class PublicationPageInfo:
 
     def __repr__(self):
         string = (
-            f"PublicationPageInfo("
+            f"Pages("
             f"page_start={self.page_start}, "
             f"page_end={self.page_end})"
         )
@@ -128,57 +113,89 @@ class PublicationPageInfo:
         return string
 
 
-class PublicationDetails:
+class Details:
     """
     A class to represent the details of a publication.
 
     Attributes:
     basic_info (PublicationBasicInfo): The basic information of the publication.
-    journal_info (PublicationJournalInfo): The journal information of the publication.
-    page_info (PublicationPageInfo): The page information of the publication.
+    journal_info (Source): The journal information of the publication.
+    page_info (Pages): The page information of the publication.
     document_type (str): The document type of the publication.
     """
 
     def __init__(self):
-        self.basic_info = PublicationBasicInfo()
-        self.journal_info = PublicationJournalInfo()
-        self.page_info = PublicationPageInfo()
+        self.title = str()
+        self.year = pd.Timestamp("NaT")
+        self.source = Source()
+        self.pages = Pages()
         self.document_type = str()
+        self.abstract = str()
+        self.keywords = str()
+
+    def get_title(self):
+        """
+        Get the title of the publication.
+        """
+        return self.title
+
+    def get_year(self):
+        """
+        Get the year of the publication.
+        """
+        return self.year
+
+    def get_document_type(self):
+        """
+        Get the document type of the publication.
+        """
+        return self.document_type
+
+    def get_abstract(self):
+        """
+        Get the abstract of the publication.
+        """
+        return self.abstract
+
+    def get_keywords(self):
+        """
+        Get the keywords of the publication.
+        """
+        return self.keywords
 
     def load(self, filename):
         """
         Load the publication details from the file.
         """
-        self.basic_info.load(filename)
-        self.journal_info.load(filename)
-        self.page_info.load(filename)
+        self.title = filename["Title"]
+        self.year = filename["Year"]
+        self.source.load(filename)
+        self.pages.load(filename)
         self.document_type = filename["Document Type"]
+        self.abstract = filename["Abstract"]
+        self.keywords = filename["Keywords"]
 
     def __repr__(self):
         string = (
-            f"PublicationDetails("
-            f"basic_info={self.basic_info}, "
-            f"journal_info={self.journal_info}, "
-            f"page_info={self.page_info})"
+            f"Details("
+            f"title={self.title}, "
+            f"year={self.year}, "
+            f"source={repr(self.source)}, "
+            f"pages={repr(self.pages)}, "
+            f"document_type={self.document_type}, "
+            f"abstract={self.abstract}, "
+            f"keywords={self.keywords})"
         )
         return string
 
-    def __str__(self):
-        string = str(self.basic_info)
-        string += str(self.journal_info)
-        string += str(self.page_info)
-        return string
 
-
-class PublicationResources:
+class Social:
     """
     A class to represent the resources of a publication.
 
     Attributes:
     code (str): The code of the publication.
     slides (str): The slides of the publication.
-    abstract (str): The abstract of the publication.
-    keywords (str): The keywords of the publication.
     doi (str): The DOI of the publication.
     preprint_doi (str): The preprint DOI of the publication.
     """
@@ -186,10 +203,32 @@ class PublicationResources:
     def __init__(self):
         self.code = str()
         self.slides = str()
-        self.abstract = str()
-        self.keywords = str()
         self.doi = str()
         self.preprint_doi = str()
+
+    def get_code(self):
+        """
+        Get the code of the publication.
+        """
+        return self.code
+
+    def get_slides(self):
+        """
+        Get the slides of the publication.
+        """
+        return self.slides
+
+    def get_doi(self):
+        """
+        Get the DOI of the publication.
+        """
+        return self.doi
+
+    def get_preprint_doi(self):
+        """
+        Get the preprint DOI of the publication.
+        """
+        return self.preprint_doi
 
     def load(self, filename):
         """
@@ -197,18 +236,14 @@ class PublicationResources:
         """
         self.code = filename["Code"]
         self.slides = filename["Slides"]
-        self.abstract = filename["Abstract"]
-        self.keywords = filename["Keywords"]
         self.doi = filename["DOI"]
         self.preprint_doi = filename["Preprint DOI"]
 
     def __repr__(self):
         string = (
-            f"PublicationResources("
+            f"Social("
             f"code={self.code}, "
             f"slides={self.slides}, "
-            f"abstract={self.abstract}, "
-            f"keywords={self.keywords}, "
             f"doi={self.doi}, "
             f"preprint_doi={self.preprint_doi})"
         )
@@ -217,48 +252,53 @@ class PublicationResources:
     def __str__(self):
         string = f"Code: {self.code}\n"
         string += f"Slides: {self.slides}\n"
-        string += f"Abstract: {self.abstract}\n"
-        string += f"Keywords: {self.keywords}\n"
         string += f"DOI: {self.doi}\n"
         string += f"Preprint DOI: {self.preprint_doi}\n"
         return string
 
 
-class PublicationRights:
+class Rights:
     """
     A class to represent the rights of a publication.
 
     Attributes:
-    jcr (str): The JCR of the publication.
     license (str): The license of the publication.
     copyright (str): The copyright of the publication.
     """
 
     def __init__(self):
-        self.jcr = str()
         self.license = str()
         self.copyright = str()
+
+    def get_license(self):
+        """
+        Get the license of the publication.
+        """
+        return self.license
+
+    def get_copyright(self):
+        """
+        Get the copyright of the publication.
+        """
+        return self.copyright
 
     def load(self, filename):
         """
         Load the publication rights from the file.
         """
-        self.jcr = filename["JCR"]
         self.license = filename["License"]
         self.copyright = filename["Copyright"]
 
     def __repr__(self):
         string = (
-            f"PublicationRights("
-            f"jcr={self.jcr}, "
+            f"Rights("
             f"license={self.license}, "
             f"copyright={self.copyright})"
         )
         return string
 
     def __str__(self):
-        string = f"JCR: {self.jcr}\n"
-        string += f"License: {self.license}\n"
+        string = f"License: {self.license}\n"
         string += f"Copyright: {self.copyright}"
         return string
 
@@ -307,16 +347,16 @@ class AuthorIDAffiliationIDs:
         string += f"Affiliation IDs: {repr(list(map(repr, self.affiliation_ids)))}\n"
         return string
 
-# pylint: disable=too-many-public-methods
+
 class PublicationsData:
     """
     A class to represent the data of a publication.
 
     Attributes:
     authors_ids (list): The list of author IDs and affiliation IDs.
-    details (PublicationDetails): The details of the publication.
-    resources (PublicationResources): The resources of the publication.
-    rights (PublicationRights): The rights of the publication.
+    details (Details): The details of the publication.
+    resources (Social): The resources of the publication.
+    rights (Rights): The rights of the publication.
 
     Methods:
     load: Load the publication data from the file.
@@ -325,117 +365,9 @@ class PublicationsData:
 
     def __init__(self):
         self.auth_id_aff_id = []
-        self.details = PublicationDetails()
-        self.resources = PublicationResources()
-        self.rights = PublicationRights()
-
-    def get_title(self):
-        """
-        Get the title of the publication.
-        """
-        return self.details.basic_info.title
-
-    def get_date(self):
-        """
-        Get the date of the publication.
-        """
-        return self.details.basic_info.get_date()
-
-    def get_source(self):
-        """
-        Get the source of the publication.
-        """
-        return self.details.basic_info.source
-
-    def get_volume(self):
-        """
-        Get the volume of the publication.
-        """
-        return self.details.journal_info.volume
-
-    def get_issue(self):
-        """
-        Get the issue of the publication.
-        """
-        return self.details.journal_info.issue
-
-    def get_artno(self):
-        """
-        Get the article number of the publication.
-        """
-        return self.details.journal_info.artno
-
-    def get_page_start(self):
-        """
-        Get the starting page of the publication.
-        """
-        return self.details.page_info.page_start
-
-    def get_page_end(self):
-        """
-        Get the ending page of the publication.
-        """
-        return self.details.page_info.page_end
-
-    def get_document_type(self):
-        """
-        Get the document type of the publication.
-        """
-        return self.details.document_type
-
-    def get_code(self):
-        """
-        Get the code of the publication.
-        """
-        return self.resources.code
-
-    def get_slides(self):
-        """
-        Get the slides of the publication.
-        """
-        return self.resources.slides
-
-    def get_abstract(self):
-        """
-        Get the abstract of the publication.
-        """
-        return self.resources.abstract
-
-    def get_keywords(self):
-        """
-        Get the keywords of the publication.
-        """
-        return self.resources.keywords
-
-    def get_doi(self):
-        """
-        Get the DOI of the publication.
-        """
-        return self.resources.doi
-
-    def get_preprint_doi(self):
-        """
-        Get the preprint DOI of the publication.
-        """
-        return self.resources.preprint_doi
-
-    def get_jcr(self):
-        """
-        Get the JCR of the publication.
-        """
-        return self.rights.jcr
-
-    def get_license(self):
-        """
-        Get the license of the publication.
-        """
-        return self.rights.license
-
-    def get_copyright(self):
-        """
-        Get the copyright of the publication.
-        """
-        return self.rights.copyright
+        self.details = Details()
+        self.social = Social()
+        self.rights = Rights()
 
     def get_auth_id_aff_id(self):
         """
@@ -465,7 +397,7 @@ class PublicationsData:
                     authors[-1].add_affiliation_id(int(affiliation))
         self.auth_id_aff_id = authors
         self.details.load(filename)
-        self.resources.load(filename)
+        self.social.load(filename)
         self.rights.load(filename)
 
     def get_apa_citation(self) -> str:
@@ -473,31 +405,31 @@ class PublicationsData:
         Build the APA citation.
         """
         citation = ""
-        if not common.check_nan(self.details.basic_info.year):
-            citation += f" ({self.details.basic_info.year.year}). "
-        if not common.check_nan(self.details.basic_info.title):
-            citation += f"{self.details.basic_info.title}. "
-        if not common.check_nan(self.details.basic_info.source):
-            citation += f"{self.details.basic_info.source}"
-        if not common.check_nan(self.details.journal_info.volume):
-            citation += f", {int(self.details.journal_info.volume)}"
-        if not common.check_nan(self.details.journal_info.issue):
-            citation += f"({int(self.details.journal_info.issue)})"
-        if not common.check_nan(self.details.journal_info.artno):
-            citation += f"{self.details.journal_info.artno}"
-        if not common.check_nan(self.details.page_info.page_start):
-            citation += f", pp. {int(self.details.page_info.page_start)}"
-        if not common.check_nan(self.details.page_info.page_end):
-            citation += f"-{int(self.details.page_info.page_end)}"
-        if not common.check_nan(self.resources.doi):
-            citation += f", doi: {self.resources.doi}"
+        if not common.check_nan(self.details.get_year()):
+            citation += f"({self.details.get_year().year}). "
+        if not common.check_nan(self.details.get_title()):
+            citation += f"{self.details.get_title()}. "
+        if not common.check_nan(self.details.source.get_source()):
+            citation += f"{self.details.source.get_source()}"
+        if not common.check_nan(self.details.source.get_volume()):
+            citation += f", {int(self.details.source.get_volume())}"
+        if not common.check_nan(self.details.source.get_issue()):
+            citation += f"({int(self.details.source.get_issue())})"
+        if not common.check_nan(self.details.source.get_artno()):
+            citation += f"{self.details.source.get_artno()}"
+        if not common.check_nan(self.details.pages.get_page_start()):
+            citation += f", pp. {int(self.details.pages.get_page_start())}"
+        if not common.check_nan(self.details.pages.get_page_end()):
+            citation += f"-{int(self.details.pages.get_page_end())}"
+        if not common.check_nan(self.social.get_doi()):
+            citation += f", doi: {self.social.get_doi()}"
         citation += "."
         return citation
 
     def __str__(self) -> str:
         string = f"Authors' IDs and Affiliation IDs: {list(map(str, self.auth_id_aff_id))}\n"
         string += str(self.details)
-        string += str(self.resources)
+        string += str(self.social)
         string += str(self.rights)
         return string
 
@@ -506,7 +438,7 @@ class PublicationsData:
             f"PublicationsData("
             f"authors={repr(self.auth_id_aff_id)}, "
             f"details={repr(self.details)}, "
-            f"resources={repr(self.resources)}, "
+            f"social={repr(self.social)}, "
             f"rights={repr(self.rights)})"
         )
         return string
@@ -544,7 +476,7 @@ class Publications():
         """
         sources = set()
         for publication in self.publications:
-            sources.add(publication.details.basic_info.source)
+            sources.add(publication.details.source.get_source())
         return len(sources)
 
     def get_document_types(self):
@@ -552,7 +484,7 @@ class Publications():
         Gets the document types.
         """
         document_types = set()
-        for publication in self.publications:
+        for publication in self:
             document_types.add(publication.details.document_type)
         return document_types
 
@@ -560,8 +492,8 @@ class Publications():
         """
         Get the publication by the title.
         """
-        for publication in self.publications:
-            if publication.get_title() == title:
+        for publication in self:
+            if publication.details.get_title() == title:
                 return publication
         return None
 
@@ -602,7 +534,7 @@ class Publications():
         """
         years = []
         for publication in self.publications:
-            years.append(publication.details.basic_info.get_date().year)
+            years.append(publication.details.get_year().year)
         return min(years), max(years)
 
     def load(self, filename):
@@ -616,7 +548,7 @@ class Publications():
             self.publications[-1].load(row)
         self.publications = sorted(
             self.publications, key=lambda x: (
-                x.details.document_type, x.details.basic_info.year), reverse=True
+                x.details.get_year(), x.details.get_title()), reverse=True
         )
 
     def __str__(self):

@@ -4,51 +4,7 @@ This module contains the Software class and SofwareData class.
 import pandas as pd
 
 
-class SoftwareInfo:
-    """
-    A class to represent the information of a software.
-
-    Attributes:
-    id (int): The ID of the software.
-    name (str): The name of the software.
-    version (str): The version of the software.
-    description (str): The description of the software.
-    """
-
-    def __init__(self):
-        self.id = str()
-        self.name = str()
-        self.version = str()
-        self.description = str()
-
-    def load(self, filename):
-        """
-        Load the software information.
-        """
-        self.id = filename["id"]
-        self.name = filename["Name"]
-        self.version = filename["Version"]
-        self.description = filename["Description"]
-
-    def __str__(self) -> str:
-        string = f"ID: {self.id}\n"
-        string += f"Name: {self.name}\n"
-        string += f"Version: {self.version}\n"
-        string += f"Description: {self.description}\n"
-        return string
-
-    def __repr__(self) -> str:
-        string = (
-            f"SoftwareInfo("
-            f"id={self.id}, "
-            f"name={self.name}, "
-            f"version={self.version}, "
-            f"description={self.description})"
-        )
-        return string
-
-
-class SoftwareResources:
+class Social:
     """
     A class to represent the resources of a software.
 
@@ -62,6 +18,24 @@ class SoftwareResources:
         self.repository = str()
         self.demo = str()
         self.website = str()
+
+    def get_repository(self):
+        """
+        Get the repository link of the software.
+        """
+        return self.repository
+
+    def get_demo(self):
+        """
+        Get the demo link of the software.
+        """
+        return self.demo
+
+    def get_website(self):
+        """
+        Get the website link of the software.
+        """
+        return self.website
 
     def load(self, filename):
         """
@@ -79,7 +53,7 @@ class SoftwareResources:
 
     def __repr__(self) -> str:
         string = (
-            f"SoftwareResources("
+            f"Social("
             f"repository={self.repository}, "
             f"demo={self.demo}, "
             f"website={self.website})"
@@ -92,15 +66,18 @@ class SoftwareData:
     The SoftwareData class is used to store the software data.
 
     Attributes:
-    info (SoftwareInfo): The information of the software.
-    resources (SoftwareResources): The resources of the software.
+    info (Details): The information of the software.
+    resources (Social): The resources of the software.
     summary (str): The summary of the software.
     license (str): The license of the software.
     """
 
     def __init__(self):
-        self.info = SoftwareInfo()
-        self.resources = SoftwareResources()
+        self.id = str()
+        self.name = str()
+        self.version = str()
+        self.description = str()
+        self.social = Social()
         self.summary = str()
         self.license = str()
 
@@ -108,43 +85,25 @@ class SoftwareData:
         """
         Get the ID of the software.
         """
-        return self.info.id
+        return self.id
 
     def get_name(self):
         """
         Get the name of the software.
         """
-        return self.info.name
+        return self.name
 
     def get_version(self):
         """
         Get the version of the software.
         """
-        return self.info.version
+        return self.version
 
     def get_description(self):
         """
         Get the description of the software.
         """
-        return self.info.description
-
-    def get_repository(self):
-        """
-        Get the repository link of the software.
-        """
-        return self.resources.repository
-
-    def get_demo(self):
-        """
-        Get the demo link of the software.
-        """
-        return self.resources.demo
-
-    def get_website(self):
-        """
-        Get the website link of the software.
-        """
-        return self.resources.website
+        return self.description
 
     def get_summary(self):
         """
@@ -162,23 +121,22 @@ class SoftwareData:
         """
         Load the software data from a file.
         """
-        self.info.load(filename)
-        self.resources.load(filename)
+        self.id = filename["id"]
+        self.name = filename["Name"]
+        self.version = filename["Version"]
+        self.description = filename["Description"]
+        self.social.load(filename)
         self.summary = filename["Summary"]
         self.license = filename["License"]
-
-    def __str__(self) -> str:
-        string = str(self.info)
-        string += str(self.resources)
-        string += f"Summary: {self.summary}\n"
-        string += f"License: {self.license}\n\n"
-        return string
 
     def __repr__(self) -> str:
         string = (
             f"SoftwareData("
-            f"info={repr(self.info)}, "
-            f"resources={repr(self.resources)}, "
+            f"id={self.id}, "
+            f"name={self.name}, "
+            f"version={self.version}, "
+            f"description={self.description}, "
+            f"social={repr(self.social)}, "
             f"summary={self.summary}, "
             f"license={self.license})"
         )

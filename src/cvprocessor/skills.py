@@ -19,6 +19,24 @@ class SkillData:
         self.skill = None
         self.level = None
 
+    def get_type(self):
+        """
+        Get the type of the skill.
+        """
+        return self.type
+
+    def get_skill(self):
+        """
+        Get the skill.
+        """
+        return self.skill
+
+    def get_level(self):
+        """
+        Get the level of the skill.
+        """
+        return self.level
+
     def load(self, filename):
         """
         Load the skill data.
@@ -108,3 +126,6 @@ class Skills:
     def __repr__(self):
         string = f"Skills(skills={repr(list(self.skills))})"
         return string
+
+    def __iter__(self):
+        return iter(self.skills)

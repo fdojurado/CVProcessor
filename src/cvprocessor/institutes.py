@@ -4,49 +4,99 @@ This module contains the classes to handle the data of the institutes.
 import pandas as pd
 
 
-class InstituteInfo:
+class Personal:
     """
-    A class to represent the information of an institute.
+    A class to represent the personal information of an institute.
+
+    Attributes:
+    name (str): The name of the institute.
+    name_abbr (str): The abbreviation of the institute.
     """
 
     def __init__(self):
-        self.id = None
         self.name = None
-        self.name_abbr = None
-        self.department = None
-        self.department_abbr = None
+        self.abbrv = None
+
+    def get_name(self):
+        """
+        Get the name of the institute.
+        """
+        return self.name
+
+    def get_abbrv(self):
+        """
+        Get the abbreviation of the institute.
+        """
+        return self.abbrv
 
     def load(self, filename):
         """
         Load the institute information.
         """
-        self.id = filename["id"]
         self.name = filename["Name"]
-        self.name_abbr = filename["Name Abbreviation"]
-        self.department = filename["Department"]
-        self.department_abbr = filename["Department Abbreviation"]
+        self.abbrv = filename["Name Abbreviation"]
 
     def __str__(self):
-        string = f"Institute ID: {self.id}\n"
-        string += f"Institute Name: {self.name}\n"
-        string += f"Institute Name Abbreviation: {self.name_abbr}\n"
-        string += f"Institute Department: {self.department}\n"
-        string += f"Institute Department Abbreviation: {self.department_abbr}\n"
+        string = f"Institute Name: {self.name}\n"
+        string += f"Institute Abbreviation: {self.abbrv}\n"
         return string
 
     def __repr__(self):
         string = (
-            f"InstituteInfo("
-            f"id={self.id}, "
+            f"Personal("
             f"name={self.name}, "
-            f"name_abbr={self.name_abbr}, "
-            f"department={self.department}, "
-            f"department_abbr={self.department_abbr})"
+            f"name_abbr={self.abbrv})"
         )
         return string
 
 
-class InstituteLocation:
+class Department:
+    """
+    A class to represent the department of an institute.
+
+    Attributes:
+    department (str): The name of the department.
+    department_abbr (str): The abbreviation of the department.
+    """
+
+    def __init__(self):
+        self.name = None
+        self.abbrv = None
+
+    def get_name(self):
+        """
+        Get the name of the department.
+        """
+        return self.name
+
+    def get_abbrv(self):
+        """
+        Get the abbreviation of the department.
+        """
+        return self.abbrv
+
+    def load(self, filename):
+        """
+        Load the institute information.
+        """
+        self.name = filename["Department"]
+        self.abbrv = filename["Department Abbreviation"]
+
+    def __str__(self):
+        string = f"Institute Department: {self.name}\n"
+        string += f"Institute Department Abbreviation: {self.abbrv}\n"
+        return string
+
+    def __repr__(self):
+        string = (
+            f"Department("
+            f"department={self.name}, "
+            f"department_abbr={self.abbrv})"
+        )
+        return string
+
+
+class Location:
     """
     A class to represent the location of an institute.
     """
@@ -56,6 +106,30 @@ class InstituteLocation:
         self.city = str()
         self.country = str()
         self.coordinates = tuple()
+
+    def get_address(self):
+        """
+        Get the address of the institute.
+        """
+        return self.address
+
+    def get_city(self):
+        """
+        Get the city of the institute.
+        """
+        return self.city
+
+    def get_country(self):
+        """
+        Get the country of the institute.
+        """
+        return self.country
+
+    def get_coordinates(self):
+        """
+        Get the coordinates of the institute.
+        """
+        return self.coordinates
 
     def convert_coordinates(self, lalng):
         """
@@ -99,7 +173,7 @@ class InstituteLocation:
 
     def __repr__(self):
         string = (
-            f"InstituteLocation("
+            f"Location("
             f"address={self.address}, "
             f"city={self.city}, "
             f"country={self.country}, "
@@ -114,63 +188,17 @@ class InstituteData:
     """
 
     def __init__(self):
-        self.info = InstituteInfo()
-        self.location = InstituteLocation()
-        self.url = None
+        self.id = str()
+        self.personal = Personal()
+        self.department = Department()
+        self.location = Location()
+        self.url = str()
 
     def get_id(self):
         """
         Get the ID of the institute.
         """
-        return self.info.id
-
-    def get_name(self):
-        """
-        Get the name of the institute.
-        """
-        return self.info.name
-
-    def get_name_abbr(self):
-        """
-        Get the name abbreviation of the institute.
-        """
-        return self.info.name_abbr
-
-    def get_department(self):
-        """
-        Get the department of the institute.
-        """
-        return self.info.department
-
-    def get_department_abbr(self):
-        """
-        Get the department abbreviation of the institute.
-        """
-        return self.info.department_abbr
-
-    def get_address(self):
-        """
-        Get the address of the institute.
-        """
-        return self.location.address
-
-    def get_city(self):
-        """
-        Get the city of the institute.
-        """
-        return self.location.city
-
-    def get_country(self):
-        """
-        Get the country of the institute.
-        """
-        return self.location.country
-
-    def get_coordinates(self):
-        """
-        Get the coordinates of the institute.
-        """
-        return self.location.coordinates
+        return self.id
 
     def get_url(self):
         """
@@ -182,20 +210,18 @@ class InstituteData:
         """
         Load the data from a pandas dataframe.
         """
-        self.info.load(pd_dataframe)
+        self.id = pd_dataframe["id"]
+        self.personal.load(pd_dataframe)
+        self.department.load(pd_dataframe)
         self.location.load(pd_dataframe)
         self.url = pd_dataframe["URL"]
-
-    def __str__(self):
-        string = str(self.info)
-        string += str(self.location)
-        string += f"url: \n{self.url}\n"
-        return string
 
     def __repr__(self):
         string = (
             f"InstituteData("
-            f"info={repr(self.info)}, "
+            f"id={self.id}, "
+            f"personal={repr(self.personal)}, "
+            f"department={repr(self.department)}, "
             f"location={repr(self.location)}, "
             f"url={self.url})"
         )

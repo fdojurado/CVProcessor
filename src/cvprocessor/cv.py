@@ -139,85 +139,12 @@ class CV:
     """
 
     def __init__(self, filename):
-        self.professional_info = ProfessionalInfo()
-        self.personal_info = PersonalInfo()
-        self.academic_info = AcademicInfo()
+        self.professional = ProfessionalInfo()
+        self.personal = PersonalInfo()
+        self.academic = AcademicInfo()
         self.software = Software()
         self.news = News()
         self._load_cv(filename)
-
-    def get_author(self, author_id):
-        """
-        The get_author method is used to get the author by the given author ID.
-
-        :param author_id: The author ID.
-        :type author_id: int
-        """
-        return self.personal_info.authors.get_author(author_id)
-
-    def get_institute(self, institute_id):
-        """
-        The get_institute method is used to get the institute by the given institute ID.
-
-        :param institute_id: The institute ID.
-        :type institute_id: int
-        """
-        return self.academic_info.institutes.get_institute(institute_id)
-
-    def get_software(self, software_id):
-        """
-        The get_software method is used to get the software by the given software ID.
-
-        :param software_id: The software ID.
-        :type software_id: int
-        """
-        return self.software.get_software(software_id)
-
-    def get_publications_count(self):
-        """
-        The get_publications_count method is used to get the number of publications.
-        """
-        return self.academic_info.publications.get_publications_count()
-
-    def get_publications_unique_sources(self):
-        """
-        The get_publications_unique_sources method is used to get the unique sources
-        of the publications.
-        """
-        return self.academic_info.publications.get_unique_sources()
-
-    def get_publications_document_types_ordered(self):
-        """
-        The get_publications_document_types_ordered method is used to get
-        the document types of the publications in order.
-        """
-        return self.academic_info.publications.get_document_types_ordered()
-
-    def get_publications_num_publications_by_document_type(self, document_type):
-        """
-        The get_publications_num_publications_by_document_type method is used to get
-        the number of publications by the given document type.
-
-        :param document_type: The document type.
-        :type document_type: str
-        """
-        return self.academic_info.publications.get_num_publications_by_document_type(document_type)
-
-    def get_publications_num_publications_by_author(self, author_id):
-        """
-        The get_publications_num_publications_by_author method is used to get
-        the number of publications by the given author.
-
-        :param author_id: The author ID.
-        :type author_id: int
-        """
-        return self.academic_info.publications.get_num_publications_by_author(author_id)
-
-    def get_publications_year_range(self):
-        """
-        The get_publications_year_range method is used to get the year range of the publications.
-        """
-        return self.academic_info.publications.get_publications_year_range()
 
     def get_publications_apa_citation(self, publication_title):
         """
@@ -226,7 +153,7 @@ class CV:
         :param publication_title: The title of the publication.
         :type publication_title: str
         """
-        pub = self.academic_info.publications.get_publication_by_title(
+        pub = self.academic.publications.get_publication_by_title(
             publication_title)
         if pub is None:
             return None
@@ -237,7 +164,7 @@ class CV:
             authors_ids.append(author_id.get_author_id())
         authors_alias_short = []
         for author_id in authors_ids:
-            author = self.get_author(author_id)
+            author = self.personal.authors.get_author(author_id)
             if author is not None:
                 authors_alias_short.append(author.get_alias_short())
         if len(authors_alias_short) > 1:
@@ -250,13 +177,13 @@ class CV:
         """
         The get_research_interests method is used to get the research interests.
         """
-        return self.academic_info.research_interests.get_interests()
+        return self.academic.research_interests.get_interests()
 
     def get_research_keywords(self):
         """
         The get_research_keywords method is used to get the research keywords.
         """
-        return self.academic_info.research_interests.get_keywords()
+        return self.academic.research_interests.get_keywords()
 
     def _load_cv(self, filename):
         """
@@ -265,27 +192,27 @@ class CV:
         :param filename: The filename of the CV file.
         :type filename: str
         """
-        self.academic_info.education.load(filename)
-        self.academic_info.institutes.load(filename)
+        self.academic.education.load(filename)
+        self.academic.institutes.load(filename)
         self.software.load(filename)
-        self.personal_info.intro.load(filename)
-        self.personal_info.authors.load(filename)
+        self.personal.intro.load(filename)
+        self.personal.authors.load(filename)
         self.news.load(filename)
-        self.academic_info.publications.load(filename)
-        self.academic_info.research_interests.load(filename)
-        self.academic_info.grants_awards.load(filename)
-        self.academic_info.teaching.load(filename)
-        self.academic_info.supervision.load(filename)
-        self.professional_info.experience.load(filename)
-        self.professional_info.skills.load(filename)
-        self.professional_info.service.load(filename)
-        self.professional_info.memberships.load(filename)
-        self.personal_info.references.load(filename)
+        self.academic.publications.load(filename)
+        self.academic.research_interests.load(filename)
+        self.academic.grants_awards.load(filename)
+        self.academic.teaching.load(filename)
+        self.academic.supervision.load(filename)
+        self.professional.experience.load(filename)
+        self.professional.skills.load(filename)
+        self.professional.service.load(filename)
+        self.professional.memberships.load(filename)
+        self.personal.references.load(filename)
 
     def __str__(self):
-        string = f"Academic Info: {self.academic_info}\n"
-        string += f"Personal Info: {self.personal_info}\n"
-        string += f"Professional Info: {self.professional_info}\n"
+        string = f"Academic Info: {self.academic}\n"
+        string += f"Personal Info: {self.personal}\n"
+        string += f"Professional Info: {self.professional}\n"
         string += f"Software: {self.software}\n"
         string += f"News: {self.news}\n"
         return string
@@ -293,9 +220,9 @@ class CV:
     def __repr__(self):
         string = (
             f"CV("
-            f"academic_info={repr(self.academic_info)}, "
-            f"personal_info={repr(self.personal_info)}, "
-            f"professional_info={repr(self.professional_info)}, "
+            f"academic={repr(self.academic)}, "
+            f"personal={repr(self.personal)}, "
+            f"professional={repr(self.professional)}, "
             f"software={repr(self.software)}, "
             f"news={repr(self.news)})\n")
         return string
@@ -303,5 +230,5 @@ class CV:
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(str(cv.personal_info.references))
+    print(str(cv.personal.references))
     sys.exit(0)

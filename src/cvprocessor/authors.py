@@ -10,7 +10,7 @@
 import pandas as pd
 
 
-class ContactInfo:
+class Contact:
     """
     A class to represent the contact information of an author.
     """
@@ -21,6 +21,36 @@ class ContactInfo:
         self.website = str()
         self.address = str()
         self.location = str()
+
+    def get_email(self):
+        """
+        Returns the email of the author.
+        """
+        return self.email
+
+    def get_telephone(self):
+        """
+        Returns the telephone of the author.
+        """
+        return self.telephone
+
+    def get_website(self):
+        """
+        Returns the website of the author.
+        """
+        return self.website
+
+    def get_address(self):
+        """
+        Returns the address of the author.
+        """
+        return self.address
+
+    def get_location(self):
+        """
+        Returns the location of the author.
+        """
+        return self.location
 
     def load(self, filename):
         """
@@ -34,7 +64,7 @@ class ContactInfo:
 
     def __repr__(self):
         string = (
-            f"ContactInfo("
+            f"Contact("
             f"email={self.email}, "
             f"telephone={self.telephone}, "
             f"website={self.website}, "
@@ -52,9 +82,9 @@ class ContactInfo:
         return string
 
 
-class ResearchInfo:
+class Social:
     """
-    A class to represent the research information of an author.
+    A class to represent the social profiles of an author.
     """
 
     def __init__(self):
@@ -63,6 +93,36 @@ class ResearchInfo:
         self.google_scholar = str()
         self.orcid = str()
         self.researchgate = str()
+
+    def get_linkedin(self):
+        """
+        Returns the LinkedIn of the author.
+        """
+        return self.linkedin
+
+    def get_github(self):
+        """
+        Returns the GitHub of the author.
+        """
+        return self.github
+
+    def get_google_scholar(self):
+        """
+        Returns the Google Scholar of the author.
+        """
+        return self.google_scholar
+
+    def get_orcid(self):
+        """
+        Returns the ORCID of the author.
+        """
+        return self.orcid
+
+    def get_researchgate(self):
+        """
+        Returns the ResearchGate of the author.
+        """
+        return self.researchgate
 
     def load(self, filename):
         """
@@ -76,7 +136,7 @@ class ResearchInfo:
 
     def __repr__(self):
         string = (
-            f"ResearchInfo("
+            f"Social("
             f"linkedin={self.linkedin}, "
             f"github={self.github}, "
             f"google_scholar={self.google_scholar}, "
@@ -94,9 +154,16 @@ class ResearchInfo:
         return string
 
 
-class PersonalInfo:
+class Personal:
     """
     A class to represent the personal information of an author.
+
+    Attributes:
+    name (str): The name of the author.
+    lastname (str): The lastname of the author.
+    alias_long (str): The long alias of the author.
+    alias_short (str): The short alias of the author.
+    job_title (str): The job title of the author.
     """
 
     def __init__(self):
@@ -105,8 +172,36 @@ class PersonalInfo:
         self.alias_long = str()
         self.alias_short = str()
         self.job_title = str()
-        self.fingerprint = str()
-        self.public_key = str()
+
+    def get_name(self):
+        """
+        Returns the name of the author.
+        """
+        return self.name
+
+    def get_lastname(self):
+        """
+        Returns the lastname of the author.
+        """
+        return self.lastname
+
+    def get_alias_long(self):
+        """
+        Returns the long alias of the author.
+        """
+        return self.alias_long
+
+    def get_alias_short(self):
+        """
+        Returns the short alias of the author.
+        """
+        return self.alias_short
+
+    def get_job_title(self):
+        """
+        Returns the job title of the author.
+        """
+        return self.job_title
 
     def load(self, filename):
         """
@@ -117,30 +212,57 @@ class PersonalInfo:
         self.alias_long = filename["Alias Long"]
         self.alias_short = filename["Alias Short"]
         self.job_title = filename["Job Title"]
+
+    def __repr__(self):
+        string = (
+            f"Personal("
+            f"name={self.name}, "
+            f"lastname={self.lastname}, "
+            f"alias_long={self.alias_long}, "
+            f"alias_short={self.alias_short}, "
+            f"job_title={self.job_title})"
+        )
+        return string
+
+
+class Security:
+    """
+    A class to represent the security details of an author.
+
+    Attributes:
+    fingerprint (str): The fingerprint of the author.
+    public_key (str): The public key of the author.
+    """
+
+    def __init__(self):
+        self.fingerprint = str()
+        self.public_key = str()
+
+    def get_fingerprint(self):
+        """
+        Returns the fingerprint of the author.
+        """
+        return self.fingerprint
+
+    def get_public_key(self):
+        """
+        Returns the public key of the author.
+        """
+        return self.public_key
+
+    def load(self, filename):
+        """
+        Loads the security details of the author.
+        """
         self.fingerprint = filename["Fingerprint"]
         self.public_key = filename["Public Key"]
 
     def __repr__(self):
         string = (
-            f"AuthorPersonalInfo("
-            f"name={self.name}, "
-            f"lastname={self.lastname}, "
-            f"alias_long={self.alias_long}, "
-            f"alias_short={self.alias_short}, "
-            f"job_title={self.job_title}, "
+            f"Security("
             f"fingerprint={self.fingerprint}, "
             f"public_key={self.public_key})"
         )
-        return string
-
-    def __str__(self):
-        string = f"Name: {self.name}\n"
-        string += f"Lastname: {self.lastname}\n"
-        string += f"Alias Long: {self.alias_long}\n"
-        string += f"Alias Short: {self.alias_short}\n"
-        string += f"Job Title: {self.job_title}\n"
-        string += f"Fingerprint: {self.fingerprint}\n"
-        string += f"Public Key: {self.public_key}\n"
         return string
 
 
@@ -151,9 +273,9 @@ class AuthorsData:
     Attributes:
     id (int): The ID of the author.
     affiliations (list): The affiliations of the author.
-    personal_info (PersonalInfo): The personal information of the author.
-    contact_info (ContactInfo): The contact information of the author.
-    research_info (ResearchInfo): The research information of the author.
+    personal_info (Personal): The personal information of the author.
+    contact_info (Contact): The contact information of the author.
+    research_info (Social): The research information of the author.
 
     Methods:
     load(filename): Loads the author data from the file.
@@ -164,9 +286,10 @@ class AuthorsData:
     def __init__(self):
         self.id = int()
         self.affiliation_ids = []
-        self.personal_info = PersonalInfo()
-        self.contact_info = ContactInfo()
-        self.research_info = ResearchInfo()
+        self.personal = Personal()
+        self.contact = Contact()
+        self.social = Social()
+        self.security = Security()
 
     def get_id(self):
         """
@@ -180,108 +303,6 @@ class AuthorsData:
         """
         return self.affiliation_ids
 
-    def get_name(self):
-        """
-        Returns the name of the author.
-        """
-        return self.personal_info.name
-
-    def get_lastname(self):
-        """
-        Returns the lastname of the author.
-        """
-        return self.personal_info.lastname
-
-    def get_alias_long(self):
-        """
-        Returns the long alias of the author.
-        """
-        return self.personal_info.alias_long
-
-    def get_alias_short(self):
-        """
-        Returns the short alias of the author.
-        """
-        return self.personal_info.alias_short
-
-    def get_job_title(self):
-        """
-        Returns the job title of the author.
-        """
-        return self.personal_info.job_title
-
-    def get_fingerprint(self):
-        """
-        Returns the fingerprint of the author.
-        """
-        return self.personal_info.fingerprint
-
-    def get_public_key(self):
-        """
-        Returns the public key of the author.
-        """
-        return self.personal_info.public_key
-
-    def get_email(self):
-        """
-        Returns the email of the author.
-        """
-        return self.contact_info.email
-
-    def get_telephone(self):
-        """
-        Returns the telephone of the author.
-        """
-        return self.contact_info.telephone
-
-    def get_website(self):
-        """
-        Returns the website of the author.
-        """
-        return self.contact_info.website
-
-    def get_address(self):
-        """
-        Returns the address of the author.
-        """
-        return self.contact_info.address
-
-    def get_location(self):
-        """
-        Returns the location of the author.
-        """
-        return self.contact_info.location
-
-    def get_linkedin(self):
-        """
-        Returns the LinkedIn of the author.
-        """
-        return self.research_info.linkedin
-
-    def get_github(self):
-        """
-        Returns the GitHub of the author.
-        """
-        return self.research_info.github
-
-    def get_google_scholar(self):
-        """
-        Returns the Google Scholar of the author.
-        """
-        return self.research_info.google_scholar
-
-    def get_orcid(self):
-        """
-        Returns the ORCID of the author.
-        """
-        return self.research_info.orcid
-
-    def get_researchgate(self):
-        """
-        Returns the ResearchGate of the author.
-        """
-        return self.research_info.researchgate
-
     def load(self, filename):
         """
         Loads the author data from the file.
@@ -294,26 +315,20 @@ class AuthorsData:
                 self.affiliation_ids.append(int(affiliation))
         else:
             self.affiliation_ids.append(int(filename["Affiliations"]))
-        self.personal_info.load(filename)
-        self.contact_info.load(filename)
-        self.research_info.load(filename)
-
-    def __str__(self):
-        string = f"id: {self.id}\n"
-        string += f"Affiliation: {self.affiliation_ids}\n"
-        string += str(self.personal_info)
-        string += str(self.contact_info)
-        string += str(self.research_info)
-        return string
+        self.personal.load(filename)
+        self.contact.load(filename)
+        self.social.load(filename)
+        self.security.load(filename)
 
     def __repr__(self):
         string = (
             f"Author("
             f"id={self.id}, "
             f"affiliation={repr(self.affiliation_ids)}, "
-            f"personal_info={repr(self.personal_info)}, "
-            f"contact_info={repr(self.contact_info)}, "
-            f"research_info={repr(self.research_info)})"
+            f"personal={repr(self.personal)}, "
+            f"contact={repr(self.contact)}, "
+            f"social={repr(self.social)}, "
+            f"security={repr(self.security)})"
         )
         return string
 
@@ -372,3 +387,6 @@ class Authors:
             f"authors={repr(self.authors)})"
         )
         return string
+
+    def __iter__(self):
+        return iter(self.authors)

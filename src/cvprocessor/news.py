@@ -16,10 +16,34 @@ class NewsResources:
     """
 
     def __init__(self):
-        self.pdf = None
-        self.preprint = None
-        self.code = None
-        self.doi = None
+        self.pdf = str()
+        self.preprint = str()
+        self.code = str()
+        self.doi = str()
+
+    def get_pdf(self):
+        """
+        Get the PDF link for the news item.
+        """
+        return self.pdf
+
+    def get_preprint(self):
+        """
+        Get the preprint link for the news item.
+        """
+        return self.preprint
+
+    def get_code(self):
+        """
+        Get the code link for the news item.
+        """
+        return self.code
+
+    def get_doi(self):
+        """
+        Get the DOI link for the news item.
+        """
+        return self.doi
 
     def load(self, filename):
         """
@@ -82,30 +106,6 @@ class NewsData:
         Get the description of the news item.
         """
         return self.description
-
-    def get_pdf(self):
-        """
-        Get the PDF link for the news item.
-        """
-        return self.resources.pdf
-
-    def get_preprint(self):
-        """
-        Get the preprint link for the news item.
-        """
-        return self.resources.preprint
-
-    def get_code(self):
-        """
-        Get the code link for the news item.
-        """
-        return self.resources.code
-
-    def get_doi(self):
-        """
-        Get the DOI link for the news item.
-        """
-        return self.resources.doi
 
     def load(self, pd_dataframe):
         """

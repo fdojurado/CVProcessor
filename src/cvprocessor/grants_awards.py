@@ -27,6 +27,36 @@ class GrantsAwardsData:
         self.country = str()
         self.value = str()
 
+    def get_year(self):
+        """
+        Get the year of the grant or award.
+        """
+        return self.year
+
+    def get_description(self):
+        """
+        Get the description of the grant or award.
+        """
+        return self.description
+
+    def get_institution(self):
+        """
+        Get the institution that awarded the grant or award.
+        """
+        return self.institution
+
+    def get_country(self):
+        """
+        Get the country where the grant or award was awarded.
+        """
+        return self.country
+
+    def get_value(self):
+        """
+        Get the value of the grant or award.
+        """
+        return self.value
+
     def load(self, filename):
         """
         Load the grants and awards data from the given file.
@@ -102,3 +132,6 @@ class GrantsAwards:
     def __repr__(self) -> str:
         string = f"GrantsAwards(grants_awards={repr(list(self.grants_awards))})"
         return string
+
+    def __iter__(self):
+        return iter(self.grants_awards)

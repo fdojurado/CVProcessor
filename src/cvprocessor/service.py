@@ -19,6 +19,24 @@ class ServiceData:
         self.venue = str()
         self.link = str()
 
+    def get_type(self) -> str:
+        """
+        Get the type of the service.
+        """
+        return self.type
+
+    def get_venue(self) -> str:
+        """
+        Get the venue of the service.
+        """
+        return self.venue
+
+    def get_link(self) -> str:
+        """
+        Get the link to the service.
+        """
+        return self.link
+
     def load(self, filename) -> None:
         """
         Load the service data.
@@ -84,3 +102,6 @@ class Services:
     def __repr__(self):
         string = f"Services(services={repr(list(self.services))})"
         return string
+
+    def __iter__(self):
+        return iter(self.services)
