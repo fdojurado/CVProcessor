@@ -169,6 +169,10 @@ class Details:
         """
         self.title = filename["Title"]
         self.year = filename["Year"]
+        if len(self.year.split()) == 1:
+            self.year = "Jan "+self.year
+        # To datetime month year format
+        self.year = pd.to_datetime(self.year, format="%b %Y").date()
         self.source.load(filename)
         self.pages.load(filename)
         self.document_type = filename["Document Type"]
@@ -469,6 +473,12 @@ class Publications():
         Gets the number of publications.
         """
         return len(self.publications)
+
+    def get_publications_by_index(self, index):
+        """
+        Gets the publication by index.
+        """
+        return self.publications[index]
 
     def get_unique_sources(self):
         """

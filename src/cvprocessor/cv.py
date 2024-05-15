@@ -166,24 +166,12 @@ class CV:
         for author_id in authors_ids:
             author = self.personal.authors.get_author(author_id)
             if author is not None:
-                authors_alias_short.append(author.get_alias_short())
+                authors_alias_short.append(author.personal.get_alias_short())
         if len(authors_alias_short) > 1:
             authors_alias_short[-1] = "& " + authors_alias_short[-1]
         authors_alias_short = ", ".join(authors_alias_short)
         apa = authors_alias_short + apa
         return apa
-
-    def get_research_interests(self):
-        """
-        The get_research_interests method is used to get the research interests.
-        """
-        return self.academic.research_interests.get_interests()
-
-    def get_research_keywords(self):
-        """
-        The get_research_keywords method is used to get the research keywords.
-        """
-        return self.academic.research_interests.get_keywords()
 
     def _load_cv(self, filename):
         """
@@ -231,4 +219,9 @@ class CV:
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
     print(str(cv.personal.references))
+    # Get the first publication
+    pub = cv.academic.publications.get_publications_by_index(0)
+    print(f"Publication title: {pub.details.get_title()}")
+    apa = cv.get_publications_apa_citation(pub.details.get_title())
+    print(f"APA Citation: {apa}")
     sys.exit(0)
