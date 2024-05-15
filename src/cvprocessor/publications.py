@@ -602,7 +602,7 @@ class Publications():
         """
         years = []
         for publication in self.publications:
-            years.append(publication.details.basic_info.year)
+            years.append(publication.details.basic_info.get_date().year)
         return min(years), max(years)
 
     def load(self, filename):
