@@ -9,7 +9,7 @@
 """
 import pandas as pd
 from cvprocessor.security.security import Security
-from cvprocessor.personal.personal import Personal
+from cvprocessor.personal2.personal import Personal
 from cvprocessor.contact.contact import Contact
 from cvprocessor.links.links import Links
 
