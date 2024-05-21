@@ -429,13 +429,13 @@ class Publications():
                 types.append(publication.details.type)
         return types
 
-    def get_num_publications_by_type(self, type):
+    def get_num_publications_by_type(self, pub_type):
         """
         Gets the number of publications by document type.
         """
         count = 0
         for publication in self.publications:
-            if publication.details.type == type:
+            if publication.details.type == pub_type:
                 count += 1
         return count
 
