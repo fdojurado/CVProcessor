@@ -9,65 +9,31 @@ class ReferenceData:
     The ReferenceData class is used to store the reference data.
 
     Attributes:
-    name (str): The name of the reference.
-    email (str): The email of the reference.
-    position (str): The position of the reference.
-    institution (str): The institution of the reference.
+    author_id (str): The author ID of the reference.
     """
 
     def __init__(self):
-        self.name = str()
-        self.email = str()
-        self.position = str()
-        self.institution = str()
+        self.author_id = str()
 
-    def get_name(self):
+    def get_author_id(self):
         """
-        Get the name of the reference.
+        Get the author ID of the reference.
         """
-        return self.name
-
-    def get_email(self):
-        """
-        Get the email of the reference.
-        """
-        return self.email
-
-    def get_position(self):
-        """
-        Get the position of the reference.
-        """
-        return self.position
-
-    def get_institution(self):
-        """
-        Get the institution of the reference.
-        """
-        return self.institution
+        return self.author_id
 
     def load(self, filename):
         """
         Load the reference data.
         """
-        self.name = filename["Name"]
-        self.email = filename["Email"]
-        self.position = filename["Position"]
-        self.institution = filename["Institution"]
-
-    def __str__(self):
-        string = f"Name: {self.name}\n"
-        string += f"Email: {self.email}\n"
-        string += f"Position: {self.position}\n"
-        string += f"Institution: {self.institution}\n"
-        return string
+        if "Author id" not in filename:
+            raise ValueError(
+                "Author id column not found in the references data.")
+        self.author_id = filename["Author id"]
 
     def __repr__(self):
         string = (
             f"ReferenceData("
-            f"name={self.name}, "
-            f"email={self.email}, "
-            f"position={self.position}, "
-            f"institution={self.institution})"
+            f"author_id={self.author_id})"
         )
         return string
 
@@ -95,12 +61,6 @@ class References:
             reference = ReferenceData()
             reference.load(row)
             self.references.append(reference)
-
-    def __str__(self):
-        string = ""
-        for reference in self.references:
-            string += str(reference) + "\n"
-        return string
 
     def __repr__(self):
         return f"References({repr(self.references)})"

@@ -10,13 +10,13 @@ class SkillData:
 
     Attributes:
     type (str): The type of the skill.
-    skill (str): The skill.
+    name (str): The name of the skill.
     level (str): The level of the skill.
     """
 
     def __init__(self):
         self.type = None
-        self.skill = None
+        self.name = None
         self.level = None
 
     def get_type(self):
@@ -25,11 +25,11 @@ class SkillData:
         """
         return self.type
 
-    def get_skill(self):
+    def get_name(self):
         """
-        Get the skill.
+        Get the name of the skill.
         """
-        return self.skill
+        return self.name
 
     def get_level(self):
         """
@@ -42,20 +42,14 @@ class SkillData:
         Load the skill data.
         """
         self.type = filename["Type"]
-        self.skill = filename["Skill"]
+        self.name = filename["Skill"]
         self.level = filename["Level"]
-
-    def __str__(self) -> str:
-        string = f"Type: {self.type}\n"
-        string += f"Skill: {self.skill}\n"
-        string += f"Level: {self.level}\n"
-        return string
 
     def __repr__(self) -> str:
         string = (
             f"SkillData("
             f"type={self.type}, "
-            f"skill={self.skill}, "
+            f"name={self.name}, "
             f"level={self.level})"
         )
         return string
@@ -79,7 +73,7 @@ class Skills:
     def __init__(self):
         self.skills = []
 
-    def get_skill_types_ordered(self):
+    def get_types_ordered(self):
         """
         Get the skill types in order.
         """
@@ -89,19 +83,19 @@ class Skills:
                 skill_type.append(skill.type)
         return skill_type
 
-    def get_num_skills_except_type(self, skill_type):
+    def get_num_except_type(self, skill_type):
         """
         Get the number of skills except for the given type.
         """
         return len([skill for skill in self.skills if skill.type != skill_type])
 
-    def get_num_skills_by_type(self, skill_type):
+    def get_num_by_type(self, skill_type):
         """
         Get the number of skills by the given type.
         """
-        return len(self.get_skill_type(skill_type))
+        return len(self.get_type(skill_type))
 
-    def get_skill_type(self, skill_type: str):
+    def get_type(self, skill_type: str):
         """
         Get the skills by the given type.
         """
@@ -116,12 +110,6 @@ class Skills:
             skill_data = SkillData()
             skill_data.load(row)
             self.skills.append(skill_data)
-
-    def __str__(self):
-        string = ""
-        for skill in self.skills:
-            string += str(skill) + "\n"
-        return string
 
     def __repr__(self):
         string = f"Skills(skills={repr(list(self.skills))})"

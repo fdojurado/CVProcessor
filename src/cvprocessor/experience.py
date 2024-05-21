@@ -2,7 +2,7 @@
 This module contains the ExperienceData and Experience classes.
 """
 import pandas as pd
-from cvprocessor import year_data as yd
+from cvprocessor.date.date import Dates
 
 
 class ExperienceData:
@@ -10,7 +10,7 @@ class ExperienceData:
     The ExperienceData class is used to store the experience data.
 
     Attributes:
-    year (YearData): The year of the experience.
+    date (Dates): The date of the experience.
     position (str): The position of the experience.
     institution (str): The institution of the experience.
     description (str): The description of the experience.
@@ -18,23 +18,11 @@ class ExperienceData:
     """
 
     def __init__(self):
-        self.years = []
+        self.dates = Dates()
         self.position = str()
-        self.institution = str()
+        self.institution_id = int()
         self.description = str()
         self.responsibilities = str()
-
-    def get_start_year(self):
-        """
-        Get the start year of this experience.
-        """
-        return yd.get_start_year(self.years)
-
-    def get_end_year(self):
-        """
-        Get the end year of this experience.
-        """
-        return yd.get_end_year(self.years)
 
     def get_position(self):
         """
@@ -42,11 +30,11 @@ class ExperienceData:
         """
         return self.position
 
-    def get_institution(self):
+    def get_institution_id(self):
         """
-        Get the institution of this experience.
+        Get the institution id of this experience.
         """
-        return self.institution
+        return self.institution_id
 
     def get_description(self):
         """
@@ -60,36 +48,22 @@ class ExperienceData:
         """
         return self.responsibilities
 
-    def process_year_data(self, filename):
-        """
-        Process the year data.
-        """
-        self.years = yd.process_year_data(filename, self.years)
-
     def load(self, filename):
         """
         Load the experience data.
         """
-        self.process_year_data(filename)
+        self.dates.load(filename)
         self.position = filename["Position"]
-        self.institution = filename["Institution"]
+        self.institution_id = filename["Institution id"]
         self.description = filename["Description"]
         self.responsibilities = filename["Responsibilities"]
-
-    def __str__(self) -> str:
-        string = f"Years: {list(map(str, self.years))}\n"
-        string += f"Position: {self.position}\n"
-        string += f"Institution: {self.institution}\n"
-        string += f"Description: {self.description}\n"
-        string += f"Responsibilities: {self.responsibilities}\n"
-        return string
 
     def __repr__(self) -> str:
         string = (
             f"ExperienceData("
-            f"years={[repr(year) for year in self.years]}, "
+            f"dates={repr(self.dates)}, "
             f"position={self.position}, "
-            f"institution={self.institution}, "
+            f"institution id={self.institution_id}, "
             f"description={self.description}, "
             f"responsibilities={self.responsibilities})"
         )
@@ -107,6 +81,12 @@ class Experience:
     def __init__(self):
         self.experiences = []
 
+    def get_num_experiences(self):
+        """
+        Get the number of experiences.
+        """
+        return len(self.experiences)
+
     def load(self, filename):
         """
         Load the experience data.
@@ -116,13 +96,7 @@ class Experience:
             self.experiences.append(ExperienceData())
             self.experiences[-1].load(row)
         self.experiences = sorted(
-            self.experiences, key=lambda x: x.get_start_year(), reverse=True)
-
-    def __str__(self) -> str:
-        string = ""
-        for experience in self.experiences:
-            string += str(experience) + "\n"
-        return string
+            self.experiences, key=lambda x: x.dates.get_end(), reverse=True)
 
     def __repr__(self) -> str:
         string = f"Experience(experience={repr(self.experiences)})"

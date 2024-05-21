@@ -3,62 +3,7 @@ This module contains the Software class and SofwareData class.
 """
 import pandas as pd
 
-
-class Social:
-    """
-    A class to represent the resources of a software.
-
-    Attributes:
-    repository (str): The repository link of the software.
-    demo (str): The demo link of the software.
-    website (str): The website link of the software.
-    """
-
-    def __init__(self):
-        self.repository = str()
-        self.demo = str()
-        self.website = str()
-
-    def get_repository(self):
-        """
-        Get the repository link of the software.
-        """
-        return self.repository
-
-    def get_demo(self):
-        """
-        Get the demo link of the software.
-        """
-        return self.demo
-
-    def get_website(self):
-        """
-        Get the website link of the software.
-        """
-        return self.website
-
-    def load(self, filename):
-        """
-        Load the software resources.
-        """
-        self.repository = filename["Repository"]
-        self.demo = filename["Demo"]
-        self.website = filename["Website"]
-
-    def __str__(self) -> str:
-        string = f"Repository: {self.repository}\n"
-        string += f"Demo: {self.demo}\n"
-        string += f"Website: {self.website}\n"
-        return string
-
-    def __repr__(self) -> str:
-        string = (
-            f"Social("
-            f"repository={self.repository}, "
-            f"demo={self.demo}, "
-            f"website={self.website})"
-        )
-        return string
+from cvprocessor.links.links import Links
 
 
 class SoftwareData:
@@ -73,11 +18,11 @@ class SoftwareData:
     """
 
     def __init__(self):
-        self.id = str()
+        self.id = int()
         self.name = str()
         self.version = str()
         self.description = str()
-        self.social = Social()
+        self.links = Links()
         self.summary = str()
         self.license = str()
 
@@ -125,7 +70,7 @@ class SoftwareData:
         self.name = filename["Name"]
         self.version = filename["Version"]
         self.description = filename["Description"]
-        self.social.load(filename)
+        self.links.load(filename)
         self.summary = filename["Summary"]
         self.license = filename["License"]
 
@@ -136,7 +81,7 @@ class SoftwareData:
             f"name={self.name}, "
             f"version={self.version}, "
             f"description={self.description}, "
-            f"social={repr(self.social)}, "
+            f"links={repr(self.links)}, "
             f"summary={self.summary}, "
             f"license={self.license})"
         )
@@ -161,8 +106,11 @@ class Software:
         if not software_id:
             return None
         if isinstance(software_id, str):
-            software_id = int(software_id)
-        for software in self.softwares:
+            try:
+                software_id = int(float(software_id))
+            except ValueError:
+                return None
+        for software in self:
             if software.get_id() == software_id:
                 return software
         return None
@@ -181,12 +129,6 @@ class Software:
         for _, row in software_df.iterrows():
             self.softwares.append(SoftwareData())
             self.softwares[-1].load(row)
-
-    def __str__(self) -> str:
-        string = ""
-        for software in self.softwares:
-            string += str(software) + "\n"
-        return string
 
     def __repr__(self) -> str:
         string = f"Software(software={repr(self.softwares)})"

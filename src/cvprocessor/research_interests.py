@@ -41,11 +41,6 @@ class ResearchInterests:
         for keyword in keywords:
             self.keywords.append(keyword)
 
-    def __str__(self):
-        string = f"Research Interests: {self.research_interests}\n"
-        string += f"Keywords: {self.keywords}\n\n"
-        return string
-
     def __repr__(self):
         string = (
             f"ResearchInterests("

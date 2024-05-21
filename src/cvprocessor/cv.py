@@ -5,7 +5,7 @@ The CV object is used to store all the information
 import sys
 
 from cvprocessor.intro import Intro
-from cvprocessor.education import Education
+from cvprocessor.education import Educations
 from cvprocessor.publications import Publications
 from cvprocessor.authors import Authors
 from cvprocessor.software import Software
@@ -34,7 +34,7 @@ class AcademicInfo:
     """
 
     def __init__(self):
-        self.education = Education()
+        self.education = Educations()
         self.institutes = Institutes()
         self.research_interests = ResearchInterests()
         self.grants_awards = GrantsAwards()
@@ -46,7 +46,7 @@ class AcademicInfo:
         string = f"Education: {self.education}\n"
         string += f"Institutes: {self.institutes}\n"
         string += f"Research Interests: {self.research_interests}\n"
-        string += f"Grants and Awards: {self.grants_awards}\n"
+        string += f"Grants & Awards: {self.grants_awards}\n"
         string += f"Teaching: {self.teaching}\n"
         string += f"Supervision: {self.supervision}\n"
         string += f"Publications: {self.publications}\n"
@@ -166,11 +166,11 @@ class CV:
         for author_id in authors_ids:
             author = self.personal.authors.get_author(author_id)
             if author is not None:
-                authors_alias_short.append(author.personal.get_alias_short())
+                authors_alias_short.append(author.personal.get_alias())
         if len(authors_alias_short) > 1:
             authors_alias_short[-1] = "& " + authors_alias_short[-1]
         authors_alias_short = ", ".join(authors_alias_short)
-        apa = authors_alias_short + apa
+        apa = authors_alias_short + " " + apa
         return apa
 
     def _load_cv(self, filename):
@@ -218,7 +218,7 @@ class CV:
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(str(cv.personal.references))
+    print(str(cv.academic.education))
     # Get the first publication
     # pub = cv.academic.publications.get_publications_by_index(0)
     # print(f"Publication title: {pub.details.get_title()}")

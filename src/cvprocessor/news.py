@@ -2,74 +2,7 @@
 This module contains the classes to handle news data.
 """
 import pandas as pd
-
-
-class NewsResources:
-    """
-    The NewsResources class is used to store the resources for a news item.
-
-    Attributes:
-    pdf (str): The PDF link for the news item.
-    preprint (str): The preprint link for the news item.
-    code (str): The code link for the news item.
-    doi (str): The DOI link for the news item.
-    """
-
-    def __init__(self):
-        self.pdf = str()
-        self.preprint = str()
-        self.code = str()
-        self.doi = str()
-
-    def get_pdf(self):
-        """
-        Get the PDF link for the news item.
-        """
-        return self.pdf
-
-    def get_preprint(self):
-        """
-        Get the preprint link for the news item.
-        """
-        return self.preprint
-
-    def get_code(self):
-        """
-        Get the code link for the news item.
-        """
-        return self.code
-
-    def get_doi(self):
-        """
-        Get the DOI link for the news item.
-        """
-        return self.doi
-
-    def load(self, filename):
-        """
-        Load the resources for the news item.
-        """
-        self.pdf = filename["PDF"]
-        self.preprint = filename["Preprint"]
-        self.code = filename["Code"]
-        self.doi = filename["DOI"]
-
-    def __str__(self):
-        string = f"PDF: {self.pdf}\n"
-        string += f"Preprint: {self.preprint}\n"
-        string += f"Code: {self.code}\n"
-        string += f"DOI: {self.doi}\n"
-        return string
-
-    def __repr__(self):
-        string = (
-            f"NewsResources("
-            f"pdf={self.pdf}, "
-            f"preprint={self.preprint}, "
-            f"code={self.code}, "
-            f"doi={self.doi})"
-        )
-        return string
+from cvprocessor.links.links import Links
 
 
 class NewsData:
@@ -87,7 +20,7 @@ class NewsData:
         self.title = str()
         self.date = str()
         self.description = str()
-        self.resources = NewsResources()
+        self.links = Links()
 
     def get_title(self):
         """
@@ -115,14 +48,7 @@ class NewsData:
         self.date = pd_dataframe["Date"]
         self.date = self.date.strftime("%b %d, %Y")
         self.description = pd_dataframe["Description"]
-        self.resources.load(pd_dataframe)
-
-    def __str__(self) -> str:
-        string = f"Title: {self.title}\n"
-        string += f"Date: {self.date}\n"
-        string += f"Description: {self.description}\n"
-        string += str(self.resources)
-        return string
+        self.links.load(pd_dataframe)
 
     def __repr__(self) -> str:
         string = (
@@ -130,7 +56,7 @@ class NewsData:
             f"title={self.title}, "
             f"date={self.date}, "
             f"description={self.description}, "
-            f"resources={repr(self.resources)})"
+            f"links={repr(self.links)})"
         )
         return string
 

@@ -2,82 +2,7 @@
 This module contains the classes to process the teaching data from the CV.
 """
 import pandas as pd
-from cvprocessor import year_data as yd
-
-
-class TeachingInfo:
-    """
-    A class to represent the teaching information.
-
-    Attributes:
-    year (list): The years range of the teaching.
-    position (str): The position.
-    course (str): The course.
-    link (str): The link.
-    type (str): The type.
-    """
-
-    def __init__(self):
-        self.years = []
-        self.position = str()
-        self.course = str()
-        self.link = str()
-        self.type = str()
-
-    def get_start_year(self):
-        """
-        Get the start year of the teaching.
-        """
-        return yd.get_start_year(self.years)
-
-    def get_end_year(self):
-        """
-        Get the end year of the teaching.
-        """
-        return yd.get_end_year(self.years)
-
-    def get_position(self):
-        """
-        Get the position of the teaching.
-        """
-        return self.position
-
-    def get_course(self):
-        """
-        Get the course of the teaching.
-        """
-        return self.course
-
-    def get_link(self):
-        """
-        Get the link of the teaching.
-        """
-        return self.link
-
-    def get_type(self):
-        """
-        Get the type of the teaching.
-        """
-        return self.type
-
-    def __str__(self):
-        string = f"Year: {list(map(str, self.years))}\n"
-        string += f"Position: {self.position}\n"
-        string += f"Course: {self.course}\n"
-        string += f"Link: {self.link}\n"
-        string += f"Type: {self.type}\n"
-        return string
-
-    def __repr__(self):
-        string = (
-            f"TeachingInfo("
-            f"year={[repr(year) for year in self.years]}, "
-            f"position={self.position}, "
-            f"course={self.course}, "
-            f"link={self.link}, "
-            f"type={self.type})"
-        )
-        return string
+from cvprocessor.education import Education
 
 
 class TeachingData:
@@ -92,56 +17,35 @@ class TeachingData:
     """
 
     def __init__(self):
-        self.info = TeachingInfo()
-        self.institution = str()
-        self.supervisor = str()
+        self.education = Education()
+        self.type = str()
         self.responsibilities = str()
 
-    def get_start_year(self):
+    def get_responsibilities(self):
         """
-        Get the start year of this teaching activity.
+        Get the responsibilities.
         """
-        return self.info.get_start_year()
+        return self.responsibilities
 
-    def get_end_year(self):
+    def get_type(self):
         """
-        Get the end year of this teaching activity.
+        Get the type.
         """
-        return self.info.get_end_year()
-
-    def process_year_data(self, filename):
-        """
-        Process the year data.
-        """
-        self.info.years = yd.process_year_data(filename, self.info.years)
+        return self.type
 
     def load(self, filename):
         """
         Load the teaching data.
         """
-        self.process_year_data(filename)
-        self.info.position = filename["Position"]
-        self.info.course = filename["Course"]
-        self.info.link = filename["Link"]
-        self.info.type = filename["Type"]
-        self.institution = filename["Institution"]
-        self.supervisor = filename["Supervisor"]
+        self.education.load(filename)
         self.responsibilities = filename["Responsibilities"]
-
-    def __str__(self):
-        string = str(self.info)
-        string += f"Institution: {self.institution}\n"
-        string += f"Supervisor: {self.supervisor}\n"
-        string += f"Responsibilities: {self.responsibilities}\n"
-        return string
+        self.type = filename["Type"]
 
     def __repr__(self):
         string = (
             f"TeachingData("
-            f"info={repr(self.info)}, "
-            f"institution={self.institution}, "
-            f"supervisor={self.supervisor}, "
-            f"responsibilities={self.responsibilities})"
+            f"education={repr(self.education)}, "
+            f"responsibilities={repr(self.responsibilities)})"
         )
         return string
 
@@ -157,23 +61,23 @@ class Teaching:
     def __init__(self):
         self.teaching = []
 
-    def get_teaching_type_ordered(self):
+    def get_type_ordered(self):
         """
         Get the teaching types in order.
         """
         teaching_type = []
         for teaching in self.teaching:
-            if teaching.info.type not in teaching_type:
-                teaching_type.append(teaching.info.type)
+            if teaching.type not in teaching_type:
+                teaching_type.append(teaching.type)
         return teaching_type
 
-    def get_num_teaching_by_document_type(self, teaching_type):
+    def get_num_by_type(self, teaching_type):
         """
         Get the number of teaching by document type.
         """
         count = 0
         for teaching in self.teaching:
-            if teaching.info.type == teaching_type:
+            if teaching.type == teaching_type:
                 count += 1
         return count
 
@@ -185,12 +89,8 @@ class Teaching:
         for _, row in teaching_df.iterrows():
             self.teaching.append(TeachingData())
             self.teaching[-1].load(row)
-
-    def __str__(self):
-        string = ""
-        for teaching in self.teaching:
-            string += str(teaching) + "\n"
-        return string
+        self.teaching = sorted(
+            self.teaching, key=lambda x: x.education.dates.get_end(), reverse=True)
 
     def __repr__(self):
         string = f"Teaching(teaching={repr(self.teaching)})"

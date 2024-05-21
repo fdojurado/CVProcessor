@@ -3,6 +3,8 @@ This module contains the ServiceData and Services classes.
 """
 import pandas as pd
 
+from cvprocessor.links.links import Link
+
 
 class ServiceData:
     """
@@ -11,19 +13,12 @@ class ServiceData:
     Attributes:
     type (str): The type of the service.
     venue (str): The venue of the service.
-    link (str): The link to the service.
+    links (Link): The links of the service.
     """
 
     def __init__(self):
-        self.type = str()
         self.venue = str()
-        self.link = str()
-
-    def get_type(self) -> str:
-        """
-        Get the type of the service.
-        """
-        return self.type
+        self.link = Link()
 
     def get_venue(self) -> str:
         """
@@ -31,32 +26,19 @@ class ServiceData:
         """
         return self.venue
 
-    def get_link(self) -> str:
-        """
-        Get the link to the service.
-        """
-        return self.link
-
-    def load(self, filename) -> None:
+    def load(self, df) -> None:
         """
         Load the service data.
         """
-        self.type = filename["Type"]
-        self.venue = filename["Venue"]
-        self.link = filename["Link"]
-
-    def __str__(self) -> str:
-        string = f"Type: {self.type}\n"
-        string += f"Venue: {self.venue}\n"
-        string += f"Link: {self.link}\n"
-        return string
+        self.venue = df["Venue"]
+        self.link.type = df["Type"]
+        self.link.url = df["Link"]
 
     def __repr__(self) -> str:
         string = (
             f"ServiceData("
-            f"type={self.type}, "
             f"venue={self.venue}, "
-            f"link={self.link})"
+            f"link={repr(self.link)})"
         )
         return string
 
@@ -72,15 +54,15 @@ class Services:
     def __init__(self):
         self.services = []
 
-    def get_service_types_ordered(self):
+    def get_services_ordered(self):
         """
-        Get the service types in order.
+        Get the services ordered by link type.
         """
-        service_type = []
-        for service in self.services:
-            if service.type not in service_type:
-                service_type.append(service.type)
-        return service_type
+        services_ordered = []
+        for service in self:
+            if service.link.get_type() not in services_ordered:
+                services_ordered.append(service.link.get_type())
+        return services_ordered
 
     def load(self, filename):
         """
@@ -92,12 +74,8 @@ class Services:
             service = ServiceData()
             service.load(row)
             self.services.append(service)
-
-    def __str__(self):
-        string = ""
-        for service in self.services:
-            string += str(service) + "\n"
-        return string
+        # Sort the services by venue alphabetically
+        self.services = sorted(self.services, key=lambda x: x.venue)
 
     def __repr__(self):
         string = f"Services(services={repr(list(self.services))})"

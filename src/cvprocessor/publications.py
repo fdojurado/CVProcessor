@@ -3,8 +3,8 @@ This module contains the classes and methods to process the publications data fr
 """
 import pandas as pd
 
-
-from cvprocessor import common
+from cvprocessor.links.links import Links
+from cvprocessor.date.date import Dates
 
 
 class Source:
@@ -21,7 +21,7 @@ class Source:
         self.volume = str()
         self.issue = str()
         self.artno = str()
-        self.source = str()
+        self.venue = str()
 
     def get_volume(self):
         """
@@ -41,11 +41,11 @@ class Source:
         """
         return self.artno
 
-    def get_source(self):
+    def get_venue(self):
         """
-        Get the source of the publication.
+        Get the venue of the publication.
         """
-        return self.source
+        return self.venue
 
     def load(self, filename):
         """
@@ -54,7 +54,7 @@ class Source:
         self.volume = filename["Volume"]
         self.issue = filename["Issue"]
         self.artno = filename["Art. No."]
-        self.source = filename["Source"]
+        self.venue = filename["Source"]
 
     def __repr__(self):
         string = (
@@ -62,7 +62,7 @@ class Source:
             f"volume={self.volume}, "
             f"issue={self.issue}, "
             f"artno={self.artno}, "
-            f"source={self.source})"
+            f"venue={self.venue})"
         )
         return string
 
@@ -121,15 +121,15 @@ class Details:
     basic_info (PublicationBasicInfo): The basic information of the publication.
     journal_info (Source): The journal information of the publication.
     page_info (Pages): The page information of the publication.
-    document_type (str): The document type of the publication.
+    type (str): The document type of the publication.
     """
 
     def __init__(self):
         self.title = str()
-        self.date = pd.Timestamp("NaT")
-        self.source = Source()
+        self.dates = Dates()
+        self.venue = Source()
         self.pages = Pages()
-        self.document_type = str()
+        self.type = str()
         self.abstract = str()
         self.keywords = str()
 
@@ -139,17 +139,11 @@ class Details:
         """
         return self.title
 
-    def get_date(self):
-        """
-        Get the date of the publication.
-        """
-        return self.date
-
-    def get_document_type(self):
+    def get_type(self):
         """
         Get the document type of the publication.
         """
-        return self.document_type
+        return self.type
 
     def get_abstract(self):
         """
@@ -168,14 +162,10 @@ class Details:
         Load the publication details from the file.
         """
         self.title = filename["Title"]
-        self.date = filename["Year"]
-        if len(self.date.split()) == 1:
-            self.date = "Jan "+self.date
-        # To datetime month year format
-        self.date = pd.to_datetime(self.date, format="%b %Y").date()
-        self.source.load(filename)
+        self.dates.load(filename)
+        self.venue.load(filename)
         self.pages.load(filename)
-        self.document_type = filename["Document Type"]
+        self.type = filename["Document Type"]
         self.abstract = filename["Abstract"]
         self.keywords = filename["Keywords"]
 
@@ -183,81 +173,13 @@ class Details:
         string = (
             f"Details("
             f"title={self.title}, "
-            f"date={self.date}, "
-            f"source={repr(self.source)}, "
+            f"dates={repr(self.dates)}, "
+            f"source={repr(self.venue)}, "
             f"pages={repr(self.pages)}, "
-            f"document_type={self.document_type}, "
+            f"type={self.type}, "
             f"abstract={self.abstract}, "
             f"keywords={self.keywords})"
         )
-        return string
-
-
-class Social:
-    """
-    A class to represent the resources of a publication.
-
-    Attributes:
-    code (str): The code of the publication.
-    slides (str): The slides of the publication.
-    doi (str): The DOI of the publication.
-    preprint_doi (str): The preprint DOI of the publication.
-    """
-
-    def __init__(self):
-        self.code = str()
-        self.slides = str()
-        self.doi = str()
-        self.preprint_doi = str()
-
-    def get_code(self):
-        """
-        Get the code of the publication.
-        """
-        return self.code
-
-    def get_slides(self):
-        """
-        Get the slides of the publication.
-        """
-        return self.slides
-
-    def get_doi(self):
-        """
-        Get the DOI of the publication.
-        """
-        return self.doi
-
-    def get_preprint_doi(self):
-        """
-        Get the preprint DOI of the publication.
-        """
-        return self.preprint_doi
-
-    def load(self, filename):
-        """
-        Load the publication resources from the file.
-        """
-        self.code = filename["Code"]
-        self.slides = filename["Slides"]
-        self.doi = filename["DOI"]
-        self.preprint_doi = filename["Preprint DOI"]
-
-    def __repr__(self):
-        string = (
-            f"Social("
-            f"code={self.code}, "
-            f"slides={self.slides}, "
-            f"doi={self.doi}, "
-            f"preprint_doi={self.preprint_doi})"
-        )
-        return string
-
-    def __str__(self):
-        string = f"Code: {self.code}\n"
-        string += f"Slides: {self.slides}\n"
-        string += f"DOI: {self.doi}\n"
-        string += f"Preprint DOI: {self.preprint_doi}\n"
         return string
 
 
@@ -299,11 +221,6 @@ class Rights:
             f"license={self.license}, "
             f"copyright={self.copyright})"
         )
-        return string
-
-    def __str__(self):
-        string = f"License: {self.license}\n"
-        string += f"Copyright: {self.copyright}"
         return string
 
 
@@ -370,7 +287,7 @@ class PublicationsData:
     def __init__(self):
         self.auth_id_aff_id = []
         self.details = Details()
-        self.social = Social()
+        self.links = Links()
         self.rights = Rights()
 
     def get_auth_id_aff_id(self):
@@ -401,7 +318,7 @@ class PublicationsData:
                     authors[-1].add_affiliation_id(int(affiliation))
         self.auth_id_aff_id = authors
         self.details.load(filename)
-        self.social.load(filename)
+        self.links.load(filename)
         self.rights.load(filename)
 
     def get_apa_citation(self) -> str:
@@ -409,40 +326,35 @@ class PublicationsData:
         Build the APA citation.
         """
         citation = ""
-        if not common.check_nan(self.details.get_date()):
-            citation += f"({self.details.get_date().year}). "
-        if not common.check_nan(self.details.get_title()):
+        start_date = self.details.dates.get_start()
+        if pd.notna(start_date):
+            citation += f"({int(start_date.year)}). "
+        if pd.notna(self.details.get_title()):
             citation += f"{self.details.get_title()}. "
-        if not common.check_nan(self.details.source.get_source()):
-            citation += f"{self.details.source.get_source()}"
-        if not common.check_nan(self.details.source.get_volume()):
-            citation += f", {int(self.details.source.get_volume())}"
-        if not common.check_nan(self.details.source.get_issue()):
-            citation += f"({int(self.details.source.get_issue())})"
-        if not common.check_nan(self.details.source.get_artno()):
-            citation += f"{self.details.source.get_artno()}"
-        if not common.check_nan(self.details.pages.get_page_start()):
+        if pd.notna(self.details.venue.get_venue()):
+            citation += f"{self.details.venue.get_venue()}"
+        if pd.notna(self.details.venue.get_volume()):
+            citation += f", {int(self.details.venue.get_volume())}"
+        if pd.notna(self.details.venue.get_issue()):
+            citation += f"({int(self.details.venue.get_issue())})"
+        if pd.notna(self.details.venue.get_artno()):
+            citation += f"{self.details.venue.get_artno()}"
+        if pd.notna(self.details.pages.get_page_start()):
             citation += f", pp. {int(self.details.pages.get_page_start())}"
-        if not common.check_nan(self.details.pages.get_page_end()):
+        if pd.notna(self.details.pages.get_page_end()):
             citation += f"-{int(self.details.pages.get_page_end())}"
-        if not common.check_nan(self.social.get_doi()):
-            citation += f", doi: {self.social.get_doi()}"
+        doi = self.links.get_link("DOI")
+        if doi is not None:
+            citation += f", doi: {doi.get_url()}"
         citation += "."
         return citation
-
-    def __str__(self) -> str:
-        string = f"Authors' IDs and Affiliation IDs: {list(map(str, self.auth_id_aff_id))}\n"
-        string += str(self.details)
-        string += str(self.social)
-        string += str(self.rights)
-        return string
 
     def __repr__(self) -> str:
         string = (
             f"PublicationsData("
             f"authors={repr(self.auth_id_aff_id)}, "
             f"details={repr(self.details)}, "
-            f"social={repr(self.social)}, "
+            f"links={repr(self.links)}, "
             f"rights={repr(self.rights)})"
         )
         return string
@@ -458,11 +370,11 @@ class Publications():
     Methods:
     get_publications_count: Gets the number of publications.
     get_unique_sources: Gets the number of unique sources.
-    get_document_types: Gets the document types.
-    get_document_types_ordered: Gets the document types ordered.
-    get_num_publications_by_document_type: Gets the number of publications by document type.
+    get_types: Gets the document types.
+    get_types_ordered: Gets the document types ordered.
+    get_num_publications_by_type: Gets the number of publications by document type.
     get_num_publications_by_author: Gets the number of publications by author.
-    get_publications_year_range: Gets the year range of the publications.
+    get_publications_date_range: Gets the date range of the publications.
     """
 
     def __init__(self):
@@ -486,17 +398,17 @@ class Publications():
         """
         sources = set()
         for publication in self.publications:
-            sources.add(publication.details.source.get_source())
+            sources.add(publication.details.venue.get_venue())
         return len(sources)
 
-    def get_document_types(self):
+    def get_types(self):
         """
         Gets the document types.
         """
-        document_types = set()
+        types = set()
         for publication in self:
-            document_types.add(publication.details.document_type)
-        return document_types
+            types.add(publication.details.type)
+        return types
 
     def get_publication_by_title(self, title):
         """
@@ -507,23 +419,23 @@ class Publications():
                 return publication
         return None
 
-    def get_document_types_ordered(self):
+    def get_types_ordered(self):
         """
         Gets the document types ordered.
         """
-        document_types = []
+        types = []
         for publication in self.publications:
-            if publication.details.document_type not in document_types:
-                document_types.append(publication.details.document_type)
-        return document_types
+            if publication.details.type not in types:
+                types.append(publication.details.type)
+        return types
 
-    def get_num_publications_by_document_type(self, document_type):
+    def get_num_publications_by_type(self, type):
         """
         Gets the number of publications by document type.
         """
         count = 0
         for publication in self.publications:
-            if publication.details.document_type == document_type:
+            if publication.details.type == type:
                 count += 1
         return count
 
@@ -538,14 +450,14 @@ class Publications():
                     count += 1
         return count
 
-    def get_publications_year_range(self):
+    def get_publications_date_range(self):
         """
-        Gets the year range of the publications.
+        Gets the date range of the publications.
         """
-        years = []
+        dates = []
         for publication in self.publications:
-            years.append(publication.details.get_date().year)
-        return min(years), max(years)
+            dates.append(publication.details.dates.get_start())
+        return min(dates), max(dates)
 
     def load(self, filename):
         """
@@ -558,14 +470,8 @@ class Publications():
             self.publications[-1].load(row)
         self.publications = sorted(
             self.publications, key=lambda x: (
-                x.details.get_date(), x.details.get_title()), reverse=True
+                x.details.dates.get_start(), x.details.get_title()), reverse=True
         )
-
-    def __str__(self):
-        string = ""
-        for publication in self.publications:
-            string += str(publication) + "\n\n"
-        return string
 
     def __repr__(self):
         string = (
