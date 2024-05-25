@@ -15,6 +15,7 @@ class ExperienceData:
     institution (str): The institution of the experience.
     description (str): The description of the experience.
     responsibilities (str): The responsibilities of the experience.
+    achievements (str): The achievements of the experience.
     """
 
     def __init__(self):
@@ -23,6 +24,7 @@ class ExperienceData:
         self.institution_id = int()
         self.description = str()
         self.responsibilities = str()
+        self.achievements = str()
 
     def get_position(self):
         """
@@ -48,6 +50,12 @@ class ExperienceData:
         """
         return self.responsibilities
 
+    def get_achievements(self):
+        """
+        Get the achievements of this experience.
+        """
+        return self.achievements
+
     def load(self, filename):
         """
         Load the experience data.
@@ -57,6 +65,7 @@ class ExperienceData:
         self.institution_id = filename["Institution id"]
         self.description = filename["Description"]
         self.responsibilities = filename["Responsibilities"]
+        self.achievements = filename["Achievements"]
 
     def __repr__(self) -> str:
         string = (
@@ -65,7 +74,8 @@ class ExperienceData:
             f"position={self.position}, "
             f"institution id={self.institution_id}, "
             f"description={self.description}, "
-            f"responsibilities={self.responsibilities})"
+            f"responsibilities={self.responsibilities}, "
+            f"achievements={self.achievements})"
         )
         return string
 
