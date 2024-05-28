@@ -9,6 +9,7 @@ link_types = {
     "linkedin": "LinkedIn",
     "preprint": "Preprint",
     "pdf": "PDF",
+    "demo": "Demo",
     "code": "Code",
     "github": "GitHub",
     "twitter": "Twitter",
