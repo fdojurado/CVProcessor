@@ -13,6 +13,7 @@ from cvprocessor.institutes import Institutes
 from cvprocessor.news import News
 from cvprocessor.research_interests import ResearchInterests
 from cvprocessor.grants_awards import GrantsAwards
+from cvprocessor.presentations import Presentations
 from cvprocessor.teaching import Teaching
 from cvprocessor.supervision import Supervision
 from cvprocessor.experience import Experience
@@ -112,12 +113,14 @@ class ProfessionalInfo:
         self.skills = Skills()
         self.service = Services()
         self.memberships = Memberships()
+        self.presentations = Presentations()
 
     def __str__(self):
         string = f"Experience: {self.experience}\n"
         string += f"Skills: {self.skills}\n"
         string += f"Service: {self.service}\n"
         string += f"Memberships: {self.memberships}\n"
+        string += f"Presentations: {self.presentations}\n"
         return string
 
     def __repr__(self):
@@ -126,7 +129,8 @@ class ProfessionalInfo:
             f"experience={repr(self.experience)}, "
             f"skills={repr(self.skills)}, "
             f"service={repr(self.service)}, "
-            f"memberships={repr(self.memberships)})\n")
+            f"memberships={repr(self.memberships)}, "
+            f"presentations={repr(self.presentations)})\n")
         return string
 
 
@@ -195,6 +199,7 @@ class CV:
         self.professional.skills.load(filename)
         self.professional.service.load(filename)
         self.professional.memberships.load(filename)
+        self.professional.presentations.load(filename)
         self.personal.references.load(filename)
 
     def __str__(self):
@@ -218,7 +223,7 @@ class CV:
 
 if __name__ == "__main__":
     cv = CV("cv.xlsx")
-    print(str(cv.academic.education))
+    print(str(cv.professional.presentations))
     # Get the first publication
     # pub = cv.academic.publications.get_publications_by_index(0)
     # print(f"Publication title: {pub.details.get_title()}")

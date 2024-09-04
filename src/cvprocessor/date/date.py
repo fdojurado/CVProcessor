@@ -42,7 +42,10 @@ class Date:
         Format the date to a datetime object.
         """
         date = date.strip()
-        date = pd.to_datetime(date, format="%b %Y")
+        spaces = date.count(" ")
+        if spaces == 1:
+            date = "01 " + date
+        date = pd.to_datetime(date, format="%d %b %Y")
         return date
 
     def process_date_range(self, date_range):
@@ -51,10 +54,10 @@ class Date:
         """
         date_range = date_range.split("-")
         self.start = self.format_date(date_range[0])
-        self.start = pd.to_datetime(self.start, format="%b %Y")
+        # self.start = pd.to_datetime(self.start, format="%b %Y")
         if len(date_range) > 1:
             self.end = self.format_date(date_range[1])
-            self.end = pd.to_datetime(self.end, format="%b %Y")
+            # self.end = pd.to_datetime(self.end, format="%b %Y")
         else:
             self.end = None
 
@@ -130,6 +133,8 @@ class Dates:
                 if len(date) == 4:
                     date = "Jan " + date
                 date_obj.start = date_obj.format_date(date)
+                # end date is the current date
+                date_obj.end = pd.to_datetime("today")
             self.add_date(date_obj)
         self.sort_dates()
 
