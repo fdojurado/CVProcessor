@@ -450,6 +450,16 @@ class Publications():
                     count += 1
         return count
 
+    def get_first_author_num_publications(self, author_id):
+        """
+        Gets the number of publications where the author is the first author.
+        """
+        count = 0
+        for publication in self:
+            if publication.get_auth_id_aff_id()[0].get_author_id() == author_id:
+                count += 1
+        return count
+
     def get_publications_date_range(self):
         """
         Gets the date range of the publications.
