@@ -13,18 +13,12 @@ readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-keywords = [
-    "CV",
-    "Curriculum Vitae",
-    "Resume",
-    "xslx",
-]
-dependencies = [
-    "pandas",
-]
+keywords = ["CV", "Curriculum Vitae", "Resume", "xslx"]
+dependencies = ["pandas"]
+license = "MIT"
+license-files = ["LICENSE"]
 
 
 [project.urls]
